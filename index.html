@@ -1,0 +1,1525 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GBoS GEOAI | Gambia Census Point Mapping</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+<style>
+:root {
+  --navy:#102b46;
+  --blue:#1769aa;
+  --cyan:#00a6a6;
+  --bg:#eef2f6;
+  --panel:#ffffff;
+  --line:#dce4ec;
+  --muted:#65778a;
+  --text:#1c2c3b;
+  --green:#16865b;
+  --orange:#e58b28;
+  --red:#c84b4b;
+  --shadow:0 2px 9px rgba(15,35,55,.08);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:var(--bg)}
+body{overflow:hidden}
+header{
+  height:66px;background:var(--navy);color:white;display:flex;
+  align-items:center;justify-content:space-between;padding:0 20px;
+  border-bottom:3px solid var(--cyan)
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{
+  width:39px;height:39px;border-radius:9px;background:#ffffff1c;
+  display:flex;align-items:center;justify-content:center;font-size:20px
+}
+.brand h1{font-size:17px;margin:0 0 4px;font-weight:700;letter-spacing:.3px}
+.brand small{font-size:11px;color:#c7d7e6}
+.header-right{font-size:11px;color:#d6e4ef;text-align:right;line-height:1.5}
+main{
+  height:calc(100vh - 66px);
+  display:grid;grid-template-columns:minmax(280px,1fr) minmax(300px,1fr) minmax(280px,1fr);
+  gap:10px;padding:10px;min-height:0
+}
+.panel{
+  background:var(--panel);border:1px solid var(--line);border-radius:9px;
+  box-shadow:var(--shadow);min-width:0;min-height:0;overflow:hidden;
+  display:flex;flex-direction:column
+}
+.panel-heading{
+  padding:13px 15px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;
+  background:#fff;flex-shrink:0
+}
+.panel-heading h2{font-size:14px;margin:0;color:var(--navy)}
+.panel-heading small{font-size:10px;color:var(--muted)}
+.panel-body{padding:13px;overflow-y:auto;min-height:0;flex:1}
+.section-title{
+  font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;
+  letter-spacing:.6px;margin:3px 0 10px
+}
+.section{padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid #edf0f3}
+label{font-size:11px;color:#435568;display:block;margin:0 0 5px;font-weight:600}
+select,input[type="file"]{
+  width:100%;border:1px solid #cfd9e3;border-radius:5px;
+  padding:8px;font-size:11px;background:white;color:var(--text);margin-bottom:9px
+}
+input[type="file"]{padding:7px}
+button{
+  border:0;border-radius:5px;padding:9px 11px;font-size:11px;
+  font-weight:700;cursor:pointer;transition:.15s
+}
+button:hover{filter:brightness(.95)}
+.btn-primary{background:var(--blue);color:white}
+.btn-dark{background:var(--navy);color:white}
+.btn-light{background:#eaf1f7;color:var(--navy);border:1px solid #d6e1eb}
+.btn-green{background:var(--green);color:white}
+.btn-orange{background:var(--orange);color:white}
+.btn-danger{background:#f9eaea;color:#a73737;border:1px solid #f0d0d0}
+.btn-row{display:flex;gap:7px;flex-wrap:wrap}
+.btn-row button{flex:1}
+.status{
+  padding:9px 10px;background:#f0f5f9;border-radius:5px;
+  font-size:10px;color:#4e6378;line-height:1.5;margin-top:8px;
+  overflow-wrap:anywhere
+}
+.status.success{background:#eaf7f0;color:#176a45}
+.status.error{background:#fff0f0;color:#a53636}
+.status.warning{background:#fff7e9;color:#8a5a13}
+.help{font-size:10px;color:var(--muted);line-height:1.5;margin:0 0 8px}
+.checkbox-line{display:flex;gap:7px;align-items:center;margin:7px 0;font-size:11px}
+.checkbox-line input{accent-color:var(--blue)}
+#map{width:100%;height:100%;min-height:300px;background:#dce5eb}
+.map-panel{position:relative}
+.map-toolbar{
+  padding:8px 10px;display:flex;gap:7px;align-items:center;
+  border-bottom:1px solid var(--line);flex-wrap:wrap;background:#fff
+}
+.map-toolbar select{width:auto;min-width:120px;margin:0;padding:7px}
+.map-toolbar button{padding:8px}
+.map-wrap{flex:1;min-height:0;position:relative}
+.map-legend{
+  position:absolute;z-index:500;bottom:17px;left:12px;background:#fff;
+  border-radius:6px;padding:9px 11px;box-shadow:var(--shadow);
+  font-size:10px;line-height:1.8
+}
+.legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.map-note{
+  position:absolute;z-index:500;top:10px;left:50%;transform:translateX(-50%);
+  background:#102b46e8;color:white;border-radius:5px;padding:6px 10px;
+  font-size:10px;white-space:nowrap;pointer-events:none
+}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.kpi{
+  border:1px solid var(--line);border-radius:7px;padding:11px;
+  background:#fbfcfd;min-width:0
+}
+.kpi .name{font-size:10px;color:var(--muted);margin-bottom:7px}
+.kpi .value{font-size:21px;font-weight:700;color:var(--navy);overflow-wrap:anywhere}
+.kpi .unit{font-size:9px;color:var(--muted);margin-top:4px}
+.chart-card{
+  border:1px solid var(--line);border-radius:7px;padding:10px;
+  margin-bottom:11px;background:white
+}
+.chart-title{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.chart-box{height:190px;position:relative}
+.chart-box.short{height:160px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:10px}
+th,td{padding:8px 6px;border-bottom:1px solid #e8edf2;text-align:left}
+th{background:#f3f6f9;color:#435568;font-weight:700}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.footer{
+  padding:11px 13px;background:#f7f9fb;border-top:1px solid var(--line);
+  font-size:9px;color:var(--muted);line-height:1.6;flex-shrink:0
+}
+.progress{height:5px;background:#e5ebf1;border-radius:5px;overflow:hidden;margin-top:7px}
+.progress-bar{height:100%;width:0;background:var(--cyan);transition:width .2s}
+.hidden{display:none!important}
+.small-note{font-size:9px;color:var(--muted);line-height:1.5}
+.badge{
+  display:inline-block;border-radius:10px;padding:3px 7px;
+  font-size:9px;background:#eaf2f9;color:var(--blue)
+}
+@media(max-width:900px){
+  body{overflow:auto}
+  header{height:auto;min-height:66px}
+  main{height:auto;min-height:calc(100vh - 66px);grid-template-columns:1fr}
+  .panel{min-height:400px}
+  .map-panel{height:600px}
+  .panel-body{overflow:visible}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="brand">
+    <div class="brand-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+    <div>
+      <h1>GBoS GEOAI | Gambia Census Point Mapping</h1>
+      <small>Geospatial Census Intelligence • Compound / Structure Point Analysis</small>
+    </div>
+  </div>
+  <div class="header-right">
+    Gambia Bureau of Statistics<br>
+    GIS / Cartography Unit
+  </div>
+</header>
+
+<main>
+
+<!-- LEFT: CONTROLS -->
+<section class="panel">
+  <div class="panel-heading">
+    <h2><i class="fa-solid fa-sliders"></i> Controls</h2>
+    <span class="badge" id="dataBadge">No data loaded</span>
+  </div>
+
+  <div class="panel-body">
+
+    <div class="section">
+      <div class="section-title">1. Load repository data</div>
+      <p class="help">Load the CSV census points and GeoJSON enumeration-area boundaries directly from the public GitHub repository.</p>
+      <div class="btn-row">
+        <button class="btn-primary" id="loadGithub"><i class="fa-brands fa-github"></i> Load from GitHub</button>
+        <button class="btn-light" id="resetBtn"><i class="fa-solid fa-rotate"></i> Reset</button>
+      </div>
+      <div id="loadStatus" class="status">Waiting for data. Select Load from GitHub or upload your files below.</div>
+      <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">2. Manual data upload</div>
+      <label>Census point CSV</label>
+      <input type="file" id="csvUpload" accept=".csv,text/csv">
+      <label>Enumeration-area boundary GeoJSON</label>
+      <input type="file" id="geoUpload" accept=".geojson,.json,application/geo+json,application/json">
+      <p class="help">The CSV should contain Latitude and Longitude. GeoJSON should contain polygon or multipolygon boundaries.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">3. Administrative boundary fields</div>
+      <label>Region / LGA field</label>
+      <select id="regionField"><option value="">Load boundaries first</option></select>
+      <label>District field</label>
+      <select id="districtField"><option value="">Load boundaries first</option></select>
+      <label>Ward field</label>
+      <select id="wardField"><option value="">Load boundaries first</option></select>
+      <p class="help">These selectors are populated from the actual properties in your boundary GeoJSON. Change them if the automatic field selection is not correct.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">4. Select area of interest</div>
+      <label>Region / LGA</label>
+      <select id="regionSelect"><option value="">All regions</option></select>
+      <label>District</label>
+      <select id="districtSelect"><option value="">All districts</option></select>
+      <label>Ward</label>
+      <select id="wardSelect"><option value="">All wards</option></select>
+      <div class="btn-row">
+        <button class="btn-primary" id="runBtn"><i class="fa-solid fa-play"></i> Run analysis</button>
+        <button class="btn-light" id="clearAreaBtn">Clear area</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">5. Map display</div>
+      <label>Basemap</label>
+      <select id="basemapSelect">
+        <option value="street">ROADMAP</option>
+        <option value="satellite">SATELLITE</option>
+        <option value="hybrid" selected>HYBRID</option>
+        <option value="terrain">TERRAIN</option>
+      </select>
+      <label>Point display</label>
+      <select id="pointStyle">
+        <option value="all">All census points</option>
+        <option value="population">Colour by population</option>
+        <option value="structures">Colour by structures</option>
+      </select>
+      <div class="checkbox-line"><input type="checkbox" id="showBoundaries" checked><span>Show EA boundaries</span></div>
+      <div class="checkbox-line"><input type="checkbox" id="showPoints" checked><span>Show census points</span></div>
+      <div class="checkbox-line"><input type="checkbox" id="fitArea" checked><span>Zoom to selected area</span></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">6. Export data</div>
+      <div class="btn-row">
+        <button class="btn-green" id="exportCsv"><i class="fa-solid fa-file-csv"></i> Points CSV</button>
+        <button class="btn-green" id="exportGeo">Points GeoJSON</button>
+      </div>
+      <div class="btn-row" style="margin-top:7px">
+        <button class="btn-light" id="exportBoundary">Boundary GeoJSON</button>
+        <button class="btn-light" id="exportSummary">Summary CSV</button>
+      </div>
+      <p class="small-note">Exports use the current selected-area filter. The original uploaded data is not modified.</p>
+    </div>
+
+  </div>
+  <div class="footer">
+    Data: Gambia Census Point Mapping GitHub repository<br>
+    Coordinate reference: WGS 84 geographic coordinates (EPSG:4326)
+  </div>
+</section>
+
+<!-- CENTRE: MAP -->
+<section class="panel map-panel">
+  <div class="panel-heading">
+    <h2><i class="fa-solid fa-map"></i> Interactive Map</h2>
+    <span class="badge" id="mapCount">0 points</span>
+  </div>
+  <div class="map-toolbar">
+    <button class="btn-light" id="zoomGambia"><i class="fa-solid fa-earth-africa"></i> Full extent</button>
+    <button class="btn-light" id="zoomSelected"><i class="fa-solid fa-crosshairs"></i> Selected area</button>
+    <button class="btn-light" id="toggleBoundary">Boundaries</button>
+  </div>
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-note" id="mapMessage">Load your data to begin mapping</div>
+    <div class="map-legend">
+      <b>Map legend</b><br>
+      <span class="legend-dot" style="background:#e34b4b"></span> Census points<br>
+      <span class="legend-dot" style="background:#1769aa"></span> EA boundaries<br>
+      <span class="legend-dot" style="background:#00a6a6"></span> Selected boundary
+    </div>
+  </div>
+</section>
+
+<!-- RIGHT: ANALYTICS -->
+<section class="panel">
+  <div class="panel-heading">
+    <h2><i class="fa-solid fa-chart-column"></i> Analytics</h2>
+    <span class="badge" id="analysisBadge">Not run</span>
+  </div>
+  <div class="panel-body">
+
+    <div class="section">
+      <div class="section-title">Selected area summary</div>
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="name">Census points</div>
+          <div class="value" id="kpiPoints">0</div>
+          <div class="unit">Valid coordinate records</div>
+        </div>
+        <div class="kpi">
+          <div class="name">Boundary features</div>
+          <div class="value" id="kpiEA">0</div>
+          <div class="unit">Selected GeoJSON features</div>
+        </div>
+        <div class="kpi">
+          <div class="name">Total population</div>
+          <div class="value" id="kpiPopulation">—</div>
+          <div class="unit">Sum of CSV population field</div>
+        </div>
+        <div class="kpi">
+          <div class="name">Households</div>
+          <div class="value" id="kpiHouseholds">—</div>
+          <div class="unit">Sum of CSV household field</div>
+        </div>
+        <div class="kpi">
+          <div class="name">Structures</div>
+          <div class="value" id="kpiStructures">—</div>
+          <div class="unit">Sum of CSV structure field</div>
+        </div>
+        <div class="kpi">
+          <div class="name">Average population</div>
+          <div class="value" id="kpiAverage">—</div>
+          <div class="unit">Population per point record</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Population distribution by settlement</div>
+      <div class="chart-box"><canvas id="settlementChart"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Households and structures</div>
+      <div class="chart-box short"><canvas id="householdChart"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Census point composition</div>
+      <div class="chart-box short"><canvas id="useChart"></canvas></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Selected area details</div>
+      <div class="table-wrap">
+        <table>
+          <tbody id="detailTable">
+            <tr><td>Region</td><td>All</td></tr>
+            <tr><td>District</td><td>All</td></tr>
+            <tr><td>Ward</td><td>All</td></tr>
+            <tr><td>Point records</td><td>0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Data quality</div>
+      <div class="table-wrap">
+        <table>
+          <tbody>
+            <tr><td>CSV records read</td><td class="num" id="qualityTotal">0</td></tr>
+            <tr><td>Valid coordinate records</td><td class="num" id="qualityValid">0</td></tr>
+            <tr><td>Invalid / missing coordinates</td><td class="num" id="qualityInvalid">0</td></tr>
+            <tr><td>Boundary features loaded</td><td class="num" id="qualityBoundary">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small-note">Population, household and structure totals are calculated by summing the corresponding CSV values for the filtered point records. Confirm that these values are compound-level counts and are not repeated EA totals before interpreting national totals.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Methodology</div>
+      <p class="help">
+        Census point records are mapped using the supplied latitude and longitude fields. Enumeration-area polygons are displayed from the GeoJSON boundary file. Administrative selections filter boundary features and census points spatially. Population, household and structure summaries are calculated from the selected point records.
+      </p>
+      <p class="help">
+        The dashboard does not infer missing coordinates, redistribute population, or estimate unobserved households. Results depend on the completeness and accuracy of the uploaded source data.
+      </p>
+    </div>
+
+  </div>
+  <div class="footer">
+    Produced by Ansu Singhateh | GIS Analyst | GIS / Cartography Unit | Gambia Bureau of Statistics<br>
+    GBoS GEOAI • Research and educational use
+  </div>
+</section>
+</main>
+
+<script>
+"use strict";
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
+const REPO = {
+  csv: "https://raw.githubusercontent.com/silkysingz94-oss/Gambia-Census-Point-Mapping/main/CensusPoints.csv",
+  geo: "https://raw.githubusercontent.com/silkysingz94-oss/Gambia-Census-Point-Mapping/main/Census_EAs_Geo.json"
+};
+
+const DEFAULT_CENTER = [13.45, -15.45];
+const DEFAULT_ZOOM = 8;
+
+let rawRows = [];
+let pointRecords = [];
+let validFeatures = [];
+let boundaryData = null;
+let filteredPoints = [];
+let filteredBoundaries = [];
+let pointLayer = null;
+let boundaryLayer = null;
+let selectedBoundaryLayer = null;
+let baseLayer = null;
+let charts = {};
+let isLoaded = false;
+
+let fields = {
+  latitude: null,
+  longitude: null,
+  population: null,
+  households: null,
+  structures: null,
+  settlement: null,
+  use: null,
+  owner: null
+};
+
+/* =========================================================
+   MAP INITIALIZATION
+========================================================= */
+
+const map = L.map("map", {
+  center: DEFAULT_CENTER,
+  zoom: DEFAULT_ZOOM,
+  preferCanvas: true
+});
+
+const baseLayers = {
+  street: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }),
+  satellite: L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {maxZoom: 19, attribution: "Tiles &copy; Esri"}
+  ),
+  hybrid: L.layerGroup([
+    L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      {maxZoom: 19, attribution: "Tiles &copy; Esri"}
+    ),
+    L.tileLayer(
+      "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+      {maxZoom: 19}
+    )
+  ]),
+  terrain: L.tileLayer(
+    "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+    {maxZoom: 17, attribution: "OpenTopoMap"}
+  )
+};
+
+function setBasemap(name) {
+  if (baseLayer) map.removeLayer(baseLayer);
+  baseLayer = baseLayers[name] || baseLayers.hybrid;
+  baseLayer.addTo(map);
+}
+setBasemap("hybrid");
+
+pointLayer = L.layerGroup().addTo(map);
+boundaryLayer = L.geoJSON(null, {
+  style: {
+    color: "#1769aa",
+    weight: 1,
+    opacity: .75,
+    fillColor: "#4b91c7",
+    fillOpacity: .04
+  },
+  onEachFeature: boundaryPopup
+}).addTo(map);
+
+selectedBoundaryLayer = L.geoJSON(null, {
+  style: {
+    color: "#00a6a6",
+    weight: 2.5,
+    opacity: 1,
+    fillColor: "#00a6a6",
+    fillOpacity: .12
+  },
+  onEachFeature: boundaryPopup
+}).addTo(map);
+
+function boundaryPopup(feature, layer) {
+  const p = feature.properties || {};
+  const rows = Object.entries(p).slice(0, 12);
+  const html = rows.map(([k,v]) =>
+    `<b>${escapeHtml(k)}:</b> ${escapeHtml(v ?? "")}`
+  ).join("<br>");
+  layer.bindPopup(`<div style="font-size:11px;line-height:1.5">${html || "No properties"}</div>`);
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  })[ch]);
+}
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function setStatus(message, type="") {
+  const el = document.getElementById("loadStatus");
+  el.textContent = message;
+  el.className = "status " + type;
+}
+
+function setProgress(value) {
+  document.getElementById("progressBar").style.width =
+    Math.max(0, Math.min(100, value)) + "%";
+}
+
+function normalizeKey(key) {
+  return String(key ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function findField(headers, candidates) {
+  const normalized = headers.map(h => [h, normalizeKey(h)]);
+  for (const candidate of candidates) {
+    const target = normalizeKey(candidate);
+    const found = normalized.find(item => item[1] === target);
+    if (found) return found[0];
+  }
+  return null;
+}
+
+function parseNumber(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const n = Number(String(value).replace(/,/g, "").trim());
+  return Number.isFinite(n) ? n : null;
+}
+
+function sumField(records, field) {
+  if (!field) return null;
+  let total = 0;
+  let found = false;
+  for (const row of records) {
+    const n = parseNumber(row[field]);
+    if (n !== null) {
+      total += n;
+      found = true;
+    }
+  }
+  return found ? total : null;
+}
+
+function fmt(value) {
+  if (value === null || value === undefined || !Number.isFinite(value)) return "—";
+  return Math.round(value).toLocaleString("en-US");
+}
+
+function getPropertyValue(feature, field) {
+  if (!field || !feature || !feature.properties) return "";
+  return String(feature.properties[field] ?? "");
+}
+
+function uniqueValues(features, field) {
+  if (!field) return [];
+  return [...new Set(features.map(f => getPropertyValue(f, field)).filter(v => v !== ""))]
+    .sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
+}
+
+function fillSelect(selectId, values, firstLabel, preserve=true) {
+  const select = document.getElementById(selectId);
+  const old = preserve ? select.value : "";
+  select.innerHTML = "";
+  const first = document.createElement("option");
+  first.value = "";
+  first.textContent = firstLabel;
+  select.appendChild(first);
+
+  values.forEach(value => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    select.appendChild(option);
+  });
+
+  if (values.includes(old)) select.value = old;
+}
+
+function setFieldSelect(id, headers, chosen) {
+  const el = document.getElementById(id);
+  el.innerHTML = "";
+  const blank = document.createElement("option");
+  blank.value = "";
+  blank.textContent = "Not selected";
+  el.appendChild(blank);
+
+  headers.forEach(header => {
+    const option = document.createElement("option");
+    option.value = header;
+    option.textContent = header;
+    el.appendChild(option);
+  });
+
+  if (chosen && headers.includes(chosen)) el.value = chosen;
+}
+
+function isPolygonFeature(feature) {
+  return feature && feature.geometry &&
+    ["Polygon","MultiPolygon"].includes(feature.geometry.type);
+}
+
+/* =========================================================
+   CSV FIELD DETECTION AND POINT CREATION
+========================================================= */
+
+function detectCsvFields(rows) {
+  const headers = rows.length ? Object.keys(rows[0]) : [];
+
+  fields.latitude = findField(headers, ["Latitude","lat","y"]);
+  fields.longitude = findField(headers, ["Longitude","lon","long","lng","x"]);
+  fields.population = findField(headers, [
+    "Total_Population","population","pop","sum_pop"
+  ]);
+  fields.households = findField(headers, [
+    "No_Of_Househlods","No_Of_Households","households","hh","sum_hhs"
+  ]);
+  fields.structures = findField(headers, [
+    "No_Of_Structure","No_Of_Structures","structures","structure_count"
+  ]);
+  fields.settlement = findField(headers, [
+    "settlement","SETTLEMENT_Name","settlement_name","village"
+  ]);
+  fields.use = findField(headers, ["fmuse","compusecod","use","land_use"]);
+  fields.owner = findField(headers, ["compowner","owner"]);
+
+  if (!fields.latitude || !fields.longitude) {
+    throw new Error(
+      "Latitude and Longitude fields were not found. Check the CSV column headings."
+    );
+  }
+
+  const invalid = [];
+  const points = [];
+
+  rows.forEach((row, index) => {
+    const lat = parseNumber(row[fields.latitude]);
+    const lon = parseNumber(row[fields.longitude]);
+
+    if (lat === null || lon === null ||
+        lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+      invalid.push(row);
+      return;
+    }
+
+    const properties = {...row};
+    properties.__latitude = lat;
+    properties.__longitude = lon;
+    properties.__sourceIndex = index;
+
+    points.push({
+      type: "Feature",
+      geometry: {type:"Point", coordinates:[lon,lat]},
+      properties
+    });
+  });
+
+  pointRecords = points;
+  document.getElementById("qualityTotal").textContent = fmt(rows.length);
+  document.getElementById("qualityValid").textContent = fmt(points.length);
+  document.getElementById("qualityInvalid").textContent = fmt(invalid.length);
+
+  return {valid:points.length, invalid:invalid.length};
+}
+
+/* =========================================================
+   BOUNDARY FIELD DETECTION
+========================================================= */
+
+function detectBoundaryFields() {
+  if (!validFeatures.length) return;
+
+  const headers = [...new Set(
+    validFeatures.flatMap(f => Object.keys(f.properties || {}))
+  )].sort();
+
+  const regionGuess = findField(headers, [
+    "RCO","region","region_name","lganame","lga","admin1","admin_1"
+  ]);
+  const districtGuess = findField(headers, [
+    "distname","district","district_name","admin2","admin_2"
+  ]);
+  const wardGuess = findField(headers, [
+    "wardname","ward","ward_name","admin3","admin_3"
+  ]);
+
+  setFieldSelect("regionField", headers, regionGuess);
+  setFieldSelect("districtField", headers, districtGuess);
+  setFieldSelect("wardField", headers, wardGuess);
+
+  refreshAdministrativeLists();
+}
+
+function refreshAdministrativeLists() {
+  const regionField = document.getElementById("regionField").value;
+  const districtField = document.getElementById("districtField").value;
+  const wardField = document.getElementById("wardField").value;
+
+  const regions = uniqueValues(validFeatures, regionField);
+  fillSelect("regionSelect", regions, "All regions", true);
+
+  updateDistrictOptions();
+}
+
+function updateDistrictOptions() {
+  const regionField = document.getElementById("regionField").value;
+  const districtField = document.getElementById("districtField").value;
+  const wardField = document.getElementById("wardField").value;
+  const selectedRegion = document.getElementById("regionSelect").value;
+
+  let source = validFeatures;
+  if (selectedRegion && regionField) {
+    source = source.filter(f => getPropertyValue(f, regionField) === selectedRegion);
+  }
+
+  fillSelect("districtSelect", uniqueValues(source, districtField), "All districts", true);
+  updateWardOptions();
+}
+
+function updateWardOptions() {
+  const regionField = document.getElementById("regionField").value;
+  const districtField = document.getElementById("districtField").value;
+  const wardField = document.getElementById("wardField").value;
+
+  const selectedRegion = document.getElementById("regionSelect").value;
+  const selectedDistrict = document.getElementById("districtSelect").value;
+
+  let source = validFeatures;
+
+  if (selectedRegion && regionField) {
+    source = source.filter(f => getPropertyValue(f, regionField) === selectedRegion);
+  }
+  if (selectedDistrict && districtField) {
+    source = source.filter(f => getPropertyValue(f, districtField) === selectedDistrict);
+  }
+
+  fillSelect("wardSelect", uniqueValues(source, wardField), "All wards", true);
+}
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadGithubData() {
+  const button = document.getElementById("loadGithub");
+  button.disabled = true;
+  setProgress(5);
+  setStatus("Connecting to GitHub repository…");
+
+  try {
+    const [csvResponse, geoResponse] = await Promise.all([
+      fetch(REPO.csv + "?cache=" + Date.now()),
+      fetch(REPO.geo + "?cache=" + Date.now())
+    ]);
+
+    if (!csvResponse.ok) throw new Error("CSV download failed: HTTP " + csvResponse.status);
+    if (!geoResponse.ok) throw new Error("GeoJSON download failed: HTTP " + geoResponse.status);
+
+    setProgress(35);
+    setStatus("Downloading census point CSV and boundary GeoJSON…");
+
+    const [csvText, geoJson] = await Promise.all([
+      csvResponse.text(),
+      geoResponse.json()
+    ]);
+
+    setProgress(65);
+
+    const parsed = Papa.parse(csvText, {
+      header:true,
+      skipEmptyLines:true,
+      dynamicTyping:false
+    });
+
+    if (parsed.errors && parsed.errors.length) {
+      console.warn("CSV parsing warnings:", parsed.errors.slice(0,5));
+    }
+
+    if (!parsed.data || !parsed.data.length) {
+      throw new Error("The CSV file contains no data rows.");
+    }
+
+    processLoadedData(parsed.data, geoJson);
+    setProgress(100);
+    setStatus(
+      "GitHub data loaded successfully. " +
+      fmt(pointRecords.length) + " valid point records and " +
+      fmt(validFeatures.length) + " boundary features.",
+      "success"
+    );
+  } catch (error) {
+    console.error(error);
+    setStatus(
+      "Could not load repository data: " + error.message +
+      " You can use the manual upload controls instead.",
+      "error"
+    );
+    setProgress(0);
+  } finally {
+    button.disabled = false;
+  }
+}
+
+function processLoadedData(rows, geoJson) {
+  rawRows = rows;
+  boundaryData = geoJson;
+
+  if (geoJson.type === "FeatureCollection") {
+    validFeatures = (geoJson.features || []).filter(isPolygonFeature);
+  } else if (geoJson.type === "Feature" && isPolygonFeature(geoJson)) {
+    validFeatures = [geoJson];
+    boundaryData = {type:"FeatureCollection",features:[geoJson]};
+  } else {
+    throw new Error("GeoJSON must be a FeatureCollection containing Polygon or MultiPolygon features.");
+  }
+
+  if (!validFeatures.length) {
+    throw new Error("No polygon or multipolygon features were found in the GeoJSON.");
+  }
+
+  const quality = detectCsvFields(rows);
+  detectBoundaryFields();
+
+  document.getElementById("qualityBoundary").textContent = fmt(validFeatures.length);
+  document.getElementById("dataBadge").textContent = "Data loaded";
+  document.getElementById("mapMessage").textContent = "Census points and boundaries loaded";
+  isLoaded = true;
+
+  renderMap();
+  runAnalysis();
+}
+
+/* =========================================================
+   FILTERS AND SPATIAL SELECTION
+========================================================= */
+
+function getSelectedBoundaryFeatures() {
+  const regionField = document.getElementById("regionField").value;
+  const districtField = document.getElementById("districtField").value;
+  const wardField = document.getElementById("wardField").value;
+
+  const region = document.getElementById("regionSelect").value;
+  const district = document.getElementById("districtSelect").value;
+  const ward = document.getElementById("wardSelect").value;
+
+  return validFeatures.filter(feature => {
+    if (region && regionField &&
+        getPropertyValue(feature, regionField) !== region) return false;
+    if (district && districtField &&
+        getPropertyValue(feature, districtField) !== district) return false;
+    if (ward && wardField &&
+        getPropertyValue(feature, wardField) !== ward) return false;
+    return true;
+  });
+}
+
+function getPointsInArea(boundaries) {
+  const hasSelection =
+    document.getElementById("regionSelect").value ||
+    document.getElementById("districtSelect").value ||
+    document.getElementById("wardSelect").value;
+
+  if (!hasSelection) return pointRecords.slice();
+  if (!boundaries.length) return [];
+
+  // Use Turf point-in-polygon against the selected EA polygons.
+  // This is deliberately performed only when Run analysis is clicked.
+  const output = [];
+
+  for (const point of pointRecords) {
+    let inside = false;
+    for (const polygon of boundaries) {
+      try {
+        if (turf.booleanPointInPolygon(point, polygon)) {
+          inside = true;
+          break;
+        }
+      } catch (e) {
+        // Ignore malformed individual polygon features.
+      }
+    }
+    if (inside) output.push(point);
+  }
+  return output;
+}
+
+/* =========================================================
+   MAP RENDERING
+========================================================= */
+
+function getPointColor(feature) {
+  const mode = document.getElementById("pointStyle").value;
+  const p = feature.properties || {};
+
+  if (mode === "population" && fields.population) {
+    const n = parseNumber(p[fields.population]) || 0;
+    if (n >= 20) return "#8e2c8e";
+    if (n >= 10) return "#e58b28";
+    return "#2c9c70";
+  }
+
+  if (mode === "structures" && fields.structures) {
+    const n = parseNumber(p[fields.structures]) || 0;
+    if (n >= 10) return "#8e2c8e";
+    if (n >= 5) return "#e58b28";
+    return "#2c9c70";
+  }
+
+  return "#e34b4b";
+}
+
+function makePointPopup(feature) {
+  const p = feature.properties || {};
+  const entries = [
+    ["Settlement", fields.settlement],
+    ["Population", fields.population],
+    ["Households", fields.households],
+    ["Structures", fields.structures],
+    ["Use code", fields.use],
+    ["Owner", fields.owner]
+  ];
+
+  const rows = entries.filter(item => item[1]).map(([label, field]) =>
+    `<tr><td style="padding:3px 8px 3px 0;color:#667">${label}</td>
+     <td style="padding:3px 0"><b>${escapeHtml(p[field] ?? "—")}</b></td></tr>`
+  ).join("");
+
+  return `<div style="font-size:11px;min-width:160px">
+    <b style="font-size:12px;color:#1769aa">Census point record</b>
+    <table>${rows}</table>
+    <div style="margin-top:5px;color:#667">
+      Lat: ${p.__latitude}<br>Lon: ${p.__longitude}
+    </div>
+  </div>`;
+}
+
+function renderMap() {
+  pointLayer.clearLayers();
+  boundaryLayer.clearLayers();
+  selectedBoundaryLayer.clearLayers();
+
+  const showBoundaries = document.getElementById("showBoundaries").checked;
+  const showPoints = document.getElementById("showPoints").checked;
+
+  if (showBoundaries && validFeatures.length) {
+    boundaryLayer.addData({type:"FeatureCollection",features:validFeatures});
+  }
+
+  if (showPoints) {
+    const featuresToDraw = filteredPoints.length || !isLoaded
+      ? filteredPoints : pointRecords;
+
+    const canvasRenderer = L.canvas({padding:0.5});
+
+    featuresToDraw.forEach(feature => {
+      const p = feature.properties;
+      const marker = L.circleMarker(
+        [p.__latitude, p.__longitude],
+        {
+          renderer:canvasRenderer,
+          radius:3.5,
+          color:"#ffffff",
+          weight:.6,
+          fillColor:getPointColor(feature),
+          fillOpacity:.85
+        }
+      );
+      marker.bindPopup(makePointPopup(feature));
+      pointLayer.addLayer(marker);
+    });
+  }
+
+  if (showBoundaries && filteredBoundaries.length) {
+    selectedBoundaryLayer.addData({
+      type:"FeatureCollection",
+      features:filteredBoundaries
+    });
+  }
+
+  document.getElementById("mapCount").textContent =
+    fmt(filteredPoints.length) + " points";
+
+  if (document.getElementById("fitArea").checked) {
+    zoomToSelected();
+  }
+}
+
+function zoomToSelected() {
+  let target = null;
+
+  if (filteredBoundaries.length) {
+    target = L.geoJSON({
+      type:"FeatureCollection",
+      features:filteredBoundaries
+    });
+  } else if (filteredPoints.length) {
+    const coords = filteredPoints.map(f => [
+      f.properties.__latitude, f.properties.__longitude
+    ]);
+    target = L.featureGroup(coords.map(c => L.marker(c)));
+  }
+
+  if (target && target.getBounds && target.getBounds().isValid()) {
+    map.fitBounds(target.getBounds(), {padding:[20,20],maxZoom:14});
+  }
+}
+
+function zoomFullExtent() {
+  if (validFeatures.length) {
+    const layer = L.geoJSON({
+      type:"FeatureCollection",
+      features:validFeatures
+    });
+    if (layer.getBounds().isValid()) {
+      map.fitBounds(layer.getBounds(), {padding:[20,20]});
+      return;
+    }
+  }
+  map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+}
+
+/* =========================================================
+   ANALYTICS AND CHARTS
+========================================================= */
+
+function destroyChart(name) {
+  if (charts[name]) {
+    charts[name].destroy();
+    charts[name] = null;
+  }
+}
+
+function makeChart(name, canvasId, config) {
+  destroyChart(name);
+  const ctx = document.getElementById(canvasId);
+  charts[name] = new Chart(ctx, config);
+}
+
+function aggregateByField(records, field, valueField, limit=10) {
+  if (!field) return {labels:[],values:[]};
+
+  const totals = new Map();
+
+  records.forEach(feature => {
+    const p = feature.properties;
+    const label = String(p[field] || "Unspecified");
+    const value = valueField ? (parseNumber(p[valueField]) || 0) : 1;
+    totals.set(label, (totals.get(label) || 0) + value);
+  });
+
+  const sorted = [...totals.entries()].sort((a,b) => b[1]-a[1]).slice(0,limit);
+  return {
+    labels:sorted.map(x => x[0]),
+    values:sorted.map(x => x[1])
+  };
+}
+
+function updateCharts(records) {
+  const settlement = aggregateByField(
+    records, fields.settlement, fields.population, 10
+  );
+
+  makeChart("settlement","settlementChart",{
+    type:"bar",
+    data:{
+      labels:settlement.labels,
+      datasets:[{
+        label:"Population",
+        data:settlement.values,
+        backgroundColor:"#1769aa",
+        borderRadius:3
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{font:{size:9},maxRotation:45,minRotation:0}},
+        y:{beginAtZero:true,ticks:{font:{size:9}}}
+      }
+    }
+  });
+
+  const householdTotal = sumField(records, fields.households);
+  const structureTotal = sumField(records, fields.structures);
+
+  makeChart("household","householdChart",{
+    type:"bar",
+    data:{
+      labels:["Households","Structures"],
+      datasets:[{
+        data:[
+          householdTotal === null ? 0 : householdTotal,
+          structureTotal === null ? 0 : structureTotal
+        ],
+        backgroundColor:["#00a6a6","#e58b28"],
+        borderRadius:4
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{ticks:{font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:9}}}}
+    }
+  });
+
+  const useCounts = aggregateByField(records, fields.use, null, 8);
+  makeChart("use","useChart",{
+    type:"doughnut",
+    data:{
+      labels:useCounts.labels.length ? useCounts.labels : ["No use field"],
+      datasets:[{
+        data:useCounts.values.length ? useCounts.values : [1],
+        backgroundColor:[
+          "#1769aa","#00a6a6","#e58b28","#8e2c8e",
+          "#5b8f50","#bd5757","#718096","#c2a34d"
+        ]
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:"right",labels:{font:{size:9},boxWidth:10}}}
+    }
+  });
+}
+
+function updateSummary(records, boundaries) {
+  const population = sumField(records, fields.population);
+  const households = sumField(records, fields.households);
+  const structures = sumField(records, fields.structures);
+  const average = population !== null && records.length
+    ? population / records.length : null;
+
+  document.getElementById("kpiPoints").textContent = fmt(records.length);
+  document.getElementById("kpiEA").textContent = fmt(boundaries.length);
+  document.getElementById("kpiPopulation").textContent = fmt(population);
+  document.getElementById("kpiHouseholds").textContent = fmt(households);
+  document.getElementById("kpiStructures").textContent = fmt(structures);
+  document.getElementById("kpiAverage").textContent = fmt(average);
+
+  const region = document.getElementById("regionSelect").value || "All";
+  const district = document.getElementById("districtSelect").value || "All";
+  const ward = document.getElementById("wardSelect").value || "All";
+
+  document.getElementById("detailTable").innerHTML = `
+    <tr><td>Region / LGA</td><td>${escapeHtml(region)}</td></tr>
+    <tr><td>District</td><td>${escapeHtml(district)}</td></tr>
+    <tr><td>Ward</td><td>${escapeHtml(ward)}</td></tr>
+    <tr><td>Point records</td><td class="num">${fmt(records.length)}</td></tr>
+    <tr><td>Boundary features</td><td class="num">${fmt(boundaries.length)}</td></tr>
+    <tr><td>Population field</td><td>${escapeHtml(fields.population || "Not detected")}</td></tr>
+    <tr><td>Household field</td><td>${escapeHtml(fields.households || "Not detected")}</td></tr>
+    <tr><td>Structure field</td><td>${escapeHtml(fields.structures || "Not detected")}</td></tr>
+  `;
+
+  document.getElementById("analysisBadge").textContent = "Analysis complete";
+}
+
+/* =========================================================
+   RUN ANALYSIS
+========================================================= */
+
+function runAnalysis() {
+  if (!isLoaded) {
+    setStatus("Load the CSV and GeoJSON files before running analysis.", "warning");
+    return;
+  }
+
+  setStatus("Filtering selected area and calculating statistics…");
+  setProgress(25);
+
+  filteredBoundaries = getSelectedBoundaryFeatures();
+  filteredPoints = getPointsInArea(filteredBoundaries);
+
+  setProgress(70);
+  updateSummary(filteredPoints, filteredBoundaries);
+  updateCharts(filteredPoints);
+  renderMap();
+
+  setProgress(100);
+  document.getElementById("mapMessage").textContent =
+    filteredPoints.length.toLocaleString() + " selected census point records";
+
+  setStatus(
+    "Analysis complete: " + fmt(filteredPoints.length) +
+    " point records within the selected area.",
+    "success"
+  );
+}
+
+/* =========================================================
+   FILE UPLOADS
+========================================================= */
+
+document.getElementById("csvUpload").addEventListener("change", event => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  setStatus("Reading CSV file…");
+  Papa.parse(file, {
+    header:true,
+    skipEmptyLines:true,
+    complete: results => {
+      try {
+        if (!results.data || !results.data.length) {
+          throw new Error("No CSV data rows found.");
+        }
+        rawRows = results.data;
+
+        if (boundaryData) {
+          processLoadedData(rawRows, boundaryData);
+        } else {
+          const quality = detectCsvFields(rawRows);
+          setStatus(
+            "CSV loaded: " + fmt(quality.valid) +
+            " valid point records. Upload the boundary GeoJSON next.",
+            "success"
+          );
+          pointLayer.clearLayers();
+          filteredPoints = pointRecords.slice();
+          document.getElementById("qualityBoundary").textContent = "0";
+          document.getElementById("dataBadge").textContent = "CSV loaded";
+          isLoaded = false;
+        }
+      } catch (error) {
+        setStatus(error.message, "error");
+      }
+    },
+    error: error => setStatus("CSV error: " + error.message, "error")
+  });
+});
+
+document.getElementById("geoUpload").addEventListener("change", event => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  setStatus("Reading GeoJSON boundary file…");
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    try {
+      const geo = JSON.parse(reader.result);
+      boundaryData = geo;
+
+      if (rawRows.length) {
+        processLoadedData(rawRows, geo);
+      } else {
+        if (geo.type === "FeatureCollection") {
+          validFeatures = (geo.features || []).filter(isPolygonFeature);
+        } else if (geo.type === "Feature" && isPolygonFeature(geo)) {
+          validFeatures = [geo];
+          boundaryData = {type:"FeatureCollection",features:[geo]};
+        } else {
+          throw new Error("GeoJSON must contain polygon features.");
+        }
+
+        detectBoundaryFields();
+        boundaryLayer.addData({
+          type:"FeatureCollection",features:validFeatures
+        });
+        document.getElementById("qualityBoundary").textContent = fmt(validFeatures.length);
+        zoomFullExtent();
+        setStatus(
+          "Boundary GeoJSON loaded. Upload the census CSV to complete the dashboard.",
+          "success"
+        );
+      }
+    } catch (error) {
+      setStatus("GeoJSON error: " + error.message, "error");
+    }
+  };
+
+  reader.readAsText(file);
+});
+
+/* =========================================================
+   EXPORTS
+========================================================= */
+
+function downloadBlob(content, filename, type) {
+  const blob = new Blob([content], {type});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function getCurrentPoints() {
+  return isLoaded ? filteredPoints : pointRecords;
+}
+
+function getCurrentBoundaries() {
+  return isLoaded ? filteredBoundaries : validFeatures;
+}
+
+document.getElementById("exportCsv").addEventListener("click", () => {
+  const records = getCurrentPoints();
+  if (!records.length) return alert("No point records to export.");
+
+  const rows = records.map(f => {
+    const p = {...f.properties};
+    delete p.__latitude;
+    delete p.__longitude;
+    delete p.__sourceIndex;
+    return p;
+  });
+
+  downloadBlob(
+    Papa.unparse(rows),
+    "Gambia_Census_Points_Selected_Area.csv",
+    "text/csv;charset=utf-8"
+  );
+});
+
+document.getElementById("exportGeo").addEventListener("click", () => {
+  const records = getCurrentPoints();
+  if (!records.length) return alert("No point records to export.");
+
+  const geo = {type:"FeatureCollection",features:records};
+  downloadBlob(
+    JSON.stringify(geo),
+    "Gambia_Census_Points_Selected_Area.geojson",
+    "application/geo+json"
+  );
+});
+
+document.getElementById("exportBoundary").addEventListener("click", () => {
+  const records = getCurrentBoundaries();
+  if (!records.length) return alert("No boundary features to export.");
+
+  downloadBlob(
+    JSON.stringify({type:"FeatureCollection",features:records}),
+    "Gambia_Census_Boundaries_Selected_Area.geojson",
+    "application/geo+json"
+  );
+});
+
+document.getElementById("exportSummary").addEventListener("click", () => {
+  const records = getCurrentPoints();
+  const boundaries = getCurrentBoundaries();
+
+  const rows = [{
+    region:document.getElementById("regionSelect").value || "All",
+    district:document.getElementById("districtSelect").value || "All",
+    ward:document.getElementById("wardSelect").value || "All",
+    census_point_records:records.length,
+    boundary_features:boundaries.length,
+    total_population:sumField(records,fields.population),
+    total_households:sumField(records,fields.households),
+    total_structures:sumField(records,fields.structures),
+    average_population_per_point:
+      sumField(records,fields.population) !== null && records.length
+      ? sumField(records,fields.population) / records.length : null
+  }];
+
+  downloadBlob(
+    Papa.unparse(rows),
+    "Gambia_Census_Selected_Area_Summary.csv",
+    "text/csv;charset=utf-8"
+  );
+});
+
+/* =========================================================
+   EVENT LISTENERS
+========================================================= */
+
+document.getElementById("loadGithub").addEventListener("click", loadGithubData);
+
+document.getElementById("runBtn").addEventListener("click", runAnalysis);
+
+document.getElementById("regionField").addEventListener("change", () => {
+  refreshAdministrativeLists();
+});
+
+document.getElementById("districtField").addEventListener("change", () => {
+  updateDistrictOptions();
+});
+
+document.getElementById("wardField").addEventListener("change", () => {
+  updateWardOptions();
+});
+
+document.getElementById("regionSelect").addEventListener("change", () => {
+  updateDistrictOptions();
+});
+
+document.getElementById("districtSelect").addEventListener("change", () => {
+  updateWardOptions();
+});
+
+document.getElementById("clearAreaBtn").addEventListener("click", () => {
+  document.getElementById("regionSelect").value = "";
+  document.getElementById("districtSelect").value = "";
+  updateDistrictOptions();
+  document.getElementById("wardSelect").value = "";
+  runAnalysis();
+});
+
+document.getElementById("basemapSelect").addEventListener("change", event => {
+  setBasemap(event.target.value);
+});
+
+document.getElementById("showPoints").addEventListener("change", renderMap);
+document.getElementById("showBoundaries").addEventListener("change", renderMap);
+document.getElementById("pointStyle").addEventListener("change", renderMap);
+
+document.getElementById("fitArea").addEventListener("change", () => {
+  if (document.getElementById("fitArea").checked) zoomToSelected();
+});
+
+document.getElementById("zoomGambia").addEventListener("click", zoomFullExtent);
+document.getElementById("zoomSelected").addEventListener("click", zoomToSelected);
+
+document.getElementById("toggleBoundary").addEventListener("click", () => {
+  const checkbox = document.getElementById("showBoundaries");
+  checkbox.checked = !checkbox.checked;
+  renderMap();
+});
+
+/* =========================================================
+   RESET
+========================================================= */
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("Reset the dashboard and clear all loaded data?")) return;
+
+  rawRows = [];
+  pointRecords = [];
+  validFeatures = [];
+  filteredPoints = [];
+  filteredBoundaries = [];
+  boundaryData = null;
+  fields = {
+    latitude:null,longitude:null,population:null,households:null,
+    structures:null,settlement:null,use:null,owner:null
+  };
+  isLoaded = false;
+
+  pointLayer.clearLayers();
+  boundaryLayer.clearLayers();
+  selectedBoundaryLayer.clearLayers();
+
+  ["settlement","household","use"].forEach(destroyChart);
+
+  ["regionField","districtField","wardField"].forEach(id => {
+    document.getElementById(id).innerHTML = '<option value="">Load boundaries first</option>';
+  });
+
+  fillSelect("regionSelect",[],"All regions",false);
+  fillSelect("districtSelect",[],"All districts",false);
+  fillSelect("wardSelect",[],"All wards",false);
+
+  document.getElementById("csvUpload").value = "";
+  document.getElementById("geoUpload").value = "";
+
+  document.getElementById("dataBadge").textContent = "No data loaded";
+  document.getElementById("analysisBadge").textContent = "Not run";
+  document.getElementById("mapCount").textContent = "0 points";
+  document.getElementById("mapMessage").textContent = "Load your data to begin mapping";
+
+  [
+    "kpiPoints","kpiEA"
+  ].forEach(id => document.getElementById(id).textContent = "0");
+
+  ["kpiPopulation","kpiHouseholds","kpiStructures","kpiAverage"].forEach(id => {
+    document.getElementById(id).textContent = "—";
+  });
+
+  document.getElementById("qualityTotal").textContent = "0";
+  document.getElementById("qualityValid").textContent = "0";
+  document.getElementById("qualityInvalid").textContent = "0";
+  document.getElementById("qualityBoundary").textContent = "0";
+
+  document.getElementById("detailTable").innerHTML =
+    '<tr><td>Region</td><td>All</td></tr><tr><td>District</td><td>All</td></tr><tr><td>Ward</td><td>All</td></tr>';
+
+  setProgress(0);
+  setStatus("Dashboard reset. Load data to begin.", "");
+  zoomFullExtent();
+});
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+fillSelect("regionSelect",[],"All regions",false);
+fillSelect("districtSelect",[],"All districts",false);
+fillSelect("wardSelect",[],"All wards",false);
+map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+
+</script>
+</body>
+</html>

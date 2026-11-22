@@ -147,7 +147,7 @@ footer{
   <div class="section">
    <h3>Data sources</h3>
    <div class="field">
-    <label>Census point CSV</label>
+    <label> CSV</label>
     <input type="file" id="csvFile" accept=".csv,.txt">
     <div class="hint">Latitude, Longitude, Total_Population, No_Of_Househlods, No_Of_Structure.</div>
    </div>
@@ -236,7 +236,7 @@ footer{
 
   <div class="section">
    <h3>Map layers</h3>
-   <label class="checkline"><input type="checkbox" id="pointsToggle" checked>Census points</label>
+   <label class="checkline"><input type="checkbox" id="pointsToggle" checked>Compounds/Structures</label>
    <label class="checkline"><input type="checkbox" id="eaToggle" checked>EA boundaries</label>
    <label class="checkline"><input type="checkbox" id="gridToggle" checked>Grid values</label>
    <label class="checkline"><input type="checkbox" id="hotToggle" checked>Hotspots / coldspots</label>
@@ -288,7 +288,7 @@ footer{
     <div class="kpi"><span>Population</span><strong id="kpiPopulation">—</strong><small>Total population</small></div>
     <div class="kpi"><span>Households</span><strong id="kpiHouseholds">—</strong><small>Recorded households</small></div>
     <div class="kpi"><span>Structures</span><strong id="kpiStructures">—</strong><small>Recorded structures</small></div>
-    <div class="kpi"><span>Census points</span><strong id="kpiPoints">—</strong><small>Valid coordinates</small></div>
+    <div class="kpi"><span>Compounds/Structures</span><strong id="kpiPoints">—</strong><small>Valid coordinates</small></div>
     <div class="kpi"><span>Mean household size</span><strong id="kpiHHSize">—</strong></div>
     <div class="kpi"><span>Hotspot cells</span><strong id="kpiHotspots">—</strong></div>
    </div>
@@ -425,7 +425,7 @@ footer{
     <br><br>
     <b>Local Moran's I (LISA):</b> classifies cells as High-High, Low-Low, High-Low or Low-High based on standardized cell values and neighbouring spatial lags. Local permutation significance is not calculated here; interpret these as exploratory cluster/outlier classes.
     <br><br>
-    <b>Gini coefficient:</b> summarizes inequality in population values across census points, from 0 (equal values) towards 1 (greater inequality).
+    <b>Gini coefficient:</b> summarizes inequality in population values across Compounds/Structures, from 0 (equal values) towards 1 (greater inequality).
     <br><br>
     <b>Pearson and Spearman correlations:</b> quantify linear and rank-based relationships between population, households and structures. Correlation does not imply causation.
     <br><br>
@@ -755,7 +755,7 @@ async function loadCSVText(text){
 
  el("dataStatus").className="status good";
  el("dataStatus").textContent="Loaded "+fmt(rawPoints.length)+" valid census point records.";
- status("Census points loaded. Select an area and run analysis.","good");
+ status("s loaded. Select an area and run analysis.","good");
 }
 async function loadGeoText(text){
  const obj=JSON.parse(text);
@@ -1480,7 +1480,7 @@ function updateCharts(list,totals,grid){
  makeChart("scatterChart",{
   type:"scatter",
   data:{datasets:[{
-   label:"Census points",data:scatter,
+   label:"",data:scatter,
    backgroundColor:"#168ca7",pointRadius:3
   }]},
   options:{responsive:true,maintainAspectRatio:false,
@@ -1847,3 +1847,4 @@ loadRepository();
 </script>
 </body>
 </html>
+

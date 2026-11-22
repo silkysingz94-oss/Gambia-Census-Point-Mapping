@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SILKYSINGZ | GAMBIA CENSUS MAPPING POINT INTELLIGENCE</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@7.2.0/turf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+<style>
+:root{
+ --navy:#102b46;--blue:#1769aa;--cyan:#16a6b6;
+ --bg:#eef3f8;--white:#fff;--text:#243447;
+ --muted:#718096;--border:#dce5ee;
+ --green:#16865b;--red:#c64b4b;--orange:#d88726;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--text)}
+header{
+ background:linear-gradient(110deg,#102b46,#145b83);
+ color:white;padding:16px 20px;display:flex;justify-content:space-between;
+ align-items:center;gap:12px;flex-wrap:wrap
+}
+header h1{font-size:19px;margin:0 0 5px}
+header p{font-size:11px;margin:0;color:#d5e6f4}
+.header-right{text-align:right;font-size:11px;line-height:1.7;color:#d5e6f4}
+.toolbar{
+ background:white;padding:9px 15px;border-bottom:1px solid var(--border);
+ display:flex;gap:8px;align-items:center;flex-wrap:wrap
+}
+button,select,input{font:inherit}
+button{
+ border:0;border-radius:6px;padding:9px 12px;background:var(--blue);
+ color:white;font-size:11px;font-weight:bold;cursor:pointer
+}
+button.secondary{background:#e8eef5;color:#29445d}
+button.success{background:var(--green)}
+button:disabled{opacity:.5;cursor:not-allowed}
+select,input[type=file],input[type=number]{
+ width:100%;min-width:0;padding:8px;border:1px solid var(--border);
+ border-radius:6px;background:white;color:var(--text)
+}
+.toolbar select{width:auto;min-width:140px}
+.layout{
+ display:grid;grid-template-columns:minmax(250px,1fr) minmax(360px,1fr) minmax(275px,1fr);
+ gap:11px;padding:11px;height:calc(100vh - 145px);min-height:620px
+}
+.panel{
+ min-width:0;background:white;border:1px solid var(--border);
+ border-radius:8px;overflow:hidden;display:flex;flex-direction:column;
+ box-shadow:0 3px 12px #17324b0c
+}
+.panel-heading{
+ padding:12px;background:#f8fafc;border-bottom:1px solid var(--border);
+ font-size:13px;font-weight:bold;display:flex;justify-content:space-between
+}
+.panel-content{padding:12px;overflow-y:auto;flex:1;min-height:0}
+.section{margin-bottom:16px}
+.section h3{
+ font-size:11px;text-transform:uppercase;letter-spacing:.6px;
+ color:#557087;margin:0 0 9px;padding-bottom:6px;border-bottom:1px solid #edf1f5
+}
+.field{margin-bottom:9px}
+.field label{display:block;font-size:11px;font-weight:bold;margin-bottom:5px;color:#526579}
+.hint{font-size:10px;color:var(--muted);line-height:1.5;margin-top:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.checkline{display:flex;align-items:center;gap:7px;font-size:11px;margin:7px 0}
+.checkline input{width:auto}
+.status{padding:9px;border-radius:6px;background:#edf5fb;color:#315b79;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+.status.error{background:#fff0f0;color:#a33131}
+.status.good{background:#eaf7f0;color:#176a45}
+.map-wrap{position:relative;flex:1;min-height:0}
+#map{height:100%;min-height:420px;width:100%;background:#e5edf2}
+.map-legend{
+ position:absolute;z-index:500;left:10px;bottom:15px;background:white;
+ padding:9px;border-radius:6px;box-shadow:0 2px 10px #0002;
+ font-size:10px;line-height:1.8
+}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+.kpi{padding:9px;border:1px solid var(--border);border-radius:6px;background:#fbfdff}
+.kpi span{display:block;font-size:10px;color:var(--muted);margin-bottom:5px}
+.kpi strong{font-size:18px;color:var(--navy);overflow-wrap:anywhere}
+.kpi small{font-size:9px;color:var(--muted)}
+.chart-card{border:1px solid var(--border);border-radius:6px;padding:9px;margin-bottom:10px}
+.chart-title{font-size:11px;font-weight:bold;margin-bottom:8px}
+.chart-container{height:185px;position:relative}
+.chart-container.tall{height:220px}
+table{width:100%;border-collapse:collapse;font-size:10px}
+th,td{padding:7px 6px;border-bottom:1px solid #e8edf2;text-align:left}
+th{background:#f5f8fb;color:#526579;position:sticky;top:0}
+.table-wrap{max-height:230px;overflow:auto;border:1px solid var(--border);border-radius:6px}
+.progress{height:5px;background:#e8eef3;border-radius:5px;overflow:hidden;margin-top:7px}
+.progress div{height:100%;width:0;background:var(--cyan)}
+.mini-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:9px}
+.mini-kpi{padding:8px;border:1px solid var(--border);border-radius:6px;background:#fbfdff;min-width:0}
+.mini-kpi span{display:block;font-size:9px;color:var(--muted);margin-bottom:4px}
+.mini-kpi strong{font-size:15px;color:var(--navy);overflow-wrap:anywhere}
+.analysis-note{padding:9px;background:#f3f7fb;border-left:3px solid var(--cyan);border-radius:4px;font-size:10px;line-height:1.55;color:#42566a;margin:8px 0}
+@media(max-width:700px){.mini-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+footer{
+ background:var(--navy);color:#c7d8e7;padding:10px 15px;font-size:10px;
+ display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap
+}
+@media(max-width:1050px){
+ .layout{grid-template-columns:280px minmax(350px,1fr);height:auto;min-height:0}
+ .panel.analytics{grid-column:1/-1}
+ .panel.map-panel{height:620px}
+}
+@media(max-width:700px){
+ .layout{display:flex;flex-direction:column;height:auto}
+ .panel.map-panel{height:550px}
+ .toolbar select{width:100%}
+ .header-right{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div>
+  <h1>GAMBIA CENSUS MAPPING POINT INTELLIGENCE</h1>
+  <p>Ansu Singhateh • Population Distribution • Spatial Statistics • Census Mapping 2023 • Hotspot Analysis</p>
+ </div>
+ <div class="header-right">Gambia Bureau of Statistics<br>GIS-Cartography Unit</div>
+</header>
+
+<div class="toolbar">
+ <button id="runBtn">▶ Run analysis</button>
+ <button id="resetBtn" class="secondary">↻ Reset</button>
+ <button id="fitBtn" class="secondary">Fit data</button>
+ <button id="exportAllBtn" class="success">Export report</button>
+ <span id="topStatus" style="font-size:10px;color:#718096;margin-left:auto">Loading data…</span>
+</div>
+
+<main class="layout">
+
+<!-- CONTROLS -->
+<section class="panel">
+ <div class="panel-heading"><span>Controls</span><span>SILKYSINGZ GEOAI</span></div>
+ <div class="panel-content">
+
+  <div class="section">
+   <h3>Data sources</h3>
+   <div class="field">
+    <label> CSV</label>
+    <input type="file" id="csvFile" accept=".csv,.txt">
+    <div class="hint">settlement, Buildings, Compounds, Households, Population, Latitude, Longitude.</div>
+   </div>
+   <div class="field">
+    <label>Enumeration area GeoJSON</label>
+    <input type="file" id="geoFile" accept=".json,.geojson">
+   </div>
+   <div id="dataStatus" class="status">Attempting to load repository datasets.</div>
+  </div>
+
+  <div class="section">
+   <h3>Administrative selection</h3>
+   <div class="field"><label>Region / LGA</label><select id="regionSelect"><option value="">All regions</option></select></div>
+   <div class="field"><label>District</label><select id="districtSelect"><option value="">All districts</option></select></div>
+   <div class="field"><label>Ward</label><select id="wardSelect"><option value="">All wards</option></select></div>
+  </div>
+
+  <div class="section">
+   <h3>Spatial statistics settings</h3>
+   <div class="field">
+    <label>Analysis variable</label>
+    <select id="variableSelect">
+     <option value="population" selected>Population</option>
+     <option value="households">Households</option>
+     <option value="buildings">Buildings</option>
+     <option value="point_count">Census point count</option>
+    </select>
+   </div>
+   <div class="field">
+    <label>Spatial method</label>
+    <select id="methodSelect">
+     <option value="gi" selected>Getis-Ord Gi*</option>
+     <option value="moran">Moran's I and local clusters</option>
+     <option value="kde">Kernel density surface</option>
+     <option value="dbscan">DBSCAN clustering</option>
+    </select>
+   </div>
+   <div class="two">
+    <div class="field">
+     <label>Grid size</label>
+     <select id="gridSelect">
+      <option value="0.125">0.125 km</option>
+      <option value="0.25">0.25 km</option>
+      <option value="0.5">0.5 km</option>
+      <option value="1" selected>1 km</option>
+      <option value="2">2 km</option>
+      <option value="5">5 km</option>
+      <option value="10">10 km</option>
+     </select>
+    </div>
+    <div class="field">
+     <label>Confidence</label>
+     <select id="confidenceSelect">
+      <option value="90">90%</option>
+      <option value="95" selected>95%</option>
+      <option value="99">99%</option>
+     </select>
+    </div>
+   </div>
+   <div class="field">
+    <label>Analysis extent</label>
+    <select id="extentSelect">
+     <option value="selected" selected>Selected area</option>
+     <option value="all">All loaded data</option>
+     <option value="map">Current map view</option>
+    </select>
+   </div>
+   <div class="field">
+    <label>Neighbourhood</label>
+    <select id="neighbourSelect">
+     <option value="queen" selected>Queen contiguity</option>
+     <option value="rook">Rook contiguity</option>
+    </select>
+   </div>
+   <div class="field">
+    <label>Moran permutation iterations</label>
+    <select id="permutationSelect">
+     <option value="99" selected>99</option>
+     <option value="199">199</option>
+     <option value="499">499</option>
+    </select>
+   </div>
+   <div class="field"><label>DBSCAN radius (metres)</label><input id="dbscanRadius" type="number" value="1000" min="100"></div>
+   <div class="field"><label>DBSCAN minimum points</label><input id="dbscanMin" type="number" value="5" min="2"></div>
+  </div>
+
+  <div class="section">
+   <h3>Map layers</h3>
+   <label class="checkline"><input type="checkbox" id="pointsToggle" checked>Compounds/Structures</label>
+   <label class="checkline"><input type="checkbox" id="eaToggle" checked>EA boundaries</label>
+   <label class="checkline"><input type="checkbox" id="gridToggle" checked>Grid values</label>
+   <label class="checkline"><input type="checkbox" id="hotToggle" checked>Hotspots / coldspots</label>
+   <label class="checkline"><input type="checkbox" id="kdeToggle">KDE concentration</label>
+   <label class="checkline"><input type="checkbox" id="clusterToggle">DBSCAN clusters</label>
+   <div class="field">
+    <label>Basemap</label>
+    <select id="basemapSelect">
+     <option value="road">Road map</option>
+     <option value="satellite">Satellite</option>
+     <option value="hybrid" selected>Hybrid</option>
+     <option value="terrain">Terrain</option>
+    </select>
+   </div>
+  </div>
+
+  <div class="section">
+   <h3>Processing status</h3>
+   <div id="analysisStatus" class="status">Waiting for data.</div>
+   <div class="progress"><div id="progressBar"></div></div>
+   <div class="hint" id="progressText">No analysis run.</div>
+  </div>
+ </div>
+</section>
+
+<!-- MAP -->
+<section class="panel map-panel">
+ <div class="panel-heading"><span>Interactive map</span><span id="mapCount">0 points</span></div>
+ <div class="map-wrap">
+  <div id="map"></div>
+  <div class="map-legend">
+   <b>Map legend</b><br>
+   <span class="dot" style="background:#dc4438"></span>Hotspot<br>
+   <span class="dot" style="background:#347bc0"></span>Coldspot<br>
+   <span class="dot" style="background:#9aa8b5"></span>Not significant<br>
+   <span class="dot" style="background:#16a6b6"></span>Census point
+  </div>
+ </div>
+</section>
+
+<!-- ANALYTICS -->
+<section class="panel analytics">
+ <div class="panel-heading"><span>Analytics & results</span><span id="resultBadge">Not run</span></div>
+ <div class="panel-content">
+
+  <div class="section">
+   <h3>Key indicators</h3>
+   <div class="kpis">
+    <div class="kpi"><span>Population</span><strong id="kpiPopulation">—</strong><small>Total population</small></div>
+    <div class="kpi"><span>Households</span><strong id="kpiHouseholds">—</strong><small>Recorded households</small></div>
+    <div class="kpi"><span>Buildings</span><strong id="kpiBuildings">—</strong><small>Recorded buildings</small></div>
+    <div class="kpi"><span>Compounds</span><strong id="kpiPoints">—</strong><small>Recorded compounds</small></div>
+    <div class="kpi"><span>Mean household size</span><strong id="kpiHHSize">—</strong></div>
+    <div class="kpi"><span>Hotspot cells</span><strong id="kpiHotspots">—</strong></div>
+   </div>
+  </div>
+
+  <div class="section">
+   <h3>Descriptive statistics</h3>
+   <div class="table-wrap">
+    <table>
+     <thead><tr><th>Statistic</th><th>Population</th><th>Households</th><th>Buildings</th></tr></thead>
+     <tbody id="descriptiveTable"><tr><td colspan="4">Waiting for analysis</td></tr></tbody>
+    </table>
+   </div>
+  </div>
+
+  <div class="section">
+   <h3>Spatial autocorrelation</h3>
+   <div class="kpis">
+    <div class="kpi"><span>Global Moran's I</span><strong id="moranI">—</strong></div>
+    <div class="kpi"><span>Permutation p-value</span><strong id="moranP">—</strong></div>
+   </div>
+   <div id="moranInterpretation" class="status">Run analysis to calculate Moran's I.</div>
+  </div>
+
+  <div class="section">
+   <h3>Hotspot results</h3>
+   <div class="kpis">
+    <div class="kpi"><span>Hotspot cells</span><strong id="hotCells">—</strong></div>
+    <div class="kpi"><span>Coldspot cells</span><strong id="coldCells">—</strong></div>
+    <div class="kpi"><span>Grid cells</span><strong id="gridCells">—</strong></div>
+    <div class="kpi"><span>Grid resolution</span><strong id="gridResolution">1 km</strong></div>
+    <div class="kpi"><span>Grid cell area</span><strong id="gridArea">1 km²</strong></div>
+   </div>
+   <div class="chart-card"><div class="chart-title">Gi* classification</div><div class="chart-container"><canvas id="hotChart"></canvas></div></div>
+  </div>
+
+  <div class="section">
+   <h3>Gi* significance levels and FDR correction</h3>
+   <div class="mini-kpis">
+    <div class="mini-kpi"><span>90% hotspots</span><strong id="hot90">—</strong></div>
+    <div class="mini-kpi"><span>95% hotspots</span><strong id="hot95">—</strong></div>
+    <div class="mini-kpi"><span>99% hotspots</span><strong id="hot99">—</strong></div>
+    <div class="mini-kpi"><span>90% coldspots</span><strong id="cold90">—</strong></div>
+    <div class="mini-kpi"><span>95% coldspots</span><strong id="cold95">—</strong></div>
+    <div class="mini-kpi"><span>99% coldspots</span><strong id="cold99">—</strong></div>
+   </div>
+   <div id="fdrInterpretation" class="analysis-note">Run analysis to calculate Benjamini-Hochberg FDR-adjusted Gi* significance.</div>
+  </div>
+
+  <div class="section">
+   <h3>Advanced spatial diagnostics</h3>
+   <div class="kpis">
+    <div class="kpi"><span>Population Gini coefficient</span><strong id="giniValue">—</strong><small>0 = equality; 1 = maximum inequality</small></div>
+    <div class="kpi"><span>Pearson r: population / households</span><strong id="pearsonPH">—</strong></div>
+    <div class="kpi"><span>Spearman ρ: population / households</span><strong id="spearmanPH">—</strong></div>
+    <div class="kpi"><span>Nearest-neighbour ratio</span><strong id="nnRatio">—</strong></div>
+    <div class="kpi"><span>Nearest-neighbour z-score</span><strong id="nnZ">—</strong></div>
+    <div class="kpi"><span>Spatial outlier cells</span><strong id="outlierCount">—</strong></div>
+   </div>
+   <div id="advancedInterpretation" class="analysis-note">Run analysis to calculate inequality, correlations, nearest-neighbour statistics and spatial outliers.</div>
+   <div class="chart-card"><div class="chart-title">Pearson and Spearman correlations</div><div class="chart-container"><canvas id="correlationChart"></canvas></div></div>
+   <div class="chart-card"><div class="chart-title">Local Moran's I (LISA) cluster composition</div><div class="chart-container"><canvas id="lisaChart"></canvas></div></div>
+   <div class="table-wrap">
+    <table><thead><tr><th>Local cluster</th><th>Grid cells</th><th>Interpretation</th></tr></thead>
+     <tbody id="lisaTable"><tr><td colspan="3">Run analysis first</td></tr></tbody>
+    </table>
+   </div>
+   <div class="metric-note">LISA classes are exploratory High-High, Low-Low, High-Low and Low-High patterns. Local permutation p-values are not calculated in this version. Spatial outliers are exploratory local contrasts, not confirmed data errors.</div>
+  </div>
+
+  <div class="section">
+   <h3>Administrative comparison</h3>
+   <div class="chart-card"><div class="chart-title">Population by selected administrative category</div><div class="chart-container tall"><canvas id="adminChart"></canvas></div></div>
+  </div>
+
+  <div class="section">
+   <h3>Population distribution</h3>
+   <div class="chart-card"><div class="chart-title">Population frequency distribution</div><div class="chart-container"><canvas id="histChart"></canvas></div></div>
+   <div class="chart-card"><div class="chart-title">Population, households and buildings</div><div class="chart-container"><canvas id="totalsChart"></canvas></div></div>
+   <div class="chart-card"><div class="chart-title">Population Lorenz curve</div><div class="chart-container"><canvas id="lorenzChart"></canvas></div></div>
+   <div class="chart-card"><div class="chart-title">Population versus households</div><div class="chart-container"><canvas id="scatterChart"></canvas></div></div>
+  </div>
+
+  <div class="section">
+   <h3>Administrative / settlement ranking</h3>
+   <div class="field">
+    <label>Ranking category</label>
+    <select id="rankField">
+     <option value="settlement">Settlement</option>
+     <option value="region">Region / LGA</option>
+     <option value="district">District</option>
+     <option value="ward">Ward</option>
+    </select>
+   </div>
+   <div class="table-wrap">
+    <table><thead><tr><th>Area</th><th>Population</th><th>Households</th><th>Buildings</th></tr></thead>
+    <tbody id="rankingTable"><tr><td colspan="4">Run analysis first</td></tr></tbody></table>
+   </div>
+  </div>
+
+  <div class="section">
+   <h3>Data quality</h3>
+   <div class="kpis">
+    <div class="kpi"><span>Missing population</span><strong id="missingPop">—</strong></div>
+    <div class="kpi"><span>Duplicate coordinates</span><strong id="duplicates">—</strong></div>
+    <div class="kpi"><span>Invalid coordinates</span><strong id="invalidCoords">—</strong></div>
+    <div class="kpi"><span>Records analysed</span><strong id="validRecords">—</strong></div>
+   </div>
+  </div>
+
+  <div class="section">
+   <h3>Exports</h3>
+   <div class="two">
+    <button class="secondary" id="exportStats">Descriptive CSV</button>
+    <button class="secondary" id="exportGrid">Grid statistics CSV</button>
+    <button class="secondary" id="exportHot">Hotspots CSV</button>
+    <button class="secondary" id="exportPoints">Points CSV</button>
+    <button class="secondary" id="exportGridGeo">Grid GeoJSON</button>
+    <button class="secondary" id="exportClusters">Clusters CSV</button>
+    <button class="secondary" id="exportRank">Rankings CSV</button>
+    <button class="secondary" id="exportLISA">LISA clusters CSV</button>
+    <button class="secondary" id="exportOutliers">Spatial outliers CSV</button>
+    <button class="secondary" id="exportCorrelation">Correlation CSV</button>
+    <button class="success" id="exportReport">Summary report</button>
+   </div>
+  </div>
+
+  <div class="section">
+   <h3>Methodology</h3>
+   <div class="status">
+    <b>Getis-Ord Gi*:</b> identifies local concentrations of high and low values using the complete rectangular grid and selected queen or rook neighbourhood. Normal-approximation p-values are adjusted across grid cells using the Benjamini-Hochberg false discovery rate (FDR) procedure. The 90%, 95% and 99% classes use adjusted q-value thresholds of 0.10, 0.05 and 0.01.
+    <br><br>
+    <b>Global Moran's I:</b> measures overall spatial autocorrelation using grid adjacency and a permutation test.
+    <br><br>
+    <b>Local Moran's I (LISA):</b> classifies cells as High-High, Low-Low, High-Low or Low-High based on standardized cell values and neighbouring spatial lags. Local permutation significance is not calculated here; interpret these as exploratory cluster/outlier classes.
+    <br><br>
+    <b>Gini coefficient:</b> summarizes inequality in population values across Compounds/buildings, from 0 (equal values) towards 1 (greater inequality).
+    <br><br>
+    <b>Pearson and Spearman correlations:</b> quantify linear and rank-based relationships between population, households and Buildings. Correlation does not imply causation.
+    <br><br>
+    <b>Nearest-neighbour analysis:</b> compares observed mean nearest-point distance with the expected distance under complete spatial randomness. The calculation uses the points' projected bounding rectangle and an approximate local equirectangular projection.
+    <br><br>
+    <b>Spatial outliers:</b> flags grid cells whose value differs from the mean of adjacent cells by at least two global standard deviations. This is an exploratory screening rule, not a formal significance test.
+    <br><br>
+    <b>KDE:</b> shows smoothed spatial concentration and is not a significance test.
+    <br><br>
+    <b>Limitations:</b> grid cells cover the selected points' bounding rectangle, not necessarily the exact administrative polygon. The local equirectangular projection is an approximation for regional analysis. Check coordinate reference systems and study-area boundaries before formal publication.
+   </div>
+  </div>
+
+ </div>
+</section>
+</main>
+
+<footer>
+ <span>Produced by Ansu Singhateh | GIS Analyst | GIS-Cartography Unit | Gambia Bureau of Statistics</span>
+ <span>SILKYSINGZ GEOAI • Research and educational use</span>
+</footer>
+
+<script>
+"use strict";
+
+/* =========================================================
+   SOURCE DATA
+========================================================= */
+const CSV_URL="https://raw.githubusercontent.com/silkysingz94-oss/Gambia-Census-Point-Mapping/main/CensusPoints.csv";
+const GEO_URL="https://raw.githubusercontent.com/silkysingz94-oss/Gambia-Census-Point-Mapping/main/Census_EAs_Geo.json";
+
+const FIELD={
+ lat:["Latitude","latitude","LATITUDE","lat","y"],
+ lon:["Longitude","longitude","LONGITUDE","lon","lng","x"],
+ population:["Population","Total_Population","total_population","population","POPULATION","pop"],
+ households:["Households","No_Of_Househlods","No_Of_Households","No_of_Households","households"],
+ buildings:["Buildings","Building","building","building_count","No_Of_Buildings","No_Of_Structure","No_Of_Structures","No_of_Structures","buildings","Structures","structures"],
+ compounds:["Compounds","Compound","compound","compound_count"],
+ settlement:["settlement","Settlement","SETTLEMENT","hsettlement","SETTLEMENT_Name"],
+ region:["region","Region","lga","LGA","lganame","RCO","regionname"],
+ district:["district","District","distname","DISTRICT"],
+ ward:["ward","Ward","wardname","WARD"]
+};
+
+let rawPoints=[],eaGeo=null,eaFeatures=[],analysis=null,clusterResults=[];
+let map,baseLayers={},mapLayers={},charts={};
+
+const fmt=(v,d=0)=>{
+ if(v===null||v===undefined||!Number.isFinite(Number(v)))return "—";
+ return Number(v).toLocaleString("en-US",{maximumFractionDigits:d});
+};
+const num=v=>{
+ if(v===null||v===undefined||String(v).trim()==="")return null;
+ const n=Number(String(v).replace(/,/g,"").trim());
+ return Number.isFinite(n)?n:null;
+};
+const normaliseHeaderName=value=>String(value??"")
+ .replace(/^\\uFEFF/,"")
+ .trim()
+ .toLowerCase()
+ .replace(/[^a-z0-9]/g,"");
+
+const first=(obj,keys)=>{
+ if(!obj)return null;
+ const lookup=new Map(Object.keys(obj).map(k=>[normaliseHeaderName(k),obj[k]]));
+ for(const k of keys){
+  const value=lookup.get(normaliseHeaderName(k));
+  if(value!==undefined&&value!==null&&String(value).trim()!=="")return value;
+ }
+ return null;
+};
+const sum=a=>{
+ let s=0;
+ for(const v of a)if(Number.isFinite(v))s+=v;
+ return s;
+};
+const mean=a=>a.length?sum(a)/a.length:null;
+const safeMin=a=>{
+ let m=Infinity;
+ for(const v of a)if(Number.isFinite(v)&&v<m)m=v;
+ return m===Infinity?null:m;
+};
+const safeMax=a=>{
+ let m=-Infinity;
+ for(const v of a)if(Number.isFinite(v)&&v>m)m=v;
+ return m===-Infinity?null:m;
+};
+const median=a=>{
+ if(!a.length)return null;
+ const b=a.slice().sort((x,y)=>x-y),m=Math.floor(b.length/2);
+ return b.length%2?b[m]:(b[m-1]+b[m])/2;
+};
+const quantile=(a,q)=>{
+ if(!a.length)return null;
+ const b=a.slice().sort((x,y)=>x-y),p=(b.length-1)*q;
+ const i=Math.floor(p),f=p-i;
+ return b[i+1]===undefined?b[i]:b[i]+f*(b[i+1]-b[i]);
+};
+const variance=a=>{
+ if(!a.length)return null;
+ const m=mean(a);
+ return sum(a.map(v=>(v-m)**2))/a.length;
+};
+const sd=a=>{const v=variance(a);return v===null?null:Math.sqrt(v);};
+const el=id=>document.getElementById(id);
+const setText=(id,v)=>{el(id).textContent=v;};
+const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function status(message,type=""){
+ el("analysisStatus").className="status "+type;
+ el("analysisStatus").textContent=message;
+ setText("topStatus",message);
+}
+function progress(p,message){
+ el("progressBar").style.width=Math.max(0,Math.min(100,p))+"%";
+ setText("progressText",message||"");
+}
+function csvString(rows){
+ if(!rows||!rows.length)return "";
+ const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))];
+ const q=v=>{
+  if(v===null||v===undefined)return "";
+  const s=String(v);
+  return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;
+ };
+ return [keys.map(q).join(","),...rows.map(r=>keys.map(k=>q(r[k])).join(","))].join("\n");
+}
+function download(content,name,type="text/csv;charset=utf-8"){
+ const blob=new Blob([content],{type});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportRows(rows,name){
+ if(!rows||!rows.length){alert("No results available. Run the analysis first.");return;}
+ download(csvString(rows),name);
+}
+
+/* =========================================================
+   MAP INITIALISATION
+========================================================= */
+function initMap(){
+ map=L.map("map",{preferCanvas:true}).setView([13.45,-15.45],8);
+
+ baseLayers.road=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+  maxZoom:19,attribution:"© OpenStreetMap"
+ });
+ baseLayers.satellite=L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {maxZoom:19,attribution:"© Esri"}
+ );
+
+ const imagery=L.tileLayer(
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {maxZoom:19}
+ );
+ const labels=L.tileLayer(
+  "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
+  {maxZoom:19}
+ );
+ baseLayers.hybrid=L.layerGroup([imagery,labels]);
+ baseLayers.terrain=L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{
+  maxZoom:17,attribution:"© OpenTopoMap"
+ });
+ baseLayers.hybrid.addTo(map);
+
+ mapLayers.points=L.layerGroup().addTo(map);
+ mapLayers.ea=L.geoJSON(null,{
+  style:{color:"#e0a52c",weight:1,fillOpacity:.02}
+ }).addTo(map);
+ mapLayers.grid=L.layerGroup().addTo(map);
+ mapLayers.hot=L.layerGroup().addTo(map);
+ mapLayers.kde=L.layerGroup().addTo(map);
+ mapLayers.clusters=L.layerGroup().addTo(map);
+
+ setTimeout(()=>map.invalidateSize(),250);
+}
+function changeBasemap(){
+ Object.values(baseLayers).forEach(l=>map.removeLayer(l));
+ const key=el("basemapSelect").value;
+ baseLayers[key].addTo(map);
+}
+function clearLayer(name){mapLayers[name].clearLayers();}
+function fitPoints(list){
+ if(!list.length)return;
+ const bounds=L.latLngBounds(list.map(p=>[p.lat,p.lon]));
+ if(bounds.isValid())map.fitBounds(bounds.pad(.08),{maxZoom:14});
+}
+function renderPoints(list){
+ clearLayer("points");
+ const renderer=L.canvas({padding:.5});
+ for(const p of list){
+  L.circleMarker([p.lat,p.lon],{
+   renderer,radius:3,color:"#087d9b",weight:1,
+   fillColor:"#20bfd0",fillOpacity:.72
+  }).bindPopup(
+   "<b>"+escapeHTML(p.settlement)+"</b><br>"+
+   "Population: "+fmt(p.population)+"<br>"+
+   "Households: "+fmt(p.households)+"<br>"+
+   "Buildings: "+fmt(p.buildings)+"<br>"+
+   "Compounds: "+fmt(p.compounds)
+  ).addTo(mapLayers.points);
+ }
+ setText("mapCount",fmt(list.length)+" points");
+}
+function updateLayerVisibility(){
+ const pairs=[
+  ["points","pointsToggle"],["ea","eaToggle"],["grid","gridToggle"],
+  ["hot","hotToggle"],["kde","kdeToggle"],["clusters","clusterToggle"]
+ ];
+ for(const [layer,id] of pairs){
+  if(el(id).checked){if(!map.hasLayer(mapLayers[layer]))map.addLayer(mapLayers[layer]);}
+  else map.removeLayer(mapLayers[layer]);
+ }
+}
+
+/* =========================================================
+   DATA NORMALISATION
+========================================================= */
+function normalisePoint(row,index){
+ return {
+  id:index+1,raw:row,
+  lat:num(first(row,FIELD.lat)),
+  lon:num(first(row,FIELD.lon)),
+  population:num(first(row,FIELD.population)),
+  households:num(first(row,FIELD.households)),
+  buildings:num(first(row,FIELD.buildings)),
+  compounds:num(first(row,FIELD.compounds)),
+  settlement:String(first(row,FIELD.settlement)||"Unspecified"),
+  region:String(first(row,FIELD.region)||""),
+  district:String(first(row,FIELD.district)||""),
+  ward:String(first(row,FIELD.ward)||""),
+  ea:""
+ };
+}
+function validCoordinate(p){
+ return Number.isFinite(p.lat)&&Number.isFinite(p.lon)&&
+  p.lat>=-90&&p.lat<=90&&p.lon>=-180&&p.lon<=180;
+}
+function adminKeys(features){
+ const props=features[0]?.properties||{};
+ const keys=Object.keys(props);
+ const find=names=>keys.find(k=>names.some(n=>k.toLowerCase()===n.toLowerCase()));
+ return {
+  region:find(["lganame","lga","region","rco","regionname"]),
+  district:find(["distname","district"]),
+  ward:find(["wardname","ward"])
+ };
+}
+function assignAdmin(){
+ if(!eaFeatures.length||!rawPoints.length)return;
+ const keys=adminKeys(eaFeatures);
+ const index=eaFeatures.map(f=>({f,bbox:turf.bbox(f)}));
+
+ for(const p of rawPoints){
+  if(p.region&&p.district&&p.ward)continue;
+  const pt=turf.point([p.lon,p.lat]);
+
+  for(const item of index){
+   const b=item.bbox;
+   if(p.lon<b[0]||p.lon>b[2]||p.lat<b[1]||p.lat>b[3])continue;
+
+   try{
+    if(turf.booleanPointInPolygon(pt,item.f)){
+     const props=item.f.properties||{};
+     p.region=p.region||String(keys.region?props[keys.region]||"":"");
+     p.district=p.district||String(keys.district?props[keys.district]||"":"");
+     p.ward=p.ward||String(keys.ward?props[keys.ward]||"":"");
+     p.ea=String(first(props,["FEACODE","feacode","ea_code","EA_CODE","eaname"])||"");
+     break;
+    }
+   }catch(e){}
+  }
+ }
+}
+function fillSelect(id,values,label){
+ const s=el(id),old=s.value;
+ const vals=[...new Set(values.filter(v=>v!==""&&v!==null).map(String))].sort();
+ s.innerHTML=`<option value="">All ${label}</option>`+
+  vals.map(v=>`<option value="${escapeHTML(v)}">${escapeHTML(v)}</option>`).join("");
+ if(vals.includes(old))s.value=old;
+}
+function refreshSelectors(){
+ fillSelect("regionSelect",rawPoints.map(p=>p.region),"regions");
+ updateDependentSelectors();
+}
+function updateDependentSelectors(){
+ const region=el("regionSelect").value;
+ const subset=rawPoints.filter(p=>!region||p.region===region);
+ const oldD=el("districtSelect").value;
+ const districts=[...new Set(subset.map(p=>p.district).filter(Boolean))].sort();
+ el("districtSelect").innerHTML='<option value="">All districts</option>'+
+  districts.map(v=>`<option value="${escapeHTML(v)}">${escapeHTML(v)}</option>`).join("");
+ if(districts.includes(oldD))el("districtSelect").value=oldD;
+
+ const district=el("districtSelect").value;
+ const wards=[...new Set(subset.filter(p=>!district||p.district===district).map(p=>p.ward).filter(Boolean))].sort();
+ const oldW=el("wardSelect").value;
+ el("wardSelect").innerHTML='<option value="">All wards</option>'+
+  wards.map(v=>`<option value="${escapeHTML(v)}">${escapeHTML(v)}</option>`).join("");
+ if(wards.includes(oldW))el("wardSelect").value=oldW;
+}
+function getSelectedPoints(){
+ const r=el("regionSelect").value,d=el("districtSelect").value,w=el("wardSelect").value;
+ let list=rawPoints.filter(p=>(!r||p.region===r)&&(!d||p.district===d)&&(!w||p.ward===w));
+ const extent=el("extentSelect").value;
+ if(extent==="all")return rawPoints.slice();
+ if(extent==="map"){
+  const bounds=map.getBounds();
+  list=list.filter(p=>bounds.contains([p.lat,p.lon]));
+ }
+ return list;
+}
+function selectedEAFeatures(){
+ if(!eaFeatures.length)return [];
+ const keys=adminKeys(eaFeatures);
+ const r=el("regionSelect").value,d=el("districtSelect").value,w=el("wardSelect").value;
+ return eaFeatures.filter(f=>{
+  const p=f.properties||{};
+  return (!r||String(keys.region?p[keys.region]||"":"")===r)&&
+   (!d||String(keys.district?p[keys.district]||"":"")===d)&&
+   (!w||String(keys.ward?p[keys.ward]||"":"")===w);
+ });
+}
+
+/* =========================================================
+   LOAD CSV AND GEOJSON
+========================================================= */
+async function loadCSVText(text){
+ const parsed=Papa.parse(text,{
+  header:true,skipEmptyLines:true,
+  transformHeader:header=>String(header).replace(/^\\uFEFF/,"").trim()
+ });
+ if(parsed.errors.length)console.warn("CSV parsing warnings:",parsed.errors);
+ if(!parsed.data||!parsed.data.length)throw Error("The CSV contains no data records.");
+
+ console.log("CSV headings:",Object.keys(parsed.data[0]));
+ console.log("First CSV record:",parsed.data[0]);
+
+ rawPoints=parsed.data.map((row,index)=>normalisePoint(row,index)).filter(validCoordinate);
+
+ const buildingRecords=rawPoints.filter(p=>p.buildings!==null&&Number.isFinite(p.buildings));
+ const compoundRecords=rawPoints.filter(p=>p.compounds!==null&&Number.isFinite(p.compounds));
+ console.log("Records with Buildings values:",buildingRecords.length);
+ console.log("Total Buildings:",sum(buildingRecords.map(p=>p.buildings)));
+ console.log("Records with Compounds values:",compoundRecords.length);
+ console.log("Total Compounds:",sum(compoundRecords.map(p=>p.compounds)));
+
+ if(eaFeatures.length)assignAdmin();
+ refreshSelectors();
+ renderPoints(rawPoints);
+ updateQuality(rawPoints);
+ if(rawPoints.length)fitPoints(rawPoints);
+
+ el("dataStatus").className="status good";
+ el("dataStatus").textContent="Loaded "+fmt(rawPoints.length)+
+  " valid census points | "+fmt(buildingRecords.length)+
+  " building records | "+fmt(sum(buildingRecords.map(p=>p.buildings)))+" buildings.";
+ status("CSV loaded. Select an area and run analysis.","good");
+}
+async function loadGeoText(text){
+ const obj=JSON.parse(text);
+ if(obj.type==="FeatureCollection")eaGeo=obj;
+ else if(obj.type==="Feature")eaGeo={type:"FeatureCollection",features:[obj]};
+ else throw new Error("Invalid GeoJSON structure.");
+
+ eaFeatures=eaGeo.features||[];
+ mapLayers.ea.clearLayers();
+ mapLayers.ea.addData(eaGeo);
+
+ if(rawPoints.length){
+  assignAdmin();refreshSelectors();renderPoints(rawPoints);
+ }
+ el("dataStatus").textContent=
+  "Loaded "+fmt(eaFeatures.length)+" EA boundary features. Points: "+fmt(rawPoints.length);
+}
+async function loadRepository(){
+ const jobs=await Promise.allSettled([
+  fetch(CSV_URL).then(r=>{if(!r.ok)throw Error("CSV HTTP "+r.status);return r.text();}),
+  fetch(GEO_URL).then(r=>{if(!r.ok)throw Error("GeoJSON HTTP "+r.status);return r.text();})
+ ]);
+
+ if(jobs[0].status==="fulfilled"){
+  try{await loadCSVText(jobs[0].value);}
+  catch(e){console.error(e);}
+ }
+ if(jobs[1].status==="fulfilled"){
+  try{await loadGeoText(jobs[1].value);}
+  catch(e){console.error(e);}
+ }
+
+ if(jobs.every(j=>j.status==="rejected")){
+  el("dataStatus").className="status error";
+  el("dataStatus").textContent="Automatic loading failed. Upload your CSV and GeoJSON files.";
+  status("Repository files could not be loaded. Use the upload controls.","error");
+ }
+}
+el("csvFile").addEventListener("change",async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{await loadCSVText(await f.text());}
+ catch(err){status("CSV error: "+err.message,"error");}
+});
+el("geoFile").addEventListener("change",async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{await loadGeoText(await f.text());}
+ catch(err){status("GeoJSON error: "+err.message,"error");}
+});
+
+/* =========================================================
+   DESCRIPTIVE STATISTICS
+========================================================= */
+function valuesFor(list,key){
+ return list.map(p=>p[key]).filter(v=>v!==null&&Number.isFinite(v));
+}
+function descriptive(a){
+ if(!a.length)return null;
+ const m=mean(a),s=sd(a),v=variance(a);
+ const lo=safeMin(a),hi=safeMax(a);
+ return {
+  n:a.length,sum:sum(a),mean:m,median:median(a),
+  min:lo,max:hi,range:hi-lo,sd:s,variance:v,
+  cv:m!==0?s/Math.abs(m)*100:null,
+  q1:quantile(a,.25),q3:quantile(a,.75),p90:quantile(a,.9)
+ };
+}
+function updateDescriptive(list){
+ const keys=["population","households","buildings"];
+ const stats=keys.map(k=>descriptive(valuesFor(list,k)));
+ const rows=[
+  ["Records","n"],["Total","sum"],["Mean","mean"],["Median","median"],
+  ["Minimum","min"],["Maximum","max"],["Range","range"],
+  ["Standard deviation","sd"],["Variance","variance"],
+  ["Coefficient of variation (%)","cv"],["25th percentile","q1"],
+  ["75th percentile","q3"],["90th percentile","p90"]
+ ];
+ el("descriptiveTable").innerHTML=rows.map(([label,key])=>
+  `<tr><td>${label}</td>`+
+  stats.map(s=>`<td>${s?fmt(s[key],2):"—"}</td>`).join("")+
+  "</tr>"
+ ).join("");
+
+ const pop=sum(valuesFor(list,"population"));
+ const hh=sum(valuesFor(list,"households"));
+ const buildingValues=valuesFor(list,"buildings");
+ const compoundValues=valuesFor(list,"compounds");
+ const buildings=sum(buildingValues);
+ const compounds=sum(compoundValues);
+
+ setText("kpiPopulation",fmt(pop));
+ setText("kpiHouseholds",fmt(hh));
+ setText("kpiBuildings",buildingValues.length?fmt(buildings):"—");
+ setText("kpiPoints",compoundValues.length?fmt(compounds):"—");
+ setText("kpiHHSize",hh>0?fmt(pop/hh,2):"—");
+
+ return {population:pop,households:hh,buildings:buildings,compounds:compounds,stats};
+}
+function updateQuality(list){
+ let missing=0,duplicates=0;
+ const seen=new Set();
+
+ for(const p of rawPoints){
+  if(p.population===null)missing++;
+  const key=p.lat.toFixed(6)+","+p.lon.toFixed(6);
+  if(seen.has(key))duplicates++;
+  else seen.add(key);
+ }
+ setText("missingPop",fmt(missing));
+ setText("duplicates",fmt(duplicates));
+ setText("invalidCoords",fmt(0));
+ setText("validRecords",fmt(list.length));
+}
+
+/* =========================================================
+   LOCAL METRIC PROJECTION
+========================================================= */
+function project(lon,lat,lat0){
+ const R=6371008.8;
+ return {
+  x:R*lon*Math.PI/180*Math.cos(lat0*Math.PI/180),
+  y:R*lat*Math.PI/180
+ };
+}
+function unproject(x,y,lat0){
+ const R=6371008.8;
+ return {
+  lon:x/(R*Math.cos(lat0*Math.PI/180))*180/Math.PI,
+  lat:y/R*180/Math.PI
+ };
+}
+
+/* =========================================================
+   COMPLETE GRID INCLUDING ZERO-VALUE CELLS
+========================================================= */
+function getVariableKey(){return el("variableSelect").value;}
+
+function buildGrid(list){
+ if(!list.length)throw Error("No points are available in the selected extent.");
+
+ const km=Number(el("gridSelect").value);
+ const cell=km*1000;
+ const lat0=mean(list.map(p=>p.lat));
+ let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+ const projected=[];
+
+ for(const p of list){
+  const xy=project(p.lon,p.lat,lat0);
+  projected.push({x:xy.x,y:xy.y,point:p});
+  minX=Math.min(minX,xy.x);
+  maxX=Math.max(maxX,xy.x);
+  minY=Math.min(minY,xy.y);
+  maxY=Math.max(maxY,xy.y);
+ }
+
+ const x0=Math.floor(minX/cell)*cell;
+ const y0=Math.floor(minY/cell)*cell;
+ const nx=Math.max(1,Math.ceil((maxX-x0)/cell));
+ const ny=Math.max(1,Math.ceil((maxY-y0)/cell));
+ const total=nx*ny;
+
+ if(!Number.isSafeInteger(total)||total>12000){
+  throw Error("The selected area creates "+fmt(total)+
+   " cells. Select a smaller area or increase grid size.");
+ }
+
+ const cells=[],lookup=new Map();
+
+ for(let iy=0;iy<ny;iy++){
+  for(let ix=0;ix<nx;ix++){
+   const x=x0+(ix+.5)*cell,y=y0+(iy+.5)*cell;
+   const ll=unproject(x,y,lat0);
+   const c={
+    id:iy*nx+ix,ix,iy,x,y,lon:ll.lon,lat:ll.lat,
+    value:0,pointCount:0,hotZ:null,pValue:null,qValue:null,
+    category:"Not significant",neighbours:[]
+   };
+   cells.push(c);
+   lookup.set(ix+","+iy,c);
+  }
+ }
+
+ const key=getVariableKey();
+ for(const p of projected){
+  const ix=Math.floor((p.x-x0)/cell);
+  const iy=Math.floor((p.y-y0)/cell);
+  const c=lookup.get(ix+","+iy);
+  if(!c)continue;
+  c.pointCount++;
+  const v=key==="point_count"?1:p.point[key];
+  if(v!==null&&Number.isFinite(v))c.value+=v;
+ }
+
+ const offsets=el("neighbourSelect").value==="rook"
+  ?[[1,0],[-1,0],[0,1],[0,-1]]
+  :[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+
+ for(const c of cells){
+  for(const [dx,dy] of offsets){
+   const n=lookup.get((c.ix+dx)+","+(c.iy+dy));
+   if(n)c.neighbours.push(n);
+  }
+ }
+
+ return {cells,lat0,x0,y0,nx,ny,cell,km,offsets};
+}
+
+/* =========================================================
+   NORMAL DISTRIBUTION AND GETIS-ORD Gi*
+========================================================= */
+function erf(x){
+ const sign=x<0?-1:1;
+ x=Math.abs(x);
+ const t=1/(1+.3275911*x);
+ const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x);
+ return sign*y;
+}
+function normalCDF(z){return .5*(1+erf(z/Math.SQRT2));}
+function twoTailP(z){return Math.max(0,Math.min(1,2*(1-normalCDF(Math.abs(z)))));}
+function criticalZ(conf){return conf===99?2.576:conf===90?1.645:1.96;}
+
+function calculateGi(grid){
+ const cells=grid.cells,n=cells.length;
+ const vals=cells.map(c=>c.value);
+ const xbar=mean(vals),S=sd(vals);
+
+ if(!S||S===0){
+  for(const c of cells){
+   c.hotZ=0;c.pValue=1;c.category="Not significant";
+  }
+  return;
+ }
+
+ for(const c of cells){
+  const local=[c,...c.neighbours];
+  const wij=local.length;
+  const localSum=sum(local.map(x=>x.value));
+  const numerator=localSum-xbar*wij;
+  const term=(n*wij-wij*wij)/(n-1);
+  const denominator=S*Math.sqrt(Math.max(0,term));
+  c.hotZ=denominator>0?numerator/denominator:0;
+  c.pValue=twoTailP(c.hotZ);
+ }
+
+ applyFDR(cells);
+ const alpha=1-Number(el("confidenceSelect").value)/100;
+ for(const c of cells){
+  if(Number.isFinite(c.qValue)&&c.qValue<=alpha){
+   const level=c.qValue<=.01?99:c.qValue<=.05?95:90;
+   c.category=(c.hotZ>=0?"Hotspot ":"Coldspot ")+level+"%";
+  }else c.category="Not significant";
+ }
+}
+
+function applyFDR(cells){
+ const ordered=cells.map((c,i)=>({i,p:Number.isFinite(c.pValue)?c.pValue:1}))
+  .sort((a,b)=>a.p-b.p);
+ const m=ordered.length;
+ let running=1;
+ for(let k=m-1;k>=0;k--){
+  const item=ordered[k];
+  running=Math.min(running,item.p*m/(k+1),1);
+  cells[item.i].qValue=running;
+ }
+}
+function baseCategory(category){
+ const value=String(category||"");
+ if(value.startsWith("Hotspot"))return "Hotspot";
+ if(value.startsWith("Coldspot"))return "Coldspot";
+ return "Not significant";
+}
+
+/* =========================================================
+   MORAN'S I WITH PERMUTATIONS
+========================================================= */
+function moranI(values,cells,iterations){
+ const n=values.length;
+ if(n<3)return {I:null,p:null,expected:null,permutations:0};
+
+ const m=mean(values);
+ const dev=values.map(v=>v-m);
+ const denom=sum(dev.map(v=>v*v));
+ if(denom===0)return {I:null,p:null,expected:-1/(n-1),permutations:0};
+
+ let numerator=0,S0=0;
+ for(let i=0;i<n;i++){
+  for(const nb of cells[i].neighbours){
+   numerator+=dev[i]*dev[nb.id];
+   S0++;
+  }
+ }
+ if(!S0)return {I:null,p:null,expected:-1/(n-1),permutations:0};
+
+ const I=n/S0*numerator/denom;
+ const expected=-1/(n-1);
+
+ let seed=20261122;
+ const rand=()=>{
+  seed=(seed*1664525+1013904223)>>>0;
+  return seed/4294967296;
+ };
+ let extreme=0;
+ const perm=values.slice();
+
+ for(let r=0;r<iterations;r++){
+  for(let i=n-1;i>0;i--){
+   const j=Math.floor(rand()*(i+1));
+   [perm[i],perm[j]]=[perm[j],perm[i]];
+  }
+
+  const pm=mean(perm);
+  let pden=0,pnum=0;
+  const pd=perm.map(v=>v-pm);
+  pden=sum(pd.map(v=>v*v));
+
+  for(let i=0;i<n;i++){
+   for(const nb of cells[i].neighbours)pnum+=pd[i]*pd[nb.id];
+  }
+
+  const pi=pden>0?n/S0*pnum/pden:0;
+  if(Math.abs(pi-expected)>=Math.abs(I-expected))extreme++;
+ }
+
+ return {I,p:(extreme+1)/(iterations+1),expected,permutations:iterations};
+}
+function calculateLocalMoran(cells){
+ const vals=cells.map(c=>c.value);
+ const m=mean(vals),s=sd(vals);
+ if(!s||s===0)return;
+
+ const z=vals.map(v=>(v-m)/s);
+ for(let i=0;i<cells.length;i++){
+  const c=cells[i];
+  const lag=mean(c.neighbours.map(nb=>z[nb.id]))||0;
+  c.localMoran=z[i]*lag;
+
+  if(z[i]>=0&&lag>=0)c.lisa="High-High";
+  else if(z[i]<=0&&lag<=0)c.lisa="Low-Low";
+  else if(z[i]>=0&&lag<0)c.lisa="High-Low";
+  else c.lisa="Low-High";
+ }
+}
+
+/* =========================================================
+   KDE
+========================================================= */
+function calculateKDE(grid){
+ const cells=grid.cells;
+ const occupied=cells.filter(c=>c.pointCount>0);
+ const bandwidth=Math.max(grid.cell*1.5,1000);
+ const cutoff=bandwidth*bandwidth*9;
+
+ for(const c of cells){
+  let density=0;
+  for(const o of occupied){
+   const d2=(c.x-o.x)**2+(c.y-o.y)**2;
+   if(d2<cutoff)density+=o.value*Math.exp(-d2/(2*bandwidth*bandwidth));
+  }
+  c.kde=density;
+ }
+}
+
+/* =========================================================
+   DBSCAN WITH SPATIAL HASH
+========================================================= */
+function runDBSCAN(list){
+ const eps=Math.max(100,Number(el("dbscanRadius").value)||1000);
+ const minPts=Math.max(2,Number(el("dbscanMin").value)||5);
+ if(!list.length)return [];
+
+ const lat0=mean(list.map(p=>p.lat));
+ const pts=list.map((p,i)=>({
+  ...project(p.lon,p.lat,lat0),p,index:i,cluster:-1,visited:false
+ }));
+ const hash=new Map();
+ const key=(x,y)=>Math.floor(x/eps)+","+Math.floor(y/eps);
+
+ for(const p of pts){
+  const k=key(p.x,p.y);
+  if(!hash.has(k))hash.set(k,[]);
+  hash.get(k).push(p);
+ }
+ function region(p){
+  const ix=Math.floor(p.x/eps),iy=Math.floor(p.y/eps),out=[];
+  for(let dx=-1;dx<=1;dx++){
+   for(let dy=-1;dy<=1;dy++){
+    const arr=hash.get((ix+dx)+","+(iy+dy))||[];
+    for(const q of arr){
+     if((p.x-q.x)**2+(p.y-q.y)**2<=eps*eps)out.push(q);
+    }
+   }
+  }
+  return out;
+ }
+
+ let cluster=0;
+ for(const p of pts){
+  if(p.visited)continue;
+  p.visited=true;
+  const neighbours=region(p);
+  if(neighbours.length<minPts){p.cluster=-1;continue;}
+
+  cluster++;
+  p.cluster=cluster;
+  const queue=neighbours.slice();
+  const queued=new Set(queue);
+
+  for(let i=0;i<queue.length;i++){
+   const q=queue[i];
+   if(!q.visited){
+    q.visited=true;
+    const qn=region(q);
+    if(qn.length>=minPts){
+     for(const n of qn){
+      if(!queued.has(n)){queued.add(n);queue.push(n);}
+     }
+    }
+   }
+   if(q.cluster===-1)q.cluster=cluster;
+  }
+ }
+
+ return pts.map(p=>({
+  id:p.p.id,lat:p.p.lat,lon:p.p.lon,
+  settlement:p.p.settlement,population:p.p.population,
+  cluster:p.cluster,
+  classification:p.cluster===-1?"Noise":"Cluster "+p.cluster
+ }));
+}
+
+/* =========================================================
+   GRID GEOMETRY AND BATCHED MAP DRAWING
+========================================================= */
+function cellFeature(c,grid){
+ const h=grid.cell/2;
+ const a=unproject(c.x-h,c.y-h,grid.lat0);
+ const b=unproject(c.x+h,c.y-h,grid.lat0);
+ const d=unproject(c.x-h,c.y+h,grid.lat0);
+ const e=unproject(c.x+h,c.y+h,grid.lat0);
+ return turf.polygon([[
+  [a.lon,a.lat],[b.lon,b.lat],[e.lon,e.lat],[d.lon,d.lat],[a.lon,a.lat]
+ ]]);
+}
+
+function renderGrid(grid,method){
+ clearLayer("grid");clearLayer("hot");clearLayer("kde");
+
+ let maxValue=1,maxKDE=1;
+ for(const c of grid.cells){
+  maxValue=Math.max(maxValue,c.value);
+  maxKDE=Math.max(maxKDE,c.kde||0);
+ }
+
+ const features=[];
+ for(const c of grid.cells){
+  const f=cellFeature(c,grid);
+  f.properties={
+   cell_id:c.id,value:c.value,point_count:c.pointCount,
+   Gi_star_z:c.hotZ,p_value:c.pValue,FDR_q_value:c.qValue,classification:c.category,
+   local_moran:c.localMoran,lisa_class:c.lisa,kde:c.kde
+  };
+  features.push(f);
+ }
+
+ const groupName=(method==="gi"||method==="moran")?"hot":method==="kde"?"kde":"grid";
+ const layer=mapLayers[groupName];
+
+ L.geoJSON({type:"FeatureCollection",features},{
+  style:f=>{
+   const p=f.properties;
+   let color="#a8b5c1",opacity=.12;
+
+   if(method==="gi"){
+    if(String(p.classification||"").startsWith("Hotspot")){color="#dc4438";opacity=.50;}
+    else if(String(p.classification||"").startsWith("Coldspot")){color="#347bc0";opacity=.50;}
+   }else if(method==="moran"){
+    const lisa=p.lisa_class;
+    if(lisa==="High-High"){color="#c64b4b";opacity=.55;}
+    else if(lisa==="Low-Low"){color="#347bc0";opacity=.55;}
+    else if(lisa==="High-Low"){color="#d88726";opacity=.60;}
+    else if(lisa==="Low-High"){color="#16a6b6";opacity=.60;}
+   }else if(method==="kde"){
+    opacity=.08+.42*((p.kde||0)/maxKDE);
+    color="#e6550d";
+   }else{
+    opacity=.08+.35*(p.value/maxValue);
+    color="#e0a52c";
+   }
+
+   return {color,weight:.4,fillColor:color,fillOpacity:opacity};
+  },
+  onEachFeature:(f,l)=>{
+   const p=f.properties;
+   const popupClass=method==="moran"?(p.lisa_class||"LISA not classified"):(p.classification||"Grid cell");
+   l.bindPopup(
+    "<b>"+escapeHTML(popupClass)+"</b><br>"+
+    "Value: "+fmt(p.value)+"<br>"+
+    "Gi* z-score: "+fmt(p.Gi_star_z,3)+"<br>"+
+    "Gi* p-value: "+fmt(p.p_value,4)+"<br>"+
+    "Gi* FDR q-value: "+fmt(p.FDR_q_value,4)+"<br>"+
+    "Points: "+fmt(p.point_count)+"<br>"+
+    "Local Moran: "+fmt(p.local_moran,3)+"<br>"+
+    "KDE: "+fmt(p.kde,2)
+   );
+  }
+ }).addTo(layer);
+}
+
+function renderClusters(results){
+ clearLayer("clusters");
+ const colors=["#7b3294","#008837","#c51b7d","#2c7fb8","#d95f0e","#4d9221"];
+ const renderer=L.canvas({padding:.5});
+
+ for(const p of results){
+  if(p.cluster<=0)continue;
+  L.circleMarker([p.lat,p.lon],{
+   renderer,radius:5,color:colors[(p.cluster-1)%colors.length],
+   weight:1,fillOpacity:.8
+  }).bindPopup("DBSCAN "+p.classification+"<br>"+escapeHTML(p.settlement))
+    .addTo(mapLayers.clusters);
+ }
+}
+
+/* =========================================================
+   ADVANCED STATISTICS
+========================================================= */
+function giniCoefficient(values){
+ const a=values.filter(Number.isFinite).slice().sort((x,y)=>x-y);
+ const n=a.length,total=sum(a);
+ if(!n||total<=0||a.some(v=>v<0))return null;
+ let weighted=0;
+ for(let i=0;i<n;i++)weighted+=(i+1)*a[i];
+ return (2*weighted)/(n*total)-(n+1)/n;
+}
+function pearson(x,y){
+ const n=Math.min(x.length,y.length);
+ if(n<3)return null;
+ const mx=mean(x),my=mean(y);
+ let cov=0,sx=0,sy=0;
+ for(let i=0;i<n;i++){
+  const dx=x[i]-mx,dy=y[i]-my;
+  cov+=dx*dy;sx+=dx*dx;sy+=dy*dy;
+ }
+ return sx>0&&sy>0?cov/Math.sqrt(sx*sy):null;
+}
+function ranks(values){
+ const order=values.map((v,i)=>({v,i})).sort((a,b)=>a.v-b.v);
+ const out=Array(values.length);
+ for(let i=0;i<order.length;){
+  let j=i+1;
+  while(j<order.length&&order[j].v===order[i].v)j++;
+  const rank=((i+1)+j)/2;
+  for(let k=i;k<j;k++)out[order[k].i]=rank;
+  i=j;
+ }
+ return out;
+}
+function correlationSummary(list){
+ const rows=list.filter(p=>Number.isFinite(p.population)&&Number.isFinite(p.households)&&Number.isFinite(p.buildings));
+ const pairs=[["Population / households","population","households"],
+  ["Population / buildings","population","buildings"],
+  ["Households / buildings","households","buildings"]];
+ return pairs.map(([relationship,a,b])=>{
+  const x=rows.map(p=>p[a]),y=rows.map(p=>p[b]);
+  return {relationship,n:rows.length,pearson:pearson(x,y),spearman:pearson(ranks(x),ranks(y))};
+ });
+}
+function nearestNeighbourStats(list){
+ const n=list.length;
+ if(n<2)return {observed:null,expected:null,ratio:null,z:null,classification:"Insufficient points"};
+ const lat0=mean(list.map(p=>p.lat));
+ const pts=list.map(p=>project(p.lon,p.lat,lat0));
+ let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,total=0;
+ for(let i=0;i<n;i++){
+  minX=Math.min(minX,pts[i].x);maxX=Math.max(maxX,pts[i].x);
+  minY=Math.min(minY,pts[i].y);maxY=Math.max(maxY,pts[i].y);
+  let nearest=Infinity;
+  for(let j=0;j<n;j++)if(i!==j){
+   const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+   if(d<nearest)nearest=d;
+  }
+  total+=nearest;
+ }
+ const area=Math.max(1,(maxX-minX)*(maxY-minY));
+ const observed=total/n, density=n/area;
+ const expected=.5/Math.sqrt(density);
+ const se=.26136/Math.sqrt(n*n/area);
+ const ratio=expected>0?observed/expected:null;
+ const z=se>0?(observed-expected)/se:null;
+ return {observed,expected,ratio,z,area_m2:area,
+  classification:ratio===null?"Not available":ratio<1?"Clustered":ratio>1?"Dispersed":"Approximately random"};
+}
+function calculateSpatialOutliers(cells){
+ const values=cells.map(c=>c.value),globalSD=sd(values)||0,out=[];
+ if(!globalSD)return out;
+ for(const c of cells){
+  if(!c.neighbours.length)continue;
+  const local=mean(c.neighbours.map(n=>n.value));
+  const difference=c.value-local;
+  if(Math.abs(difference)/globalSD>=2){
+   out.push({cell_id:c.id,longitude:c.lon,latitude:c.lat,value:c.value,
+    neighbour_mean:local,local_difference:difference,
+    type:difference>0?"High-value spatial outlier":"Low-value spatial outlier"});
+  }
+ }
+ return out;
+}
+function lisaCounts(cells){
+ const labels=["High-High","Low-Low","High-Low","Low-High"];
+ const counts=Object.fromEntries(labels.map(k=>[k,0]));
+ for(const c of cells)if(c.lisa&&counts[c.lisa]!==undefined)counts[c.lisa]++;
+ return counts;
+}
+function giCounts(cells){
+ const result={hot90:0,hot95:0,hot99:0,cold90:0,cold95:0,cold99:0};
+ for(const c of cells){
+  if(!Number.isFinite(c.qValue))continue;
+  const prefix=c.hotZ>=0?"hot":"cold",q=c.qValue;
+  if(q<=.10)result[prefix+"90"]++;
+  if(q<=.05)result[prefix+"95"]++;
+  if(q<=.01)result[prefix+"99"]++;
+ }
+ return result;
+}
+function updateAdvancedAnalytics(list,grid,rankings){
+ const gini=giniCoefficient(valuesFor(list,"population"));
+ const correlations=correlationSummary(list),ph=correlations[0];
+ const nn=nearestNeighbourStats(list),outliers=calculateSpatialOutliers(grid.cells);
+ const lisa=lisaCounts(grid.cells),gi=giCounts(grid.cells);
+ setText("giniValue",gini===null?"N/A":fmt(gini,4));
+ setText("pearsonPH",ph.pearson===null?"N/A":fmt(ph.pearson,3));
+ setText("spearmanPH",ph.spearman===null?"N/A":fmt(ph.spearman,3));
+ setText("nnRatio",nn.ratio===null?"N/A":fmt(nn.ratio,3));
+ setText("nnZ",nn.z===null?"N/A":fmt(nn.z,3));
+ setText("outlierCount",fmt(outliers.length));
+ for(const id of ["hot90","hot95","hot99","cold90","cold95","cold99"])setText(id,fmt(gi[id]));
+ setText("fdrInterpretation","Benjamini-Hochberg FDR-adjusted Gi* p-values (q-values) across "+fmt(grid.cells.length)+" cells. Counts are nested: 99% cells are also included in 95% and 90% totals. Map classification follows the selected confidence setting.");
+ setText("advancedInterpretation","Population Gini = "+(gini===null?"not available":fmt(gini,4))+". Population-household Pearson r = "+(ph.pearson===null?"not available":fmt(ph.pearson,3))+"; Spearman ρ = "+(ph.spearman===null?"not available":fmt(ph.spearman,3))+". Nearest-neighbour pattern: "+nn.classification+" (R = "+(nn.ratio===null?"N/A":fmt(nn.ratio,3))+", z = "+(nn.z===null?"N/A":fmt(nn.z,3))+"). Outlier flags are exploratory, not confirmed errors.");
+ el("lisaTable").innerHTML=[["High-High","High values near high values"],["Low-Low","Low values near low values"],["High-Low","High-value cell among low-value neighbours"],["Low-High","Low-value cell among high-value neighbours"]].map(([k,d])=>`<tr><td>${k}</td><td>${fmt(lisa[k])}</td><td>${d}</td></tr>`).join("");
+ makeChart("correlationChart",{type:"bar",data:{labels:correlations.map(x=>x.relationship),datasets:[
+  {label:"Pearson r",data:correlations.map(x=>x.pearson),backgroundColor:"#1769aa"},
+  {label:"Spearman ρ",data:correlations.map(x=>x.spearman),backgroundColor:"#16a6b6"}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:-1,max:1}}}});
+ makeChart("lisaChart",{type:"doughnut",data:{labels:Object.keys(lisa),datasets:[{data:Object.values(lisa),backgroundColor:["#c64b4b","#347bc0","#d88726","#16a6b6"]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}}}});
+ const top=(rankings||[]).slice(0,12).reverse();
+ makeChart("adminChart",{type:"bar",data:{labels:top.map(x=>x.area),datasets:[{label:"Population",data:top.map(x=>x.population),backgroundColor:"#1769aa"}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+ return {gini,correlations,nearestNeighbour:nn,outliers,lisa,gi};
+}
+
+/* =========================================================
+   CHARTS
+========================================================= */
+function destroyChart(id){
+ if(charts[id]){charts[id].destroy();delete charts[id];}
+}
+function makeChart(id,config){
+ destroyChart(id);
+ charts[id]=new Chart(el(id),config);
+}
+function updateCharts(list,totals,grid){
+ const values=valuesFor(list,"population");
+ const max=safeMax(values)||0;
+ const bins=10,step=max>0?max/bins:1;
+ const hist=Array(bins).fill(0);
+
+ for(const v of values){
+  const idx=Math.min(bins-1,Math.floor(v/step));
+  hist[idx]++;
+ }
+
+ makeChart("histChart",{
+  type:"bar",
+  data:{
+   labels:hist.map((v,i)=>fmt(i*step)+"–"+fmt((i+1)*step)),
+   datasets:[{label:"Records",data:hist,backgroundColor:"#16a6b6"}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+   plugins:{legend:{display:false}},
+   scales:{x:{ticks:{maxRotation:45,minRotation:25}}}}
+ });
+
+ makeChart("totalsChart",{
+  type:"bar",
+  data:{labels:["Population","Households","Buildings"],datasets:[{
+   label:"Total",data:[totals.population,totals.households,totals.buildings],
+   backgroundColor:["#1769aa","#16a6b6","#d88726"]
+  }]},
+  options:{responsive:true,maintainAspectRatio:false,
+   plugins:{legend:{display:false}}}
+ });
+
+ const sorted=values.slice().sort((a,b)=>a-b);
+ const total=sum(sorted);
+ let cumulative=0;
+ const lorenz=[{x:0,y:0}];
+
+ for(let i=0;i<sorted.length;i++){
+  cumulative+=sorted[i];
+  lorenz.push({
+   x:(i+1)/Math.max(1,sorted.length)*100,
+   y:total?cumulative/total*100:0
+  });
+ }
+
+ makeChart("lorenzChart",{
+  type:"line",
+  data:{datasets:[
+   {label:"Lorenz curve",data:lorenz,borderColor:"#1769aa",pointRadius:0,tension:0},
+   {label:"Equality line",data:[{x:0,y:0},{x:100,y:100}],
+    borderColor:"#d88726",borderDash:[5,5],pointRadius:0}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,parsing:false,
+   scales:{
+    x:{type:"linear",min:0,max:100,title:{display:true,text:"Cumulative records (%)"}},
+    y:{min:0,max:100,title:{display:true,text:"Cumulative population (%)"}}
+   }}
+ });
+
+ const scatter=[];
+ for(const p of list){
+  if(p.population!==null&&p.households!==null){
+   scatter.push({x:p.households,y:p.population});
+  }
+ }
+
+ makeChart("scatterChart",{
+  type:"scatter",
+  data:{datasets:[{
+   label:"",data:scatter,
+   backgroundColor:"#168ca7",pointRadius:3
+  }]},
+  options:{responsive:true,maintainAspectRatio:false,
+   scales:{
+    x:{title:{display:true,text:"Households"}},
+    y:{title:{display:true,text:"Population"}}
+   }}
+ });
+
+ if(grid){
+  let hot=0,cold=0;
+  for(const c of grid.cells){
+   if(baseCategory(c.category)==="Hotspot")hot++;
+   if(baseCategory(c.category)==="Coldspot")cold++;
+  }
+  const other=grid.cells.length-hot-cold;
+
+  makeChart("hotChart",{
+   type:"doughnut",
+   data:{labels:["Hotspot","Coldspot","Not significant"],
+    datasets:[{data:[hot,cold,other],backgroundColor:["#dc4438","#347bc0","#a8b5c1"]}]},
+   options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:"bottom"}}}
+  });
+ }
+}
+
+/* =========================================================
+   RANKINGS
+========================================================= */
+function updateRanking(list){
+ const field=el("rankField").value;
+ const groups=new Map();
+
+ for(const p of list){
+  const name=p[field]||"Unspecified";
+  if(!groups.has(name))groups.set(name,{
+   area:name,population:0,households:0,points:0
+  });
+  const g=groups.get(name);
+  g.points++;
+  if(p.population!==null)g.population+=p.population;
+  if(p.households!==null)g.households+=p.households;
+ }
+
+ const rows=[...groups.values()].sort((a,b)=>b.population-a.population);
+ el("rankingTable").innerHTML=rows.slice(0,50).map(r=>
+  `<tr><td>${escapeHTML(r.area)}</td><td>${fmt(r.population)}</td>`+
+  `<td>${fmt(r.households)}</td><td>${fmt(r.points)}</td></tr>`
+ ).join("")||'<tr><td colspan="4">No ranking data</td></tr>';
+
+ return rows;
+}
+
+/* =========================================================
+   RUN ANALYSIS
+========================================================= */
+async function runAnalysis(){
+ try{
+  if(!rawPoints.length)throw Error("Load the census CSV before running analysis.");
+
+  status("Filtering selected census records…");
+  progress(5,"Filtering selected area");
+  await new Promise(resolve=>setTimeout(resolve,10));
+
+  const list=getSelectedPoints();
+  if(!list.length)throw Error("No points match the selected extent.");
+
+  const totals=updateDescriptive(list);
+  updateQuality(list);
+
+  progress(20,"Building complete grid");
+  await new Promise(resolve=>setTimeout(resolve,10));
+
+  const grid=buildGrid(list);
+  const method=el("methodSelect").value;
+  let moran={I:null,p:null,expected:null,permutations:0};
+
+  // Calculate the core spatial diagnostics for every selected map method.
+  calculateGi(grid);
+  calculateLocalMoran(grid.cells);
+  const iterations=Number(el("permutationSelect").value);
+  if(grid.cells.length<=6000){
+   moran=moranI(grid.cells.map(c=>c.value),grid.cells,iterations);
+  }
+  if(method==="kde")calculateKDE(grid);
+
+  progress(65,"Rendering spatial layers and charts");
+  await new Promise(resolve=>setTimeout(resolve,10));
+
+  clusterResults=method==="dbscan"?runDBSCAN(list):[];
+
+  renderGrid(grid,method);
+  renderClusters(clusterResults);
+  renderPoints(list);
+
+  mapLayers.ea.clearLayers();
+  const selected=selectedEAFeatures();
+  if(selected.length){
+   mapLayers.ea.addData({type:"FeatureCollection",features:selected});
+  }else if(eaGeo){
+   mapLayers.ea.addData(eaGeo);
+  }
+
+  updateCharts(list,totals,grid);
+  const rankings=updateRanking(list);
+  const advanced=updateAdvancedAnalytics(list,grid,rankings);
+  updateLayerVisibility();
+
+  let hot=0,cold=0;
+  for(const c of grid.cells){
+   if(baseCategory(c.category)==="Hotspot")hot++;
+   if(baseCategory(c.category)==="Coldspot")cold++;
+  }
+
+  setText("kpiHotspots",fmt(hot));
+  setText("hotCells",fmt(hot));
+  setText("coldCells",fmt(cold));
+  setText("gridCells",fmt(grid.cells.length));
+  setText("gridResolution",fmt(grid.km,3)+" km");
+  setText("gridArea",fmt(grid.km*grid.km,3)+" km²");
+
+  setText("moranI",moran.I===null?"N/A":fmt(moran.I,4));
+  setText("moranP",moran.p===null?"N/A":fmt(moran.p,4));
+
+  let interpretation;
+  if(moran.I===null){
+   interpretation=grid.cells.length>6000
+    ?"Moran's I skipped because the grid exceeds 6,000 cells. Increase grid size or select a smaller area."
+    :"Moran's I cannot be calculated for constant or insufficient grid values.";
+  }else{
+   interpretation="Moran's I = "+fmt(moran.I,4)+
+    "; expected I = "+fmt(moran.expected,4)+
+    "; permutation p = "+fmt(moran.p,4)+
+    " ("+moran.permutations+" permutations). "+
+    (moran.p<.05
+     ?(moran.I>moran.expected?"Evidence of positive spatial autocorrelation.":"Evidence of negative spatial autocorrelation.")
+     :"No significant global spatial autocorrelation at the 5% level.");
+  }
+  setText("moranInterpretation",interpretation);
+
+  analysis={
+   date:new Date().toISOString(),list,totals,stats:totals.stats,
+   grid,method,variable:getVariableKey(),
+   conf:Number(el("confidenceSelect").value),
+   moran,hot,cold,rankings,clusterResults,advanced
+  };
+
+  setText("resultBadge","Completed");
+  progress(100,"Completed: "+fmt(list.length)+" points and "+fmt(grid.cells.length)+" grid cells.");
+  status("Analysis completed successfully.","good");
+
+ }catch(err){
+  console.error(err);
+  status(err.message||"Analysis failed.","error");
+  progress(0,"Correct the issue and run again.");
+ }
+}
+
+/* =========================================================
+   EXPORT FUNCTIONS
+========================================================= */
+function pointRows(list){
+ return list.map(p=>({
+  id:p.id,settlement:p.settlement,region:p.region,
+  district:p.district,ward:p.ward,latitude:p.lat,
+  longitude:p.lon,population:p.population,
+  households:p.households,buildings:p.buildings,compounds:p.compounds,ea:p.ea
+ }));
+}
+function gridRows(){
+ if(!analysis)return [];
+ return analysis.grid.cells.map(c=>({
+  cell_id:c.id,grid_x:c.ix,grid_y:c.iy,
+  longitude:c.lon,latitude:c.lat,value:c.value,
+  point_count:c.pointCount,Gi_star_z:c.hotZ,
+  p_value:c.pValue,FDR_q_value:c.qValue,classification:c.category,
+  local_moran:c.localMoran,lisa_class:c.lisa,kde:c.kde
+ }));
+}
+function hotRows(){
+ if(!analysis)return [];
+ return analysis.grid.cells.filter(c=>
+  baseCategory(c.category)==="Hotspot"||baseCategory(c.category)==="Coldspot"
+ ).map(c=>({
+  cell_id:c.id,longitude:c.lon,latitude:c.lat,
+  value:c.value,Gi_star_z:c.hotZ,p_value:c.pValue,FDR_q_value:c.qValue,
+  classification:c.category,confidence:analysis.conf,
+  grid_km:analysis.grid.km
+ }));
+}
+function statsRows(){
+ if(!analysis)return [];
+ const rows=[];
+ const names=["population","households","buildings"];
+ for(let i=0;i<names.length;i++){
+  const s=analysis.stats[i];
+  if(!s)continue;
+  for(const [statistic,value] of Object.entries(s)){
+   rows.push({variable:names[i],statistic,value});
+  }
+ }
+ return rows;
+}
+function reportRows(){
+ if(!analysis)return [];
+ return [{
+  analysis_date:analysis.date,
+  variable:analysis.variable,method:analysis.method,
+  grid_km:analysis.grid.km,confidence_percent:analysis.conf,
+  extent:el("extentSelect").value,
+  points:analysis.list.length,grid_cells:analysis.grid.cells.length,
+  population:analysis.totals.population,
+  households:analysis.totals.households,
+  buildings:analysis.totals.buildings,
+  compounds:analysis.totals.compounds,
+  hotspot_cells:analysis.hot,coldspot_cells:analysis.cold,
+  morans_I:analysis.moran.I,
+  morans_permutation_p:analysis.moran.p,
+  permutations:analysis.moran.permutations,
+  population_gini:analysis.advanced?.gini,
+  population_households_pearson:analysis.advanced?.correlations?.[0]?.pearson,
+  population_households_spearman:analysis.advanced?.correlations?.[0]?.spearman,
+  nearest_neighbour_ratio:analysis.advanced?.nearestNeighbour?.ratio,
+  nearest_neighbour_z:analysis.advanced?.nearestNeighbour?.z,
+  spatial_outlier_cells:analysis.advanced?.outliers?.length,
+  gi_hotspot_90:analysis.advanced?.gi?.hot90,
+  gi_hotspot_95:analysis.advanced?.gi?.hot95,
+  gi_hotspot_99:analysis.advanced?.gi?.hot99,
+  gi_coldspot_90:analysis.advanced?.gi?.cold90,
+  gi_coldspot_95:analysis.advanced?.gi?.cold95,
+  gi_coldspot_99:analysis.advanced?.gi?.cold99
+ }];
+}
+function lisaRows(){
+ if(!analysis)return [];
+ return analysis.grid.cells.filter(c=>c.lisa).map(c=>({
+  cell_id:c.id,longitude:c.lon,latitude:c.lat,value:c.value,
+  local_moran:c.localMoran,lisa_class:c.lisa,neighbour_count:c.neighbours.length
+ }));
+}
+function outlierRows(){return analysis?.advanced?.outliers||[];}
+function correlationRows(){return analysis?.advanced?.correlations||[];}
+function exportGridGeoJSON(){
+ if(!analysis){alert("Run the analysis first.");return;}
+ const features=[];
+ for(const c of analysis.grid.cells){
+  const f=cellFeature(c,analysis.grid);
+  f.properties={
+   cell_id:c.id,value:c.value,point_count:c.pointCount,
+   Gi_star_z:c.hotZ,p_value:c.pValue,FDR_q_value:c.qValue,
+   classification:c.category,local_moran:c.localMoran,
+   lisa_class:c.lisa,kde:c.kde,grid_km:analysis.grid.km
+  };
+  features.push(f);
+ }
+ download(JSON.stringify({type:"FeatureCollection",features},null,2),
+  "Gambia_Census_Analysis_Grid.geojson","application/geo+json");
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+el("runBtn").addEventListener("click",runAnalysis);
+el("fitBtn").addEventListener("click",()=>fitPoints(rawPoints));
+el("basemapSelect").addEventListener("change",changeBasemap);
+
+for(const id of ["pointsToggle","eaToggle","gridToggle","hotToggle","kdeToggle","clusterToggle"]){
+ el(id).addEventListener("change",updateLayerVisibility);
+}
+
+el("regionSelect").addEventListener("change",()=>{
+ updateDependentSelectors();
+ renderPoints(getSelectedPoints());
+});
+el("districtSelect").addEventListener("change",()=>{
+ updateDependentSelectors();
+ renderPoints(getSelectedPoints());
+});
+el("wardSelect").addEventListener("change",()=>renderPoints(getSelectedPoints()));
+
+el("rankField").addEventListener("change",()=>{
+ if(analysis){
+  analysis.rankings=updateRanking(analysis.list);
+  const top=analysis.rankings.slice(0,12).reverse();
+  makeChart("adminChart",{type:"bar",data:{labels:top.map(x=>x.area),datasets:[{label:"Population",data:top.map(x=>x.population),backgroundColor:"#1769aa"}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+ }
+});
+
+el("resetBtn").addEventListener("click",()=>{
+ el("regionSelect").value="";
+ updateDependentSelectors();
+ el("districtSelect").value="";
+ updateDependentSelectors();
+ el("wardSelect").value="";
+ el("variableSelect").value="population";
+ el("methodSelect").value="gi";
+ el("gridSelect").value="1";
+ el("confidenceSelect").value="95";
+ el("extentSelect").value="selected";
+ el("neighbourSelect").value="queen";
+ el("permutationSelect").value="99";
+ el("rankField").value="settlement";
+
+ analysis=null;clusterResults=[];
+ for(const k of ["grid","hot","kde","clusters"])clearLayer(k);
+ renderPoints(rawPoints);
+ fitPoints(rawPoints);
+
+ setText("resultBadge","Not run");
+ for(const id of ["kpiHotspots","moranI","moranP","hotCells","coldCells","gridCells",
+  "giniValue","pearsonPH","spearmanPH","nnRatio","nnZ","outlierCount",
+  "hot90","hot95","hot99","cold90","cold95","cold99"]){
+  setText(id,"—");
+ }
+ setText("gridResolution","1 km");setText("gridArea","1 km²");
+ el("lisaTable").innerHTML='<tr><td colspan="3">Run analysis first</td></tr>';
+ setText("advancedInterpretation","Run analysis to calculate advanced diagnostics.");
+ setText("fdrInterpretation","Run analysis to calculate FDR-adjusted Gi* significance.");
+ status("Settings reset to Population, Gi*, 1 km, 95% and selected area.");
+ progress(0,"Run analysis to calculate results.");
+});
+
+el("exportAllBtn").addEventListener("click",()=>{
+ exportRows(reportRows(),"Gambia_Census_Analysis_Report.csv");
+});
+el("exportReport").addEventListener("click",()=>{
+ exportRows(reportRows(),"Gambia_Census_Analysis_Report.csv");
+});
+el("exportStats").addEventListener("click",()=>{
+ exportRows(statsRows(),"Gambia_Descriptive_Statistics.csv");
+});
+el("exportGrid").addEventListener("click",()=>{
+ exportRows(gridRows(),"Gambia_Gi_Grid_Statistics.csv");
+});
+el("exportHot").addEventListener("click",()=>{
+ exportRows(hotRows(),"Gambia_Hotspots_Coldspots.csv");
+});
+el("exportPoints").addEventListener("click",()=>{
+ exportRows(pointRows(analysis?.list||[]),"Gambia_Filtered_Census_Points.csv");
+});
+el("exportGridGeo").addEventListener("click",exportGridGeoJSON);
+el("exportClusters").addEventListener("click",()=>{
+ exportRows(clusterResults,"Gambia_DBSCAN_Clusters.csv");
+});
+el("exportRank").addEventListener("click",()=>{
+ exportRows(analysis?.rankings||[],"Gambia_Area_Rankings.csv");
+});
+el("exportLISA").addEventListener("click",()=>{
+ exportRows(lisaRows(),"Gambia_LISA_Clusters.csv");
+});
+el("exportOutliers").addEventListener("click",()=>{
+ exportRows(outlierRows(),"Gambia_Spatial_Outlier_Cells.csv");
+});
+el("exportCorrelation").addEventListener("click",()=>{
+ exportRows(correlationRows(),"Gambia_Correlation_Statistics.csv");
+});
+
+/* =========================================================
+   START
+========================================================= */
+initMap();
+loadRepository();
+
+</script>
+</body>
+</html>

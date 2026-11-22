@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,6 +96,12 @@ th{background:#f5f8fb;color:#526579;position:sticky;top:0}
 .table-wrap{max-height:230px;overflow:auto;border:1px solid var(--border);border-radius:6px}
 .progress{height:5px;background:#e8eef3;border-radius:5px;overflow:hidden;margin-top:7px}
 .progress div{height:100%;width:0;background:var(--cyan)}
+.mini-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:9px}
+.mini-kpi{padding:8px;border:1px solid var(--border);border-radius:6px;background:#fbfdff;min-width:0}
+.mini-kpi span{display:block;font-size:9px;color:var(--muted);margin-bottom:4px}
+.mini-kpi strong{font-size:15px;color:var(--navy);overflow-wrap:anywhere}
+.analysis-note{padding:9px;background:#f3f7fb;border-left:3px solid var(--cyan);border-radius:4px;font-size:10px;line-height:1.55;color:#42566a;margin:8px 0}
+@media(max-width:700px){.mini-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 footer{
  background:var(--navy);color:#c7d8e7;padding:10px 15px;font-size:10px;
  display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap
@@ -315,8 +320,48 @@ footer{
     <div class="kpi"><span>Coldspot cells</span><strong id="coldCells">—</strong></div>
     <div class="kpi"><span>Grid cells</span><strong id="gridCells">—</strong></div>
     <div class="kpi"><span>Grid resolution</span><strong id="gridResolution">1 km</strong></div>
+    <div class="kpi"><span>Grid cell area</span><strong id="gridArea">1 km²</strong></div>
    </div>
    <div class="chart-card"><div class="chart-title">Gi* classification</div><div class="chart-container"><canvas id="hotChart"></canvas></div></div>
+  </div>
+
+  <div class="section">
+   <h3>Gi* significance levels and FDR correction</h3>
+   <div class="mini-kpis">
+    <div class="mini-kpi"><span>90% hotspots</span><strong id="hot90">—</strong></div>
+    <div class="mini-kpi"><span>95% hotspots</span><strong id="hot95">—</strong></div>
+    <div class="mini-kpi"><span>99% hotspots</span><strong id="hot99">—</strong></div>
+    <div class="mini-kpi"><span>90% coldspots</span><strong id="cold90">—</strong></div>
+    <div class="mini-kpi"><span>95% coldspots</span><strong id="cold95">—</strong></div>
+    <div class="mini-kpi"><span>99% coldspots</span><strong id="cold99">—</strong></div>
+   </div>
+   <div id="fdrInterpretation" class="analysis-note">Run analysis to calculate Benjamini-Hochberg FDR-adjusted Gi* significance.</div>
+  </div>
+
+  <div class="section">
+   <h3>Advanced spatial diagnostics</h3>
+   <div class="kpis">
+    <div class="kpi"><span>Population Gini coefficient</span><strong id="giniValue">—</strong><small>0 = equality; 1 = maximum inequality</small></div>
+    <div class="kpi"><span>Pearson r: population / households</span><strong id="pearsonPH">—</strong></div>
+    <div class="kpi"><span>Spearman ρ: population / households</span><strong id="spearmanPH">—</strong></div>
+    <div class="kpi"><span>Nearest-neighbour ratio</span><strong id="nnRatio">—</strong></div>
+    <div class="kpi"><span>Nearest-neighbour z-score</span><strong id="nnZ">—</strong></div>
+    <div class="kpi"><span>Spatial outlier cells</span><strong id="outlierCount">—</strong></div>
+   </div>
+   <div id="advancedInterpretation" class="analysis-note">Run analysis to calculate inequality, correlations, nearest-neighbour statistics and spatial outliers.</div>
+   <div class="chart-card"><div class="chart-title">Pearson and Spearman correlations</div><div class="chart-container"><canvas id="correlationChart"></canvas></div></div>
+   <div class="chart-card"><div class="chart-title">Local Moran's I (LISA) cluster composition</div><div class="chart-container"><canvas id="lisaChart"></canvas></div></div>
+   <div class="table-wrap">
+    <table><thead><tr><th>Local cluster</th><th>Grid cells</th><th>Interpretation</th></tr></thead>
+     <tbody id="lisaTable"><tr><td colspan="3">Run analysis first</td></tr></tbody>
+    </table>
+   </div>
+   <div class="metric-note">LISA classes are exploratory High-High, Low-Low, High-Low and Low-High patterns. Local permutation p-values are not calculated in this version. Spatial outliers are exploratory local contrasts, not confirmed data errors.</div>
+  </div>
+
+  <div class="section">
+   <h3>Administrative comparison</h3>
+   <div class="chart-card"><div class="chart-title">Population by selected administrative category</div><div class="chart-container tall"><canvas id="adminChart"></canvas></div></div>
   </div>
 
   <div class="section">
@@ -364,6 +409,9 @@ footer{
     <button class="secondary" id="exportGridGeo">Grid GeoJSON</button>
     <button class="secondary" id="exportClusters">Clusters CSV</button>
     <button class="secondary" id="exportRank">Rankings CSV</button>
+    <button class="secondary" id="exportLISA">LISA clusters CSV</button>
+    <button class="secondary" id="exportOutliers">Spatial outliers CSV</button>
+    <button class="secondary" id="exportCorrelation">Correlation CSV</button>
     <button class="success" id="exportReport">Summary report</button>
    </div>
   </div>
@@ -371,9 +419,19 @@ footer{
   <div class="section">
    <h3>Methodology</h3>
    <div class="status">
-    <b>Getis-Ord Gi*:</b> identifies spatial concentrations of high and low values. The analysis uses a complete rectangular grid, including zero-value cells, with the selected queen or rook neighbourhood. The 95% threshold uses an absolute z-score of approximately 1.96. P-values use a normal approximation and are not multiple-testing corrected.
+    <b>Getis-Ord Gi*:</b> identifies local concentrations of high and low values using the complete rectangular grid and selected queen or rook neighbourhood. Normal-approximation p-values are adjusted across grid cells using the Benjamini-Hochberg false discovery rate (FDR) procedure. The 90%, 95% and 99% classes use adjusted q-value thresholds of 0.10, 0.05 and 0.01.
     <br><br>
     <b>Global Moran's I:</b> measures overall spatial autocorrelation using grid adjacency and a permutation test.
+    <br><br>
+    <b>Local Moran's I (LISA):</b> classifies cells as High-High, Low-Low, High-Low or Low-High based on standardized cell values and neighbouring spatial lags. Local permutation significance is not calculated here; interpret these as exploratory cluster/outlier classes.
+    <br><br>
+    <b>Gini coefficient:</b> summarizes inequality in population values across census points, from 0 (equal values) towards 1 (greater inequality).
+    <br><br>
+    <b>Pearson and Spearman correlations:</b> quantify linear and rank-based relationships between population, households and structures. Correlation does not imply causation.
+    <br><br>
+    <b>Nearest-neighbour analysis:</b> compares observed mean nearest-point distance with the expected distance under complete spatial randomness. The calculation uses the points' projected bounding rectangle and an approximate local equirectangular projection.
+    <br><br>
+    <b>Spatial outliers:</b> flags grid cells whose value differs from the mean of adjacent cells by at least two global standard deviations. This is an exploratory screening rule, not a formal significance test.
     <br><br>
     <b>KDE:</b> shows smoothed spatial concentration and is not a significance test.
     <br><br>
@@ -868,7 +926,7 @@ function buildGrid(list){
    const ll=unproject(x,y,lat0);
    const c={
     id:iy*nx+ix,ix,iy,x,y,lon:ll.lon,lat:ll.lat,
-    value:0,pointCount:0,hotZ:null,pValue:null,
+    value:0,pointCount:0,hotZ:null,pValue:null,qValue:null,
     category:"Not significant",neighbours:[]
    };
    cells.push(c);
@@ -938,12 +996,32 @@ function calculateGi(grid){
   c.pValue=twoTailP(c.hotZ);
  }
 
- const zcrit=criticalZ(Number(el("confidenceSelect").value));
+ applyFDR(cells);
+ const alpha=1-Number(el("confidenceSelect").value)/100;
  for(const c of cells){
-  if(c.hotZ>=zcrit)c.category="Hotspot";
-  else if(c.hotZ<=-zcrit)c.category="Coldspot";
-  else c.category="Not significant";
+  if(Number.isFinite(c.qValue)&&c.qValue<=alpha){
+   const level=c.qValue<=.01?99:c.qValue<=.05?95:90;
+   c.category=(c.hotZ>=0?"Hotspot ":"Coldspot ")+level+"%";
+  }else c.category="Not significant";
  }
+}
+
+function applyFDR(cells){
+ const ordered=cells.map((c,i)=>({i,p:Number.isFinite(c.pValue)?c.pValue:1}))
+  .sort((a,b)=>a.p-b.p);
+ const m=ordered.length;
+ let running=1;
+ for(let k=m-1;k>=0;k--){
+  const item=ordered[k];
+  running=Math.min(running,item.p*m/(k+1),1);
+  cells[item.i].qValue=running;
+ }
+}
+function baseCategory(category){
+ const value=String(category||"");
+ if(value.startsWith("Hotspot"))return "Hotspot";
+ if(value.startsWith("Coldspot"))return "Coldspot";
+ return "Not significant";
 }
 
 /* =========================================================
@@ -1132,7 +1210,7 @@ function renderGrid(grid,method){
   const f=cellFeature(c,grid);
   f.properties={
    cell_id:c.id,value:c.value,point_count:c.pointCount,
-   Gi_star_z:c.hotZ,p_value:c.pValue,classification:c.category,
+   Gi_star_z:c.hotZ,p_value:c.pValue,FDR_q_value:c.qValue,classification:c.category,
    local_moran:c.localMoran,lisa_class:c.lisa,kde:c.kde
   };
   features.push(f);
@@ -1146,9 +1224,15 @@ function renderGrid(grid,method){
    const p=f.properties;
    let color="#a8b5c1",opacity=.12;
 
-   if(method==="gi"||method==="moran"){
-    if(p.classification==="Hotspot"){color="#dc4438";opacity=.50;}
-    else if(p.classification==="Coldspot"){color="#347bc0";opacity=.50;}
+   if(method==="gi"){
+    if(String(p.classification||"").startsWith("Hotspot")){color="#dc4438";opacity=.50;}
+    else if(String(p.classification||"").startsWith("Coldspot")){color="#347bc0";opacity=.50;}
+   }else if(method==="moran"){
+    const lisa=p.lisa_class;
+    if(lisa==="High-High"){color="#c64b4b";opacity=.55;}
+    else if(lisa==="Low-Low"){color="#347bc0";opacity=.55;}
+    else if(lisa==="High-Low"){color="#d88726";opacity=.60;}
+    else if(lisa==="Low-High"){color="#16a6b6";opacity=.60;}
    }else if(method==="kde"){
     opacity=.08+.42*((p.kde||0)/maxKDE);
     color="#e6550d";
@@ -1161,11 +1245,13 @@ function renderGrid(grid,method){
   },
   onEachFeature:(f,l)=>{
    const p=f.properties;
+   const popupClass=method==="moran"?(p.lisa_class||"LISA not classified"):(p.classification||"Grid cell");
    l.bindPopup(
-    "<b>"+escapeHTML(p.classification||"Grid cell")+"</b><br>"+
+    "<b>"+escapeHTML(popupClass)+"</b><br>"+
     "Value: "+fmt(p.value)+"<br>"+
     "Gi* z-score: "+fmt(p.Gi_star_z,3)+"<br>"+
-    "p-value: "+fmt(p.p_value,4)+"<br>"+
+    "Gi* p-value: "+fmt(p.p_value,4)+"<br>"+
+    "Gi* FDR q-value: "+fmt(p.FDR_q_value,4)+"<br>"+
     "Points: "+fmt(p.point_count)+"<br>"+
     "Local Moran: "+fmt(p.local_moran,3)+"<br>"+
     "KDE: "+fmt(p.kde,2)
@@ -1187,6 +1273,132 @@ function renderClusters(results){
   }).bindPopup("DBSCAN "+p.classification+"<br>"+escapeHTML(p.settlement))
     .addTo(mapLayers.clusters);
  }
+}
+
+/* =========================================================
+   ADVANCED STATISTICS
+========================================================= */
+function giniCoefficient(values){
+ const a=values.filter(Number.isFinite).slice().sort((x,y)=>x-y);
+ const n=a.length,total=sum(a);
+ if(!n||total<=0||a.some(v=>v<0))return null;
+ let weighted=0;
+ for(let i=0;i<n;i++)weighted+=(i+1)*a[i];
+ return (2*weighted)/(n*total)-(n+1)/n;
+}
+function pearson(x,y){
+ const n=Math.min(x.length,y.length);
+ if(n<3)return null;
+ const mx=mean(x),my=mean(y);
+ let cov=0,sx=0,sy=0;
+ for(let i=0;i<n;i++){
+  const dx=x[i]-mx,dy=y[i]-my;
+  cov+=dx*dy;sx+=dx*dx;sy+=dy*dy;
+ }
+ return sx>0&&sy>0?cov/Math.sqrt(sx*sy):null;
+}
+function ranks(values){
+ const order=values.map((v,i)=>({v,i})).sort((a,b)=>a.v-b.v);
+ const out=Array(values.length);
+ for(let i=0;i<order.length;){
+  let j=i+1;
+  while(j<order.length&&order[j].v===order[i].v)j++;
+  const rank=((i+1)+j)/2;
+  for(let k=i;k<j;k++)out[order[k].i]=rank;
+  i=j;
+ }
+ return out;
+}
+function correlationSummary(list){
+ const rows=list.filter(p=>Number.isFinite(p.population)&&Number.isFinite(p.households)&&Number.isFinite(p.structures));
+ const pairs=[["Population / households","population","households"],
+  ["Population / structures","population","structures"],
+  ["Households / structures","households","structures"]];
+ return pairs.map(([relationship,a,b])=>{
+  const x=rows.map(p=>p[a]),y=rows.map(p=>p[b]);
+  return {relationship,n:rows.length,pearson:pearson(x,y),spearman:pearson(ranks(x),ranks(y))};
+ });
+}
+function nearestNeighbourStats(list){
+ const n=list.length;
+ if(n<2)return {observed:null,expected:null,ratio:null,z:null,classification:"Insufficient points"};
+ const lat0=mean(list.map(p=>p.lat));
+ const pts=list.map(p=>project(p.lon,p.lat,lat0));
+ let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity,total=0;
+ for(let i=0;i<n;i++){
+  minX=Math.min(minX,pts[i].x);maxX=Math.max(maxX,pts[i].x);
+  minY=Math.min(minY,pts[i].y);maxY=Math.max(maxY,pts[i].y);
+  let nearest=Infinity;
+  for(let j=0;j<n;j++)if(i!==j){
+   const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+   if(d<nearest)nearest=d;
+  }
+  total+=nearest;
+ }
+ const area=Math.max(1,(maxX-minX)*(maxY-minY));
+ const observed=total/n, density=n/area;
+ const expected=.5/Math.sqrt(density);
+ const se=.26136/Math.sqrt(n*n/area);
+ const ratio=expected>0?observed/expected:null;
+ const z=se>0?(observed-expected)/se:null;
+ return {observed,expected,ratio,z,area_m2:area,
+  classification:ratio===null?"Not available":ratio<1?"Clustered":ratio>1?"Dispersed":"Approximately random"};
+}
+function calculateSpatialOutliers(cells){
+ const values=cells.map(c=>c.value),globalSD=sd(values)||0,out=[];
+ if(!globalSD)return out;
+ for(const c of cells){
+  if(!c.neighbours.length)continue;
+  const local=mean(c.neighbours.map(n=>n.value));
+  const difference=c.value-local;
+  if(Math.abs(difference)/globalSD>=2){
+   out.push({cell_id:c.id,longitude:c.lon,latitude:c.lat,value:c.value,
+    neighbour_mean:local,local_difference:difference,
+    type:difference>0?"High-value spatial outlier":"Low-value spatial outlier"});
+  }
+ }
+ return out;
+}
+function lisaCounts(cells){
+ const labels=["High-High","Low-Low","High-Low","Low-High"];
+ const counts=Object.fromEntries(labels.map(k=>[k,0]));
+ for(const c of cells)if(c.lisa&&counts[c.lisa]!==undefined)counts[c.lisa]++;
+ return counts;
+}
+function giCounts(cells){
+ const result={hot90:0,hot95:0,hot99:0,cold90:0,cold95:0,cold99:0};
+ for(const c of cells){
+  if(!Number.isFinite(c.qValue))continue;
+  const prefix=c.hotZ>=0?"hot":"cold",q=c.qValue;
+  if(q<=.10)result[prefix+"90"]++;
+  if(q<=.05)result[prefix+"95"]++;
+  if(q<=.01)result[prefix+"99"]++;
+ }
+ return result;
+}
+function updateAdvancedAnalytics(list,grid,rankings){
+ const gini=giniCoefficient(valuesFor(list,"population"));
+ const correlations=correlationSummary(list),ph=correlations[0];
+ const nn=nearestNeighbourStats(list),outliers=calculateSpatialOutliers(grid.cells);
+ const lisa=lisaCounts(grid.cells),gi=giCounts(grid.cells);
+ setText("giniValue",gini===null?"N/A":fmt(gini,4));
+ setText("pearsonPH",ph.pearson===null?"N/A":fmt(ph.pearson,3));
+ setText("spearmanPH",ph.spearman===null?"N/A":fmt(ph.spearman,3));
+ setText("nnRatio",nn.ratio===null?"N/A":fmt(nn.ratio,3));
+ setText("nnZ",nn.z===null?"N/A":fmt(nn.z,3));
+ setText("outlierCount",fmt(outliers.length));
+ for(const id of ["hot90","hot95","hot99","cold90","cold95","cold99"])setText(id,fmt(gi[id]));
+ setText("fdrInterpretation","Benjamini-Hochberg FDR-adjusted Gi* p-values (q-values) across "+fmt(grid.cells.length)+" cells. Counts are nested: 99% cells are also included in 95% and 90% totals. Map classification follows the selected confidence setting.");
+ setText("advancedInterpretation","Population Gini = "+(gini===null?"not available":fmt(gini,4))+". Population-household Pearson r = "+(ph.pearson===null?"not available":fmt(ph.pearson,3))+"; Spearman ρ = "+(ph.spearman===null?"not available":fmt(ph.spearman,3))+". Nearest-neighbour pattern: "+nn.classification+" (R = "+(nn.ratio===null?"N/A":fmt(nn.ratio,3))+", z = "+(nn.z===null?"N/A":fmt(nn.z,3))+"). Outlier flags are exploratory, not confirmed errors.");
+ el("lisaTable").innerHTML=[["High-High","High values near high values"],["Low-Low","Low values near low values"],["High-Low","High-value cell among low-value neighbours"],["Low-High","Low-value cell among high-value neighbours"]].map(([k,d])=>`<tr><td>${k}</td><td>${fmt(lisa[k])}</td><td>${d}</td></tr>`).join("");
+ makeChart("correlationChart",{type:"bar",data:{labels:correlations.map(x=>x.relationship),datasets:[
+  {label:"Pearson r",data:correlations.map(x=>x.pearson),backgroundColor:"#1769aa"},
+  {label:"Spearman ρ",data:correlations.map(x=>x.spearman),backgroundColor:"#16a6b6"}]},
+  options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:-1,max:1}}}});
+ makeChart("lisaChart",{type:"doughnut",data:{labels:Object.keys(lisa),datasets:[{data:Object.values(lisa),backgroundColor:["#c64b4b","#347bc0","#d88726","#16a6b6"]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}}}});
+ const top=(rankings||[]).slice(0,12).reverse();
+ makeChart("adminChart",{type:"bar",data:{labels:top.map(x=>x.area),datasets:[{label:"Population",data:top.map(x=>x.population),backgroundColor:"#1769aa"}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+ return {gini,correlations,nearestNeighbour:nn,outliers,lisa,gi};
 }
 
 /* =========================================================
@@ -1281,8 +1493,8 @@ function updateCharts(list,totals,grid){
  if(grid){
   let hot=0,cold=0;
   for(const c of grid.cells){
-   if(c.category==="Hotspot")hot++;
-   if(c.category==="Coldspot")cold++;
+   if(baseCategory(c.category)==="Hotspot")hot++;
+   if(baseCategory(c.category)==="Coldspot")cold++;
   }
   const other=grid.cells.length-hot-cold;
 
@@ -1347,17 +1559,13 @@ async function runAnalysis(){
   const method=el("methodSelect").value;
   let moran={I:null,p:null,expected:null,permutations:0};
 
-  if(method==="gi"||method==="moran"){
-   calculateGi(grid);
-   calculateLocalMoran(grid.cells);
-
-   const iterations=Number(el("permutationSelect").value);
-
-   if(grid.cells.length<=6000){
-    moran=moranI(grid.cells.map(c=>c.value),grid.cells,iterations);
-   }
+  // Calculate the core spatial diagnostics for every selected map method.
+  calculateGi(grid);
+  calculateLocalMoran(grid.cells);
+  const iterations=Number(el("permutationSelect").value);
+  if(grid.cells.length<=6000){
+   moran=moranI(grid.cells.map(c=>c.value),grid.cells,iterations);
   }
-
   if(method==="kde")calculateKDE(grid);
 
   progress(65,"Rendering spatial layers and charts");
@@ -1379,19 +1587,21 @@ async function runAnalysis(){
 
   updateCharts(list,totals,grid);
   const rankings=updateRanking(list);
+  const advanced=updateAdvancedAnalytics(list,grid,rankings);
   updateLayerVisibility();
 
   let hot=0,cold=0;
   for(const c of grid.cells){
-   if(c.category==="Hotspot")hot++;
-   if(c.category==="Coldspot")cold++;
+   if(baseCategory(c.category)==="Hotspot")hot++;
+   if(baseCategory(c.category)==="Coldspot")cold++;
   }
 
   setText("kpiHotspots",fmt(hot));
   setText("hotCells",fmt(hot));
   setText("coldCells",fmt(cold));
   setText("gridCells",fmt(grid.cells.length));
-  setText("gridResolution",fmt(grid.km)+" km");
+  setText("gridResolution",fmt(grid.km,3)+" km");
+  setText("gridArea",fmt(grid.km*grid.km,3)+" km²");
 
   setText("moranI",moran.I===null?"N/A":fmt(moran.I,4));
   setText("moranP",moran.p===null?"N/A":fmt(moran.p,4));
@@ -1416,7 +1626,7 @@ async function runAnalysis(){
    date:new Date().toISOString(),list,totals,stats:totals.stats,
    grid,method,variable:getVariableKey(),
    conf:Number(el("confidenceSelect").value),
-   moran,hot,cold,rankings,clusterResults
+   moran,hot,cold,rankings,clusterResults,advanced
   };
 
   setText("resultBadge","Completed");
@@ -1447,17 +1657,17 @@ function gridRows(){
   cell_id:c.id,grid_x:c.ix,grid_y:c.iy,
   longitude:c.lon,latitude:c.lat,value:c.value,
   point_count:c.pointCount,Gi_star_z:c.hotZ,
-  p_value:c.pValue,classification:c.category,
+  p_value:c.pValue,FDR_q_value:c.qValue,classification:c.category,
   local_moran:c.localMoran,lisa_class:c.lisa,kde:c.kde
  }));
 }
 function hotRows(){
  if(!analysis)return [];
  return analysis.grid.cells.filter(c=>
-  c.category==="Hotspot"||c.category==="Coldspot"
+  baseCategory(c.category)==="Hotspot"||baseCategory(c.category)==="Coldspot"
  ).map(c=>({
   cell_id:c.id,longitude:c.lon,latitude:c.lat,
-  value:c.value,Gi_star_z:c.hotZ,p_value:c.pValue,
+  value:c.value,Gi_star_z:c.hotZ,p_value:c.pValue,FDR_q_value:c.qValue,
   classification:c.category,confidence:analysis.conf,
   grid_km:analysis.grid.km
  }));
@@ -1489,9 +1699,30 @@ function reportRows(){
   hotspot_cells:analysis.hot,coldspot_cells:analysis.cold,
   morans_I:analysis.moran.I,
   morans_permutation_p:analysis.moran.p,
-  permutations:analysis.moran.permutations
+  permutations:analysis.moran.permutations,
+  population_gini:analysis.advanced?.gini,
+  population_households_pearson:analysis.advanced?.correlations?.[0]?.pearson,
+  population_households_spearman:analysis.advanced?.correlations?.[0]?.spearman,
+  nearest_neighbour_ratio:analysis.advanced?.nearestNeighbour?.ratio,
+  nearest_neighbour_z:analysis.advanced?.nearestNeighbour?.z,
+  spatial_outlier_cells:analysis.advanced?.outliers?.length,
+  gi_hotspot_90:analysis.advanced?.gi?.hot90,
+  gi_hotspot_95:analysis.advanced?.gi?.hot95,
+  gi_hotspot_99:analysis.advanced?.gi?.hot99,
+  gi_coldspot_90:analysis.advanced?.gi?.cold90,
+  gi_coldspot_95:analysis.advanced?.gi?.cold95,
+  gi_coldspot_99:analysis.advanced?.gi?.cold99
  }];
 }
+function lisaRows(){
+ if(!analysis)return [];
+ return analysis.grid.cells.filter(c=>c.lisa).map(c=>({
+  cell_id:c.id,longitude:c.lon,latitude:c.lat,value:c.value,
+  local_moran:c.localMoran,lisa_class:c.lisa,neighbour_count:c.neighbours.length
+ }));
+}
+function outlierRows(){return analysis?.advanced?.outliers||[];}
+function correlationRows(){return analysis?.advanced?.correlations||[];}
 function exportGridGeoJSON(){
  if(!analysis){alert("Run the analysis first.");return;}
  const features=[];
@@ -1499,7 +1730,7 @@ function exportGridGeoJSON(){
   const f=cellFeature(c,analysis.grid);
   f.properties={
    cell_id:c.id,value:c.value,point_count:c.pointCount,
-   Gi_star_z:c.hotZ,p_value:c.pValue,
+   Gi_star_z:c.hotZ,p_value:c.pValue,FDR_q_value:c.qValue,
    classification:c.category,local_moran:c.localMoran,
    lisa_class:c.lisa,kde:c.kde,grid_km:analysis.grid.km
   };
@@ -1531,7 +1762,11 @@ el("districtSelect").addEventListener("change",()=>{
 el("wardSelect").addEventListener("change",()=>renderPoints(getSelectedPoints()));
 
 el("rankField").addEventListener("change",()=>{
- if(analysis)analysis.rankings=updateRanking(analysis.list);
+ if(analysis){
+  analysis.rankings=updateRanking(analysis.list);
+  const top=analysis.rankings.slice(0,12).reverse();
+  makeChart("adminChart",{type:"bar",data:{labels:top.map(x=>x.area),datasets:[{label:"Population",data:top.map(x=>x.population),backgroundColor:"#1769aa"}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+ }
 });
 
 el("resetBtn").addEventListener("click",()=>{
@@ -1555,9 +1790,15 @@ el("resetBtn").addEventListener("click",()=>{
  fitPoints(rawPoints);
 
  setText("resultBadge","Not run");
- for(const id of ["kpiHotspots","moranI","moranP","hotCells","coldCells","gridCells"]){
+ for(const id of ["kpiHotspots","moranI","moranP","hotCells","coldCells","gridCells",
+  "giniValue","pearsonPH","spearmanPH","nnRatio","nnZ","outlierCount",
+  "hot90","hot95","hot99","cold90","cold95","cold99"]){
   setText(id,"—");
  }
+ setText("gridResolution","1 km");setText("gridArea","1 km²");
+ el("lisaTable").innerHTML='<tr><td colspan="3">Run analysis first</td></tr>';
+ setText("advancedInterpretation","Run analysis to calculate advanced diagnostics.");
+ setText("fdrInterpretation","Run analysis to calculate FDR-adjusted Gi* significance.");
  status("Settings reset to Population, Gi*, 1 km, 95% and selected area.");
  progress(0,"Run analysis to calculate results.");
 });
@@ -1587,6 +1828,15 @@ el("exportClusters").addEventListener("click",()=>{
 el("exportRank").addEventListener("click",()=>{
  exportRows(analysis?.rankings||[],"Gambia_Area_Rankings.csv");
 });
+el("exportLISA").addEventListener("click",()=>{
+ exportRows(lisaRows(),"Gambia_LISA_Clusters.csv");
+});
+el("exportOutliers").addEventListener("click",()=>{
+ exportRows(outlierRows(),"Gambia_Spatial_Outlier_Cells.csv");
+});
+el("exportCorrelation").addEventListener("click",()=>{
+ exportRows(correlationRows(),"Gambia_Correlation_Statistics.csv");
+});
 
 /* =========================================================
    START
@@ -1597,4 +1847,3 @@ loadRepository();
 </script>
 </body>
 </html>
-

@@ -1335,7 +1335,7 @@ Dippa Kunda,Drammeh Kunda Ebrima Drammeh Ya,Ebrima Drammeh,1,Residential,1,5,27,
 Dippa Kunda,Kabba Kunda,Muhammed Haji Kabba,1,Residential,1,1,9,13.442261,-16.684162
 Dippa Kunda,Alkali Kunda,Ebrima Sohna,"1,2",Residential,11,8,42,13.441965,-16.684153
 Dippa Kunda,Jaiteh Kunda,Alagie Malamin Jaiteh,"1,2",Residential,3,3,15,13.441604,-16.684042
-Dippa Kunda,Johnson Kunda,Madam Johnson,4,Institutional,0,0,2,13.443745,-16.679329
+Dippa Kunda,Johnson Kunda,Madam Johnson,4,Institutional,1,0,2,13.443745,-16.679329
 Dippa Kunda,Jallow Kunda, Musa l Jallow,"1,2",Residential,8,2,7,13.443999,-16.67942
 Dippa Kunda,Sillah Kunda,Jakariya Sillah,"1,2",Residential,6,8,36,13.44319,-16.679602
 Dippa Kunda,Gomez Kunda,Ablie Gomez,1,Residential,3,7,42,13.443523,-16.679634
@@ -5308,7 +5308,7 @@ Faraba Kairaba,Dibba,Ensa dibba,1,Residential,2,1,9,13.248055,-16.525855
 Faraba Kairaba,Colley kunda,Pamodou colley,1,Residential,3,1,6,13.248071,-16.525359
 Faraba Kairaba,Colley kunda,Sainey colley,1,Residential,4,2,17,13.24762,-16.525634
 Faraba Kairaba,Bah kunda,Omar bah,1,Residential,5,1,15,13.247286,-16.525461
-Faraba Kairaba,Sowe kunda,Ablie sowe,1,Residential,44,2,20,13.247169,-16.524871
+Faraba Kairaba,Sowe kunda,Ablie sowe,1,Residential,4,2,20,13.247169,-16.524871
 Faraba Kairaba,Jallow kunda,Mamadou jallow,1,Residential,3,1,14,13.247064,-16.524433
 Faraba Kairaba,Jallow kumda,Lamarana jallow,1,Residential,2,1,8,13.248084,-16.524396
 Faraba Kairaba,Kanteh kunda,Ebrima kanteh,1,Residential,2,1,10,13.247832,-16.524095
@@ -10023,7 +10023,7 @@ Brikama Kabafita,Danjo Kunda,Ebrima Danjo,1,Residential,2,1,8,13.289453,-16.6443
 Brikama Kabafita,Kujabi Kunda,Labally Kujabi,1,Residential,2,1,7,13.289794,-16.645767
 Brikama Kabafita,Unknow,Unknow,1,Residential,1,1,4,13.289098,-16.645713
 Brikama Kabafita,Jammeh Kunda,Lamin Jammeh,1,Residential,2,1,7,13.289004,-16.645886
-Brikama Kabafita,Bah Kunda,Biram Bah,2,Commercial,0,0,12,13.288944,-16.646015
+Brikama Kabafita,Bah Kunda,Biram Bah,2,Commercial,3,0,12,13.288944,-16.646015
 Brikama Kabafita,Bojang Kunda,Alhagie Bojang,1,Residential,2,1,3,13.28894,-16.64622
 Brikama Kabafita,Sanneh kunda,Amie Sanneh,1,Residential,2,2,9,13.288884,-16.646437
 Brikama Kabafita,Kanteh Kunda,Ismaila Kanteh,1,Residential,3,1,8,13.288936,-16.646682
@@ -14813,7 +14813,7 @@ Pirang,Mbakey kunda,Agusten mbakey,1,Residential,2,1,15,13.280157,-16.545283
 Pirang,Sonko,Ousman sonko,"1,Other",Residential,2,1,8,13.27916,-16.544264
 Pirang,Gibba kunda,Ansumana gibba,1,Residential,3,1,13,13.279703,-16.543921
 Pirang,Sonko kunda,Karlos nyina sonko,1,Residential,3,1,11,13.280503,-16.543155
-Pirang,Camara kunda,Samba camara,"1,2",Residential,44,1,15,13.281071,-16.543135
+Pirang,Camara kunda,Samba camara,"1,2",Residential,4,1,15,13.281071,-16.543135
 Pirang,Kujabi kunda,Masirreh kujabi,1,Residential,2,1,11,13.281081,-16.543014
 Pirang,Badjie kunda,Yaya badjie,1,Residential,3,1,15,13.279568,-16.542937
 Pirang,Gibba kunda,Mai gibba,1,Residential,3,1,12,13.279391,-16.543272
@@ -17981,7 +17981,7 @@ Brikama Gidda,JAITEH KUNDA,MUSA JAITEH,1,Residential,3,1,22,13.265671,-16.621471
 Brikama Gidda,JALLOW KUNDA,GIBRIL JALLOW,1,Residential,1,1,14,13.265587,-16.621668
 Brikama Gidda,DARBOE KUNDA,MUSA DARBOE,1,Residential,3,1,8,13.265429,-16.621289
 Brikama Gidda,SAMURA KUNDA,BINTA SAMURA,1,Residential,2,1,10,13.264801,-16.621278
-Brikama Gidda,SOWE KUNDA,JAMBOYE SOWE,2,Commercial,0,0,3,13.265339,-16.620668
+Brikama Gidda,SOWE KUNDA,JAMBOYE SOWE,2,Commercial,2,0,3,13.265339,-16.620668
 Brikama Gidda,SANYANG KUNDA,LAMIN SANYANG,1,Residential,1,2,9,13.264504,-16.620465
 Brikama Gidda,BAYO KUNDA,SERING BAYO,1,Residential,1,1,15,13.26503,-16.62031
 Brikama Sanchaba,BOJANG KUNDA,ALASANNA BOJANG,1,Residential,1,1,13,13.263232,-16.627974
@@ -18764,7 +18764,7 @@ Sanchaba Sulay Jobe,Ceesay Kunda,Balang Ceesay,1,Residential,2,3,7,13.424333,-16
 Sanchaba Sulay Jobe,Ceesay Kunda,Jerreh Ceesay,1,Residential,7,1,15,13.424265,-16.706697
 Sanchaba Sulay Jobe,Jagana Kunda,Lamin Jagana,1,Residential,1,1,2,13.42405,-16.706618
 Sanchaba Sulay Jobe,Ceesay Kunda,Madi Ceesay,"1,2",Residential,3,1,5,13.423725,-16.70658
-Sanchaba Sulay Jobe,Njie Kunda,Tijan Njie,"1,2",Residential,91,4,21,13.423788,-16.706887
+Sanchaba Sulay Jobe,Njie Kunda,Tijan Njie,"1,2",Residential,9,4,21,13.423788,-16.706887
 Sanchaba Sulay Jobe,Bah Kunda,Bubacarr Bah,1,Residential,1,1,6,13.423697,-16.707102
 Sanchaba Sulay Jobe,Jawneh Kunda,Mafoday Jawneh,"1,2",Residential,4,1,20,13.423514,-16.707136
 Sanchaba Sulay Jobe,Gaye Kunda,Sulayman Gaye,"1,2",Residential,3,1,12,13.423568,-16.707302
@@ -35663,7 +35663,7 @@ Bakau New Town,Njie Kunda,Njemeh Njie,1,Residential,2,1,8,13.46391,-16.680966
 Bakau New Town,Sillah Kunda,Yusupha Sillah,1,Residential,2,1,9,13.464234,-16.6812
 Bakau New Town,Safrin Kunda,Aisha Safrin,1,Residential,2,1,5,13.464327,-16.681052
 Bakau New Town,Saffarie Kunda,Isatou Saffarie,1,Residential,1,1,6,13.464367,-16.680967
-Bakau New Town,Kuranv Kunda,Mamie Kurang,1,Residential,51,1,2,13.464445,-16.680865
+Bakau New Town,Kuranv Kunda,Mamie Kurang,1,Residential,5,1,2,13.464445,-16.680865
 Bakau New Town,Kuran Kunda,Mammie Kuran,1,Residential,2,1,4,13.464346,-16.680733
 Bakau New Town,Jagana Kunda,Muhammed Jagana,1,Residential,7,1,4,13.464529,-16.680552
 Bakau New Town,Touray Kunda,Kebba Touray,1,Residential,1,1,5,13.464396,-16.680416
@@ -48032,7 +48032,7 @@ Gunjur,Demba touray,Demba touray,1,Residential,3,2,25,13.178227,-16.758372
 Gunjur,Manneh kunda,Malangding manneh,"1,2,Other",Residential,8,2,21,13.179471,-16.758715
 Gunjur,Janneh kunda,Lamin janneh,1,Residential,2,1,14,13.180122,-16.758837
 Gunjur,Janneh kunda,Karamo janneh,1,Residential,4,0,0,13.180404,-16.758875
-Gunjur,Imam kunda, fa Karamo touray,"1,2",Residential,39,19,135,13.179542,-16.759168
+Gunjur,Imam kunda, fa Karamo touray,"1,2",Residential,3,19,135,13.179542,-16.759168
 Gunjur,Jabang kunda,Folonko jabang,"1,2",Residential,13,5,54,13.180256,-16.759229
 Gunjur,Bojang kunda,Abduwahab bojang,"1,2",Residential,10,3,30,13.17913,-16.759483
 Gunjur,Touray kunda,Tuman touray,"1,2",Residential,1,1,8,13.179687,-16.759596
@@ -55862,7 +55862,7 @@ Kololi,Behind Luigis Complex,Omar Jawara,"1,Other",Residential,1,1,1,13.453511,-
 Kololi,Taranga Beach Club,Lie Ngum,"1,Other",Residential,1,1,2,13.454564,-16.716675
 Kololi,African Priencess Beach Hotel,African Princess Beach Hotel,"1,4",Residential,24,1,8,13.454966,-16.716124
 Kololi,Tamala Beach Resort,Tamala Beach,"1,4",Residential,20,1,4,13.458957,-16.711103
-Kololi,Kunta Kinteh Hotel,Kunta Kinteh Hotel,"1,4",Residential,42,1,1,13.460438,-16.709444
+Kololi,Kunta Kinteh Hotel,Kunta Kinteh Hotel,"1,4",Residential,4,1,1,13.460438,-16.709444
 Kololi,Badala park Hotel,Badala Park Hotel,"1,4",Residential,26,1,7,13.458346,-16.705698
 Kololi,Palm Beach,Palm Beach,"1,4",Residential,24,1,1,13.460408,-16.70781
 Kotu,Jawara kunda,Lamin Jawara,"1,2",Residential,2,3,16,13.444644,-16.70531
@@ -55991,7 +55991,7 @@ Kotu,Jallow kunda,Oumar Rafiou Jallow,1,Residential,2,1,9,13.446803,-16.70495
 Kotu,Unknown,Tapha surname not known,1,Residential,2,1,4,13.446942,-16.704439
 Kotu,Nyang kunda,Babucarr Nyang,1,Residential,1,1,3,13.446773,-16.704461
 Kotu,Jeng kunda,Sheihk Malick Jeng,1,Residential,2,1,1,13.44662,-16.704403
-Kotu,Carvalho  Residence,Anthony Carvalho,1,Residential,54,1,2,13.446482,-16.704379
+Kotu,Carvalho  Residence,Anthony Carvalho,1,Residential,5,1,2,13.446482,-16.704379
 Kotu,Camara kunda,Njatteh Camara,1,Residential,1,1,4,13.446341,-16.704351
 Kotu,Jobe kunda,Ousman Jobe,1,Residential,2,3,5,13.446074,-16.704347
 Kotu,Touray kunda,Juma  Touray,1,Residential,1,1,13,13.445916,-16.704261
@@ -63389,7 +63389,7 @@ Manjai Kunda,Jassy Kunda,Haddy Jassy,"1,2",Residential,3,1,19,13.436876,-16.6930
 Manjai Kunda,Koito Kunda,Buba Koita,1,Residential,3,1,9,13.43692,-16.692752
 Manjai Kunda,Ceesay Kunda,Mam Jarra Ceesay,1,Residential,1,2,12,13.436617,-16.692736
 Manjai Kunda,Ceesay Kunda,Sherifo Cessay,1,Residential,3,2,20,13.437145,-16.692738
-Manjai Kunda,Jallow Kunda,Kaddijatou Sidibeh,1,Residential,2633,4,25,13.437382,-16.69274
+Manjai Kunda,Jallow Kunda,Kaddijatou Sidibeh,1,Residential,2,4,25,13.437382,-16.69274
 Manjai Kunda,Kinteh Kunda,Ebrima Kinteh,"1,2",Residential,4,1,1,13.437763,-16.692823
 Manjai Kunda,Kinteh Kunda,Njundu Sey,1,Residential,3,1,9,13.437648,-16.69297
 Manjai Kunda,Minteh Kunda,Aminata Jallow,1,Residential,3,2,18,13.437434,-16.693004
@@ -65447,7 +65447,7 @@ Kotu,Jallow Kunda,Assan  Jallow,1,Residential,1,1,5,13.44854,-16.701251
 Kotu,Jallow Kunda,Assan Jallow,1,Residential,5,9,23,13.448755,-16.701034
 Kotu,Jabbie Kunda,Jabbie,1,Residential,1,3,5,13.448634,-16.703031
 Kotu,Call back,Call back,1,Residential,1,1,2,13.447902,-16.702843
-Kotu,Sarr Kunda,Yandeh Sarr,1,Residential,44,3,38,13.447732,-16.702539
+Kotu,Sarr Kunda,Yandeh Sarr,1,Residential,5,3,38,13.447732,-16.702539
 Manjai Kunda,Sonko Kunda,Malick Sonko,1,Residential,1,1,1,13.444931,-16.697621
 Kotu,Jarju Kunda,Yusupha Jarju,1,Residential,2,1,8,13.460628,-16.70181
 Kotu,Bush Caffee And Refreshment Garden,Modou Lamin Sidibeh,"1,2",Residential,3,1,1,13.460309,-16.701492
@@ -67569,7 +67569,7 @@ Brikama Jamisa,Bah Kunda,Lamin Bah,"1,Other",Residential,5,4,36,13.271019,-16.65
 Brikama Jamisa,Njie Kunda,Darboe Njie,1,Residential,2,2,18,13.270639,-16.656646
 Brikama Jamisa,Baldeh Kunda,Penda Baldeh,1,Residential,3,3,12,13.270296,-16.656528
 Brikama Jamisa,Drammeh Kunda,Doctor Busireh Ebrima Drammeh,1,Residential,2,3,17,13.270089,-16.656518
-Brikama Jamisa,Jawla Kunda,Lamin Jawla,1,Residential,60,4,26,13.269922,-16.656694
+Brikama Jamisa,Jawla Kunda,Lamin Jawla,1,Residential,6,4,26,13.269922,-16.656694
 Brikama Jamisa,Ceesay Kunda,Kebba Ceesay,1,Residential,4,1,12,13.269912,-16.65683
 Brikama Jamisa,Barry Kunda,Alhajie Bubacarr Barry,1,Residential,6,1,19,13.269897,-16.657345
 Brikama Jamisa,Jallow Kunda,Ousman Jallow,1,Residential,4,1,9,13.269694,-16.657387
@@ -68136,7 +68136,7 @@ Jalambang,Mendy Kunda,Jassey Mendy,1,Residential,2,1,8,13.284177,-16.670635
 Jalambang,Colley Kunda,Omar Colley,1,Residential,4,1,6,13.282685,-16.670272
 Jalambang,Gomez Kunda,Marie Gomez,1,Residential,3,1,3,13.283004,-16.670114
 Jalambang,Bah Kunda,Momodou Bah,1,Residential,6,1,28,13.282563,-16.670001
-Jalambang,Al Madina School Village,Al Madina School Village,"1,4,Other",Residential,60,1,11,13.281589,-16.670318
+Jalambang,Al Madina School Village,Al Madina School Village,"1,4,Other",Residential,6,1,11,13.281589,-16.670318
 Jalambang,Njie Kunda,Buba Njie,1,Residential,2,1,15,13.282724,-16.673149
 Jalambang,Jallow Kunda,Alhajie Jallow,1,Residential,3,2,9,13.282746,-16.67283
 Jalambang,Njie Kunda,Hamadi Njie,"1,2",Residential,4,2,11,13.282502,-16.672749
@@ -76403,7 +76403,7 @@ Bundung,Conteh Kunda,Saiba Conteh,1,Residential,4,4,10,13.421247,-16.680728
 Bundung,Sawaneh kunda,Ebrima Sawaneh,1,Residential,8,3,30,13.421211,-16.680589
 Bundung,Sowe Kunda,Juldeh Sowe,"1,2",Residential,3,2,20,13.420956,-16.68056
 Bundung,Jeng Kunda,Ousainou Jeng,"1,Other",Residential,2,4,18,13.420739,-16.680489
-Bundung,Fishiru Fishiru,Bakaseh Fishiru,1,Residential,45,10,48,13.420512,-16.680425
+Bundung,Fishiru Fishiru,Bakaseh Fishiru,1,Residential,4,10,48,13.420512,-16.680425
 Bundung,Sillah Kunda,Alhagie Saibo Sillah,"1,2,Other",Residential,3,4,25,13.420348,-16.680825
 Bundung,Fishiru Kunda,Mamadou Noba Fishiru,1,Residential,4,9,45,13.420582,-16.68088
 Bundung,Secka Kunda,Ebra Secka,"1,2",Residential,4,7,39,13.420803,-16.680989
@@ -78167,7 +78167,7 @@ Faji Kunda,Kujabi Kunda,Alieu Kujabi,1,Residential,7,1,18,13.412076,-16.661683
 Faji Kunda,Camara Kunda,Muhammed Camara,1,Residential,1,1,6,13.412349,-16.66106
 Faji Kunda,Jawo Kunda,Gallo Jawo,1,Residential,3,1,18,13.412637,-16.661195
 Faji Kunda,Kassama Kunda,Lamin Kassama,1,Residential,1,1,7,13.412717,-16.661345
-Faji Kunda,Kalajula Kunda,Julaba Kalajula,1,Residential,46,6,29,13.412901,-16.66136
+Faji Kunda,Kalajula Kunda,Julaba Kalajula,1,Residential,4,6,29,13.412901,-16.66136
 Faji Kunda,Jatta Kunda,Manlafi Jatta,"1,2",Residential,3,5,20,13.413054,-16.661219
 Faji Kunda,Jobe Kunda,Alieu Kebba Jobe,"1,Other",Residential,6,1,26,13.413055,-16.661508
 Faji Kunda,Manneh Kunda,Abba Manneh,1,Residential,3,1,13,13.413033,-16.661994
@@ -80520,7 +80520,7 @@ Jamwelly,Saidykhan kunda,Bakary Saidykhan,1,Residential,2,1,8,13.376282,-16.7304
 Jamwelly,1,Lalla janko,1,Residential,2,1,5,13.376452,-16.73042
 Jamwelly,Kambi kunda,Sukuta Kambi,1,Residential,1,1,12,13.376573,-16.730386
 Jamwelly,Sisaho kunda,Musa sisaho,1,Residential,3,1,11,13.376603,-16.72957
-Jamwelly,Jallow kunda,Alpha omar Jallow,"2,Other",Commercial,0,0,11,13.373878,-16.731275
+Jamwelly,Jallow kunda,Alpha omar Jallow,"2,Other",Commercial,6,0,11,13.373878,-16.731275
 Jamwelly,ceesay kunda,Junkung ceesay,1,Residential,3,1,1,13.374038,-16.731471
 Jamwelly,Manneh kunda,Bakary manneh,1,Residential,2,1,7,13.37438,-16.731424
 Jamwelly,Jallow kunda,Bubacarr Jallow,1,Residential,4,1,16,13.374834,-16.730706
@@ -81347,7 +81347,7 @@ Yuna,Nyabally Kunda,Alagie Nyabally,1,Residential,1,1,6,13.342965,-16.737258
 Yuna,SoweKundda,Sheriff Sowe,1,Residential,2,1,10,13.342872,-16.735328
 Yuna,Jallow Kunda,PatehJallow,1,Residential,2,1,15,13.342183,-16.734595
 Yuna,Jammeh Kunda,Nuha Jammeh,1,Residential,1,1,9,13.341953,-16.73626
-Yuna,Ndow Kunda,Tijan Ndow,1,Residential,0,1,3,13.344046,-16.734768
+Yuna,Ndow Kunda,Tijan Ndow,1,Residential,2,1,3,13.344046,-16.734768
 Yuna,Sugufara Kunda,Ablie Sugufara,1,Residential,2,1,7,13.343833,-16.734357
 Yuna,Bah Kunda,Omar Bah,"1,Other",Residential,2,1,12,13.344412,-16.73401
 Yuna,Sylva Kunda,Muhammed sylva,1,Residential,1,1,1,13.343425,-16.733721
@@ -108866,7 +108866,7 @@ Keneba,Jarra Kunda,Chima Jarra,1,Residential,4,2,18,13.436981,-13.856539
 Keneba,Bajaha Kunda,Sarjo Bajaha,1,Residential,10,7,100,13.436377,-13.856641
 Keneba,Touray Kunda,Bully Touray,1,Residential,4,3,40,13.437087,-13.858032
 Jawo Kunda,Baldeh Kunda,Abdoulie Baldeh,1,Residential,5,4,43,13.425637,-13.861908
-Jawo Kunda,Baldeh Kunda,Alagie Baldeh,1,Residential,80,2,33,13.424855,-13.861927
+Jawo Kunda,Baldeh Kunda,Alagie Baldeh,1,Residential,8,2,33,13.424855,-13.861927
 Jawo Kunda,Baldeh Kunda,Foday Baldeh,1,Residential,5,5,65,13.424681,-13.861942
 Jawo Kunda,Jawo Kunda,Buba Jawo,1,Residential,2,2,12,13.424111,-13.862121
 Jawo Kunda,Jawo Kunda,Ousman Jawo,1,Residential,1,1,19,13.423999,-13.862375
@@ -109927,7 +109927,7 @@ Macca Mbayen,Mbaye kunda,Mot Amie Mbaye,1,Residential,2,1,17,13.614203,-15.09522
 Macca Mbayen,Mbaye Kunda,Ebou Sala Mbaye,1,Residential,2,1,10,13.614439,-15.095373
 Macca Mbayen,Mbaye kunda,Abdou Lolly Mbaye,1,Residential,4,1,20,13.613786,-15.094349
 Macca Mbayen,Mbaye Kunda,Hamat Fatou Jaye Mbaye,1,Residential,6,2,28,13.613022,-15.093648
-Macca Mbayen,Mbaye kunda,Alhagie Hawa Mbaye,1,Residential,41,6,114,13.613143,-15.09384
+Macca Mbayen,Mbaye kunda,Alhagie Hawa Mbaye,1,Residential,4,6,114,13.613143,-15.09384
 Macca Mbayen,Mbaye kunda,Alhagie Bai Mbaye,"1,2",Residential,16,4,76,13.612938,-15.093792
 Macca Mbayen,Mbaye kunda,Mot Tala Mena Mbayee,1,Residential,9,2,37,13.612816,-15.093583
 Macca Mbayen,Mbaye kunda,Habibou Mbaye,1,Residential,11,1,18,13.613063,-15.093181
@@ -112104,7 +112104,7 @@ Temanto Chedo,Jallow kunda,Amadou Jallow,1,Residential,4,1,10,13.455518,-14.5915
 Temanto Chedo,Mballow kunda,Yemadou Mballow,1,Residential,6,2,19,13.455809,-14.591494
 Temanto Chedo,Jallow kunda,Sellou Jallow,1,Residential,6,2,22,13.456115,-14.591432
 Temanto Chedo,Alkalo's compound,Sawadi Sanneh,1,Residential,23,2,47,13.455913,-14.591144
-Temanto Chedo,Mballow kunda,Alagie Mansa Mballow,1,Residential,45,6,220,13.45655,-14.591002
+Temanto Chedo,Mballow kunda,Alagie Mansa Mballow,1,Residential,4,6,220,13.45655,-14.591002
 Temanto Chedo,Mballow kunda,Jarga Mballow,"1,2",Residential,29,3,66,13.457194,-14.591021
 Temanto Chedo,Baldeh kunda,Musa Baldeh,1,Residential,12,1,40,13.457617,-14.590977
 Temanto Chedo,Sanneh kunda,Babou Sanneh,1,Residential,24,3,65,13.457993,-14.591298
@@ -113870,7 +113870,7 @@ Kulkuleh,FATTY KUNDA,MAI FATTY,"1,2",Residential,5,1,27,13.296631,-14.140756
 Kulkuleh,GIKINEH KUNDA,MBEMBA GIKINEH,1,Residential,4,1,34,13.296566,-14.141192
 Kulkuleh,CAMARA KUNDA,BAYEI CAMARA,1,Residential,6,1,61,13.296099,-14.141461
 Kulkuleh,SILLAH KUNDA,LAMIN SILLAH,1,Residential,7,1,11,13.296434,-14.141438
-Kulkuleh,KEITA KUNDA,EBRIMA KEITA,"1,2",Residential,0,1,17,13.296282,-14.142184
+Kulkuleh,KEITA KUNDA,EBRIMA KEITA,"1,2",Residential,3,1,17,13.296282,-14.142184
 Dingiri,Waggeh Kunda,Ebrima Waggeh,1,Residential,6,2,43,13.296894,-14.064078
 Dingiri,Waggeh Kunda,Kandeh Waggeh,"1,2",Residential,7,1,42,13.296975,-14.063809
 Dingiri,Sanno Kunda,Abubacarr Sanno,"1,2",Residential,7,7,60,13.297068,-14.063208
@@ -117815,7 +117815,7 @@ Jimbala Felingo-C,Jaw Kunda,Sheohk Jaw,1,Residential,2,1,8,13.734899,-15.380584
 Jimbala Felingo-C,Jobe Kunda,Demba Jobe,1,Residential,5,1,30,13.735424,-15.380292
 Jimbala Felingo-C,Jobe Kunda,Malick Jobe,1,Residential,4,1,4,13.735404,-15.380518
 Jimbala Felingo-C,Jobe Kunda,Samba Jobe,1,Residential,6,1,9,13.735649,-15.38058
-Jimbala Felingo-C,Jallow Kunda,Late Ali Jallow,1,Residential,50,12,168,13.736257,-15.380708
+Jimbala Felingo-C,Jallow Kunda,Late Ali Jallow,1,Residential,5,12,168,13.736257,-15.380708
 Jimbala Felingo-C,Ceesay Kunda,Fafa Ceesay,1,Residential,2,1,10,13.73521,-15.380126
 Jimbala Felingo-C,Jobe Kunda,Omar Jobe,1,Residential,5,1,21,13.735602,-15.379946
 Jimbala Felingo-C,Jobe Kunda,Omar K Jobe,1,Residential,1,1,25,13.735372,-15.379904
@@ -119470,7 +119470,7 @@ Barra,Joof kunda,Mam Laiteh Joof,1,Residential,3,1,16,13.487299,-16.541931
 Barra,Ndure kunda,Mam Degen Ndure,1,Residential,3,2,8,13.487369,-16.542171
 Barra,Sarr kunda,Modou Sarr,1,Residential,3,10,20,13.487863,-16.542308
 Barra,Fofana kunda,Ebou Fofana,1,Residential,3,1,6,13.488008,-16.541904
-Barra,Sey kunda,Harouna Sey,1,Residential,44,2,17,13.487979,-16.54159
+Barra,Sey kunda,Harouna Sey,1,Residential,4,2,17,13.487979,-16.54159
 Barra,Faye kunda,Fatou Faye,"1,Other",Residential,6,8,35,13.488,-16.541293
 Barra,Maharagie,Maharagie,1,Residential,4,3,15,13.488039,-16.541068
 Barra,Bombeh kunda,Wurry Bombeh,1,Residential,4,7,25,13.488032,-16.540918
@@ -120563,7 +120563,7 @@ Mbollet Ba,Njie kunda,Samba Njie,1,Residential,2,1,15,13.519315,-16.491441
 Mbollet Ba,Sarr kunda,Momodou Sarr,"1,2",Residential,2,1,16,13.518809,-16.49148
 Mbollet Ba,Kah kunda,Abdoulie Kah,1,Residential,1,1,7,13.518872,-16.491866
 Mbollet Ba,Joof kunda,Sengan Joof,1,Residential,7,2,36,13.518963,-16.492082
-Mbollet Ba,Joof kunda,Mambureh Joof,1,Residential,0,3,30,13.51907,-16.492232
+Mbollet Ba,Joof kunda,Mambureh Joof,1,Residential,4,3,30,13.51907,-16.492232
 Kerr Jatta,Faal kunda,Amadou Faal,"1,2",Residential,4,1,17,13.55443,-16.44002
 Kerr Jatta,Sarr kunda,Modou Sarr,1,Residential,1,1,9,13.554186,-16.44052
 Kerr Jatta,Sine kunda,Daam Sine,1,Residential,2,1,8,13.553796,-16.440473
@@ -121813,7 +121813,7 @@ Mbollet Ba,Ndong kunda,Wally Ndong,1,Residential,2,1,7,13.512747,-16.489726
 Mbollet Ba,Joof kunda,Omar Joof,1,Residential,2,1,12,13.513008,-16.489528
 Mbollet Ba,Drammeh kunda,Seedy Drammeh,1,Residential,3,2,36,13.513345,-16.489319
 Mbollet Ba,Joof kunda,Ismaila Joof,1,Residential,2,2,11,13.513661,-16.489113
-Mbollet Ba, ,Musa,1,Residential,0,1,0,13.514081,-16.488904
+Mbollet Ba, ,Musa,1,Residential,1,1,1,13.514081,-16.488904
 Ndofan,Saine kunda,Oley Saine,1,Residential,1,1,14,13.530835,-16.435568
 Ndofan,Bobb kunda,Jabang Bobb,1,Residential,1,1,11,13.530498,-16.435252
 Ndofan,Bobb kunda,Jojo Ndong,1,Residential,3,1,20,13.530645,-16.43507
@@ -125448,7 +125448,7 @@ Chilla,Sillah Kunda,Matarr Sillah,1,Residential,3,1,11,13.463132,-16.270435
 Chilla,Ceesay Kunda,Alagie Ceesay,1,Residential,4,1,25,13.462695,-16.271113
 Chilla,Njie Kunda,Ismaila Njie,1,Residential,3,1,7,13.462946,-16.271206
 Chilla,Sillah Kunda,Saihou Sillah,1,Residential,5,2,57,13.463025,-16.270008
-Chilla,Njie Kunda,Jim Njie,"1,2",Residential,40,8,166,13.46258,-16.268613
+Chilla,Njie Kunda,Jim Njie,"1,2",Residential,4,8,166,13.46258,-16.268613
 Chilla,Sowe Kunda,Amadou Sowe,1,Residential,7,2,62,13.462205,-16.269113
 Chilla,Alkali Kunda,Alagie Abdoulie Sillah,"1,2",Residential,13,2,69,13.461973,-16.269893
 Chilla,Sillah Kunda,Ousman Sillah,1,Residential,6,2,32,13.462544,-16.269618
@@ -131520,7 +131520,7 @@ Musanding Kunda,Barry Kunda,Talibeh Barry,1,Residential,3,1,10,13.347557,-14.453
 Musanding Kunda,Barry Kunda,Marwanou Barry,1,Residential,5,1,16,13.347466,-14.453988
 Musanding Kunda,Mballow Kunda,Samba Mballow,1,Residential,4,1,19,13.34719,-14.453806
 Musanding Kunda,Mballow Kunda,Bubacarr Mballow,1,Residential,5,1,7,13.347224,-14.453487
-Jawo Kunda,Baldeh Kunda Alkalo's Comp.,Salieu Baldeh,1,Residential,44,9,142,13.357185,-14.422648
+Jawo Kunda,Baldeh Kunda Alkalo's Comp.,Salieu Baldeh,1,Residential,4,9,142,13.357185,-14.422648
 Jawo Kunda,Barry Kunda,Gagel Barry,1,Residential,14,2,64,13.357089,-14.422432
 Jawo Kunda,Bandeh Kunda,Demba Baldeh,1,Residential,7,1,15,13.356668,-14.422019
 Jawo Kunda,Mballow Kunda,Mulai Mballow,1,Residential,6,1,14,13.357389,-14.421998
@@ -131593,7 +131593,7 @@ Sare Kockay,Baldeh Kunda,Foday Baldeh,1,Residential,4,2,14,13.311025,-14.404164
 Sare Kockay,Camara Kunda,Foady Camara,1,Residential,13,2,33,13.310679,-14.404285
 Sare Kockay,Camara Kunda,Pulo Camara,1,Residential,3,1,50,13.310352,-14.404337
 Sare Kockay,Mballow kunda,Demba Mballow,1,Residential,12,4,35,13.311013,-14.404805
-Sare Kockay,Sowe kunda,Ousman Sowe,1,Residential,90,3,42,13.311178,-14.404884
+Sare Kockay,Sowe kunda,Ousman Sowe,1,Residential,9,3,42,13.311178,-14.404884
 Sare Kockay,Sowe kunda,Bunja Sowe,1,Residential,6,1,20,13.311219,-14.404644
 Sare Kockay,Sowe Kunda,Bukari Sowe,"1,2",Residential,4,1,20,13.311198,-14.404298
 Kossemarr Dembell Jawo,Jawo Kunda,Francis Jawo,1,Residential,5,1,13,13.311816,-14.401796
@@ -131673,7 +131673,7 @@ Bakadagi,Jabbie kunda,Muctarr Jabbie,1,Residential,4,1,22,13.302978,-14.385326
 Bakadagi,Sillah kunda,MORRDINDING SILLAH,1,Residential,5,3,74,13.302594,-14.385995
 Bakadagi,Sima Kunda,ESSA SIMA,"1,2",Residential,7,1,32,13.302435,-14.386377
 Bakadagi,Drammeh kunda,BASANA DRAMMEH,1,Residential,2,1,15,13.302887,-14.385932
-Bakadagi,Sima Kunda,Bubacarr Sima,1,Residential,55,2,10,13.303023,-14.386341
+Bakadagi,Sima Kunda,Bubacarr Sima,1,Residential,5,2,10,13.303023,-14.386341
 Bakadagi,Drammeh kunda,Alagie Drammeh,1,Residential,7,1,26,13.302952,-14.386572
 Bakadagi,Drammeh kunda,Muhammad Drammeh,"1,2",Residential,4,1,22,13.302887,-14.386786
 Bakadagi,Sankareh Kunda,Filly Sankareh,"1,2",Residential,4,2,28,13.303005,-14.387266
@@ -132938,7 +132938,7 @@ Numuyel,Saho Kunda,Yaya Saho,1,Residential,9,1,71,13.276866,-14.296708
 Numuyel,Saho Kunda,Musa Saho,1,Residential,7,1,31,13.276877,-14.297084
 Demba Kunda Koto,Samusa Kunda,Haji Samusa,1,Residential,3,1,6,13.261552,-14.265495
 Demba Kunda Koto,Trawally Kunda,Essa Trawally,1,Residential,5,2,77,13.26149,-14.265842
-Demba Kunda Koto,Camara Kunda,Alhagie Bagkusa Camara,1,Residential,39,5,296,13.261305,-14.266757
+Demba Kunda Koto,Camara Kunda,Alhagie Bagkusa Camara,1,Residential,3,5,296,13.261305,-14.266757
 Demba Kunda Koto,Camara Kunda,Alagie Kaw Camara,1,Residential,3,1,6,13.262143,-14.266999
 Demba Kunda Koto,Camara Kunda,Muhammad Camara,1,Residential,2,1,2,13.262139,-14.266702
 Demba Kunda Koto,Camara Kunda,Degumeh Camara,1,Residential,10,7,81,13.260967,-14.268144
@@ -133066,7 +133066,7 @@ Gambissara,Jawara Kunda,Foday Yousupha Jawara,"1,2",Residential,5,2,50,13.237207
 Gambissara,Nyabally Kunda,Haja Nyabally,1,Residential,1,1,35,13.23697,-14.306164
 Gambissara,Camara Kunda,Saikou Camara,1,Residential,1,2,10,13.237204,-14.306213
 Gambissara,Camara Kunda,Yaya Camara,1,Residential,2,1,5,13.237477,-14.306314
-Gambissara,Dukureh Kunda the Alkalo,Alhagie Biayge Dukureh,1,Residential,43,9,392,13.238891,-14.308727
+Gambissara,Dukureh Kunda the Alkalo,Alhagie Biayge Dukureh,1,Residential,4,9,392,13.238891,-14.308727
 Gambissara,Kabba Kunda,Jariga Kabba,1,Residential,13,3,49,13.238007,-14.308365
 Gambissara,Camara Kunda,Almameh Camara,1,Residential,7,2,51,13.237979,-14.308834
 Gambissara,Fofana Kunda,Alhagie Baba Fofana,1,Residential,13,2,81,13.237592,-14.309165
@@ -134768,7 +134768,7 @@ Basse Santo-Su,Suso Kunda,Musa Suso,"1,Other",Residential,3,3,4,13.308763,-14.21
 Basse Santo-Su,Trawally Kunda,Dawda Trawally,"1,Other",Residential,5,3,51,13.309072,-14.212791
 Basse Santo-Su,Drammeh Kunda,Ousman Drammeh,"1,2",Residential,5,5,23,13.308372,-14.214489
 Basse Santo-Su,Touray Kunda,GaloTouray,"1,Other",Residential,1,1,7,13.308188,-14.214732
-Basse Santo-Su,Junkumba Real Estate,Junkumba Real Estate,"1,2,Other",Residential,55,4,12,13.308036,-14.214936
+Basse Santo-Su,Junkumba Real Estate,Junkumba Real Estate,"1,2,Other",Residential,5,4,12,13.308036,-14.214936
 Basse Santo-Su,Sowe Kunda,Musa Sowe,1,Residential,4,3,13,13.307928,-14.214871
 Basse Santo-Su,Camara Kunda,Alhagi Modou Kebba Camara,1,Residential,6,8,50,13.307608,-14.214825
 Basse Santo-Su,Camara Kunda,Alhagi Amara Camara,1,Residential,4,3,16,13.307856,-14.215123
@@ -135757,7 +135757,7 @@ Allunkhareh,Trawally Kunda,Bully Trawally,1,Residential,7,2,14,13.31863,-14.2396
 Allunkhareh,Cham Kunda,Muhammadou Cham,1,Residential,3,3,17,13.319049,-14.239115
 Allunkhareh,Conteh Kunda,Dalla Conteh,1,Residential,25,9,110,13.319356,-14.239557
 Allunkhareh,Horse and Donkey House,Dalla Conteh,"1,Other",Residential,1,0,0,13.32001,-14.23998
-Allunkhareh,Cham Kunda,Abdoulie Cham,1,Residential,41,3,91,13.318872,-14.240305
+Allunkhareh,Cham Kunda,Abdoulie Cham,1,Residential,4,3,91,13.318872,-14.240305
 Allunkhareh,Sissoho Kunda,Muhammed Sissoho,"1,2",Residential,7,1,40,13.318317,-14.24062
 Allunkhareh,Tunkara Kunda,Papa Tunkara,1,Residential,16,1,21,13.318338,-14.241016
 Allunkhareh,Tunkara Kunda,Baba Tunkara,"1,2",Residential,7,2,51,13.317681,-14.240774
@@ -136569,7 +136569,7 @@ Bantanto Kerr Ebrima Khan,Sallah Kunda,Family compound,1,Residential,6,4,53,13.6
 Bantanto Kerr Ebrima Khan,Secka Kunda,Biran Secka,1,Residential,13,4,52,13.69651,-15.253987
 Bantanto Kerr Ebrima Khan,Gaye Kunda,Demba  Gaye,1,Residential,4,3,33,13.696368,-15.253613
 Bantanto Kerr Ebrima Khan,Jallow Kunda,Amat Jallow,1,Residential,3,1,15,13.695962,-15.253539
-Bantanto Kerr Ebrima Khan,Bah Kunda,Demba Bah,1,Residential,40,1,16,13.696129,-15.253137
+Bantanto Kerr Ebrima Khan,Bah Kunda,Demba Bah,1,Residential,4,1,16,13.696129,-15.253137
 Bantanto Kerr Ebrima Khan,Jallow Kunda,Modou Jallow,1,Residential,3,1,16,13.695773,-15.252808
 Bantanto Kerr Ebrima Khan,Jallow Kunda,Malick Jallow,1,Residential,6,2,34,13.6956,-15.253159
 Bantanto Kerr Ebrima Khan,Jallow Kunda,Alpha Jallow Adama,1,Residential,6,2,26,13.695622,-15.253502
@@ -136848,7 +136848,7 @@ Kerr Ali Jelleh,NJIE KUNDA,BULLY NJIE,1,Residential,9,1,25,13.800535,-15.121881
 Kerr Ali Jelleh,JALLOW KUNDA,GIBI JALLOW,1,Residential,5,1,17,13.800421,-15.122088
 Kerr Ali Jelleh,JALLOW KUNDA,HASSAN JALLOW,"1,Other",Residential,15,2,80,13.800298,-15.122294
 Kerr Ali Jelleh,JALLOW KUNDA,ABDOULIE JALLOW,1,Residential,15,6,74,13.79997,-15.122296
-Kerr Ali Jelleh,JALLOW KUNDA,MUSA MARIAM JALLOW,1,Residential,120,6,85,13.799528,-15.122082
+Kerr Ali Jelleh,JALLOW KUNDA,MUSA MARIAM JALLOW,1,Residential,1,6,85,13.799528,-15.122082
 Kerr Ali Jelleh,JALLOW KUNDA,DEMBA JALLOW,1,Residential,11,4,35,13.798716,-15.122577
 Panchang Wharf Town,Ceesay Kunda,Hasum Ceesay,"1,2",Residential,4,1,6,13.785112,-15.145418
 Panchang Wharf Town,Mbub Kunda,Bakary Mbub,1,Residential,4,3,31,13.784578,-15.145651
@@ -148416,7 +148416,7 @@ Taifa,Dembele kunda,Alagie Dembele,1,Residential,5,2,21,13.500951,-14.882635
 Taifa,Janneh kunda,Yorro Janneh,1,Residential,3,2,24,13.50095,-14.882387
 Taifa,Touray kunda,Saikou Touray,1,Residential,6,2,39,13.50084,-14.882407
 Taifa,Sisoho kunda,Dawda sisoho,1,Residential,6,2,46,13.500327,-14.882186
-Taifa,Alimameh kunda,Alhagie Kisima Sillah,1,Residential,40,17,242,13.500691,-14.881747
+Taifa,Alimameh kunda,Alhagie Kisima Sillah,1,Residential,4,17,242,13.500691,-14.881747
 Taifa,Dukureh kunda,Ebrima Dukureh,1,Residential,9,4,62,13.500749,-14.880823
 Taifa,Njie kunda,Lamin Njie,1,Residential,4,1,18,13.500732,-14.880528
 Tabanding,Mballow kunda,Billo Mballow,1,Residential,2,1,9,13.477421,-14.937763
@@ -151019,7 +151019,7 @@ Bansang,Jallow Kunda,Sarjo Jallow,1,Residential,5,2,11,13.446595,-14.667861
 Bansang,Sainey Kunda,Alagie Sainey,1,Residential,3,1,9,13.44649,-14.667622
 Bansang,Mbye Kunda,Amie Mbye,1,Residential,2,3,17,13.44642,-14.667468
 Bansang,School for Enrolled nurses and midwife,Gambia Government ministry of health,"1,4",Residential,26,3,198,13.44624,-14.667042
-Bansang,Bansang general hospital,Gambia government ministry of health,"1,4",Residential,46,54,109,13.445795,-14.666071
+Bansang,Bansang general hospital,Gambia government ministry of health,"1,4",Residential,4,54,109,13.445795,-14.666071
 Bansang,Bansang Sukurr kunda,Christian Mission Fellowship,"1,4",Residential,11,2,7,13.442541,-14.663363
 Bansang,Gibbon Kunda,Ablie Gibbon,1,Residential,1,1,7,13.439798,-14.665266
 Bansang,Jatta Kunda,Marie Jatta,1,Residential,3,1,8,13.441472,-14.663149
@@ -153227,7 +153227,7 @@ Sabi,Jabbie Kunda,Alhajie Muhammed Jabbie,"1,2",Residential,8,3,38,13.236055,-14
 Sabi,Beyai Kunda,Alhajie Momodou Beyai,1,Residential,6,3,28,13.236186,-14.198194
 Sabi,Jabbie Kunda,Saibo Jabbie,1,Residential,4,2,17,13.236615,-14.198074
 Sabi,Fofana Kunda,Bakary Fofana,"1,2",Residential,9,1,44,13.236576,-14.197039
-Sabi,Jabbie Kunda,Muhammed Jabbie,1,Residential,50,3,20,13.236763,-14.197298
+Sabi,Jabbie Kunda,Muhammed Jabbie,1,Residential,5,3,20,13.236763,-14.197298
 Sabi,Camara Kunda,Bubacarr Camara,1,Residential,3,2,11,13.236922,-14.196955
 Sabi,Trawally Kunda,Foday Trawally,1,Residential,9,1,41,13.237442,-14.197125
 Sabi,Suwareh Kunda,Saihouna Suwareh,1,Residential,5,1,21,13.236667,-14.19658
@@ -154830,7 +154830,7 @@ Tanjeh,Trawally Kunda,Modou Trawally,1,Residential,1,1,15,13.343297,-16.791375
 Tanjeh,Taal Kunda,Mamadou Taal,"1,2",Residential,2,2,17,13.343088,-16.79209
 Tanjeh,Dampha Kunda,Sambou Dampha,1,Residential,1,1,14,13.342881,-16.792021
 Tanjeh,Saidy Kunda,Idrissa Saidy,1,Residential,1,1,19,13.342795,-16.791939
-Tanjeh,Jallow Kunda,Yaya Jallow,1,Residential,0,1,12,13.343151,-16.791899
+Tanjeh,Jallow Kunda,Yaya Jallow,1,Residential,1,1,12,13.343151,-16.791899
 Tanjeh,unknown,unknown,1,Residential,1,1,1,13.342927,-16.791811
 Tanjeh,Unknown,unknown,"1,2",Residential,1,1,2,13.342882,-16.791638
 Tanjeh,jarju kunda,Mamad m jarju,1,Residential,2,1,7,13.342552,-16.791431
@@ -155474,7 +155474,7 @@ Bato Kunku,BANJAN KUNDA,BAMBA BANJAN,1,Residential,5,1,25,13.329375,-16.799965
 Bato Kunku,BATO KUNKU,MAMUDOU TOURAY,1,Residential,7,1,20,13.329432,-16.799658
 Bato Kunku,JAGANA KUNDA,AJA KUJAI JAGANA,1,Residential,2,1,16,13.329452,-16.799247
 Bato Kunku,KANTEH KUNDA,PATAA KANTEH,1,Residential,2,1,18,13.329482,-16.798937
-Bato Kunku,SAWANEH KUNDA,LAMIN SAWANEH,"1,2",Residential,632,1,32,13.329444,-16.798018
+Bato Kunku,SAWANEH KUNDA,LAMIN SAWANEH,"1,2",Residential,6,1,32,13.329444,-16.798018
 Bato Kunku,MBAYE KUNDA,PA MODOU MBAYE,1,Residential,7,1,8,13.32983,-16.79814
 Bato Kunku,SUMAREH KUNDA,ABDOULIE SUMAREH,"1,2",Residential,4,1,20,13.329827,-16.798405
 Bato Kunku,NDURE KUNDA,OA EBRIMA NDURE,1,Residential,4,1,8,13.329852,-16.798747
@@ -158297,7 +158297,7 @@ Farato,Jatta kunda,Yusupha Jatta,1,Residential,2,1,20,13.321818,-16.661903
 Farato,Brisibe kunda,Nicholas Brisibe,1,Residential,2,1,9,13.321588,-16.661859
 Farato,Sabally Kunda,Modou Sabally,1,Residential,1,0,0,13.32154,-16.662115
 Farato,Ganess kunda,Muhamed Ganess,"1,2",Residential,2,3,14,13.32158,-16.662317
-Farato,Ssllah kunda,Omar Ssllah,1,Residential,41,1,17,13.321547,-16.662455
+Farato,Ssllah kunda,Omar Ssllah,1,Residential,4,1,17,13.321547,-16.662455
 Farato,sallah kunda,Morr Talla Sallsh,"1,2",Residential,3,1,50,13.321444,-16.662793
 Farato,Fatty Kunda,Kalifa Fatty,1,Residential,2,1,25,13.317622,-16.674185
 Farato,Sanneh Kunda,Mustapha Sanneh,1,Residential,2,1,15,13.317627,-16.674393
@@ -158613,7 +158613,7 @@ Jambanjelly,Saidy Kunda (Brikama highway),Dodou Saidy,"1,2,Other",Residential,3,
 Jambanjelly,Kasseh Kunda,Alieu Kasseh,"1,2",Residential,2,1,1,13.27896,-16.727179
 Jambanjelly,Sanneh Kunda (Brikama highway),Bekai Sanneh,"1,2",Residential,4,1,20,13.278874,-16.72619
 Jambanjelly,Sanneh Kunda,Ebrima Sanneh,1,Residential,1,1,5,13.279656,-16.726017
-Jambanjelly,Sanneh Kunda,Lamin S. Sanneh,"1,Other",Residential,42535555,2,16,13.278775,-16.725768
+Jambanjelly,Sanneh Kunda,Lamin S. Sanneh,"1,Other",Residential,4,2,16,13.278775,-16.725768
 Jambanjelly,Bojang Kunda (opposite Chil Fund),Lamin Bojang,1,Residential,2,0,0,13.27904,-16.724808
 Jambanjelly,Jabi Kunda behind the arabic school,Muhammad Jabi,1,Residential,1,0,0,13.27961,-16.723904
 Jambanjelly,Baldeh Kunda (opposite the nursery school,Abdoulie Baldeh,1,Residential,2,1,8,13.280226,-16.725286
@@ -159300,7 +159300,7 @@ Jambanjelly,Mbye Kunda,Saliu Mbye,"1,Other",Residential,1,1,4,13.286885,-16.7280
 Jambanjelly,Jallow Kunda,Mamudou Jallow,1,Residential,2,1,12,13.286551,-16.728498
 Jambanjelly,Njie Kunda,Ela Njie,1,Residential,2,1,8,13.286578,-16.728847
 Jambanjelly,Camara Kunda,Nyema Sanyang,1,Residential,1,1,7,13.287714,-16.729235
-Jambanjelly,Bajo Kunda,Buba Bajo,1,Residential,415,2,26,13.288039,-16.725687
+Jambanjelly,Bajo Kunda,Buba Bajo,1,Residential,4,2,26,13.288039,-16.725687
 Jambanjelly, not found,n non,1,Residential,2,0,0,13.288529,-16.725555
 Jambanjelly,Ansumana Krumang,Ansumana Krumang,1,Residential,1,0,0,13.288707,-16.725326
 Jambanjelly,Sano Kunda,Kalipha Sano,1,Residential,2,1,15,13.289021,-16.727934
@@ -159701,7 +159701,7 @@ Jambur,Jarju Kunda,Sulayman jarju,1,Residential,1,0,0,13.315808,-16.68329
 Jambur,Jallow kunda,Abdourahman jallow,1,Residential,3,1,7,13.316019,-16.683286
 Jambur,Baldeh Kunda,Jainaba Kandeh,1,Residential,1,1,7,13.316548,-16.683252
 Jambur,Jallow Kunda, Momodou Jallow,1,Residential,3,1,15,13.316404,-16.682839
-Jambur,Sowe kunda,Ummu Hawa Jallow,1,Residential,7560430,1,6,13.317154,-16.683052
+Jambur,Sowe kunda,Ummu Hawa Jallow,1,Residential,7,1,6,13.317154,-16.683052
 Jambur,Kaloga Kunda,Momodou lamin Kaloga,"1,2",Residential,2,1,20,13.317429,-16.683059
 Jambur,Mbye Kunda,Fana Mbye,"1,Other",Residential,2,1,30,13.317358,-16.68279
 Jambur,Bah Kunda,Amadou Bah,1,Residential,3,1,19,13.31739,-16.68256
@@ -160381,7 +160381,7 @@ Farato,Sanyang Kunda,Yankuba Sanyang,1,Residential,2,1,20,13.309287,-16.676723
 Farato,Saidy Kunda,Amadou Saidy,1,Residential,1,1,2,13.309451,-16.677032
 Farato,Jammeh kunda,Jerreh Jammeh,1,Residential,2,1,17,13.309207,-16.677155
 Farato,Saidy kunda,Malick Saidy,1,Residential,2,1,2,13.309011,-16.677008
-Farato,Drammeh kunda,Alhagie Drammeh,1,Residential,255,1,17,13.308225,-16.677704
+Farato,Drammeh kunda,Alhagie Drammeh,1,Residential,2,1,17,13.308225,-16.677704
 Farato,Camara Kunda,Mustapha Camara,1,Residential,3,1,45,13.309297,-16.677448
 Farato,kassama kunda,Lamin Kassama,1,Residential,1,1,11,13.309324,-16.677709
 Farato,Sanyang Kunda,Edrissa Sanyang,1,Residential,1,1,3,13.30953,-16.677739
@@ -160942,7 +160942,7 @@ Sanyang,Jassey Kunda,Momodou Jassey,1,Residential,1,1,12,13.272886,-16.752596
 Sanyang,Ceesay Kunda,Nuha Ceesay,1,Residential,1,1,10,13.273077,-16.752221
 Sanyang,Conteh Kunda,Kebba Conteh,1,Residential,3,1,13,13.273203,-16.752046
 Sanyang,Conteh Kunda,Sheriif Conteh,"1,2",Residential,5,2,37,13.273297,-16.751764
-Sanyang,Sarr Kunda,Fa Burama Sarr,1,Residential,41,1,37,13.272587,-16.751551
+Sanyang,Sarr Kunda,Fa Burama Sarr,1,Residential,4,1,37,13.272587,-16.751551
 Sanyang,Bahoum Kunda,Omar Nyang,1,Residential,1,0,0,13.272345,-16.751072
 Sanyang,Jawara Kunda,Sora Jawara,1,Residential,5,3,38,13.272669,-16.75115
 Sanyang,Saidy Kunda,Sedou Saidy,"1,2",Residential,2,1,20,13.27346,-16.751402
@@ -165074,7 +165074,7 @@ Tanjeh,Jarju Kunda,Babu E Jarju,"1,2",Residential,4,1,17,13.347568,-16.792603
 Tanjeh,Mankah Kunda,Bubacarr Mankah,1,Residential,1,1,13,13.346864,-16.792258
 Bato Kunku,JATTA KUNDA,KOFFIE JATTA,1,Residential,4,1,12,13.328121,-16.798431
 Bato Kunku,JASSEY KUNDA,PAPA JASSEY,1,Residential,3,1,12,13.328028,-16.800089
-Bato Kunku,TOURAY KUNDA,FANSU TOURAY,1,Residential,41,1,9,13.328412,-16.80007
+Bato Kunku,TOURAY KUNDA,FANSU TOURAY,1,Residential,4,1,9,13.328412,-16.80007
 Bato Kunku,Camara kunda,Alieu Camara,"1,2",Residential,2,3,21,13.330236,-16.797655
 Bato Kunku,Bayo  kunda,Karangba Bayo,1,Residential,1,1,2,13.330064,-16.797677
 Bato Kunku,Success nursery school,Fatou Jammeh,"1,Other",Residential,3,1,4,13.330784,-16.797574
@@ -165541,7 +165541,7 @@ Sanyang,Komma kunda,Kebba komma,1,Residential,5,1,5,13.238685,-16.752327
 Sanyang,Daffeh kunda,Morro Daffeh,1,Residential,9,1,9,13.236786,-16.751036
 Sansanding,Ceesay Kunda,Haruna Ceesay,1,Residential,3,1,25,13.238115,-16.748043
 Sansanding,Sidebeh Kunda,Lamin Sidebeh,1,Residential,1,1,6,13.238062,-16.748173
-Sansanding,Saidy Kunda,Yaya Saidy,1,Residential,111,1,13,13.237447,-16.748149
+Sansanding,Saidy Kunda,Yaya Saidy,1,Residential,1,1,13,13.237447,-16.748149
 Sansanding,Hydara Kunda,Lamin aHydara,1,Residential,2,1,6,13.239425,-16.74994
 Sansanding,Sowe Kunda,Amafou Sowe,1,Residential,1,1,7,13.238116,-16.750555
 Sansanding,Saidykhan Kunda,Samsideen Saidykhan,1,Residential,1,1,12,13.238739,-16.75284
@@ -166023,7 +166023,7 @@ Sami,Saine kunda,Modou Saine,1,Residential,2,1,10,13.482002,-16.51305
 Sami,Jallow kunda,Buba Jallow,1,Residential,4,1,10,13.481918,-16.512536
 Sami,Jallow kunda,Ousman Jallow,1,Residential,1,1,5,13.482221,-16.512544
 Sami,Tope kunda,Alieu Tope,1,Residential,4,1,6,13.482172,-16.512332
-Sami,Joof kunda,Alkali Joof,1,Residential,0,1,7,13.481134,-16.512143
+Sami,Joof kunda,Alkali Joof,1,Residential,1,1,7,13.481134,-16.512143
 Sami,Jammeh kunda,Buba Jammeh,1,Residential,4,1,1,13.48134,-16.51176
 Sami,Jallow kunda,Omar Jallow,1,Residential,1,1,10,13.482974,-16.511462
 Sami,Sarr kunda,Ebrima Sarr,1,Residential,1,1,6,13.483551,-16.511186
@@ -167005,7 +167005,7 @@ Latrikunda Sabiji,Jawara Kunda,Demba Jawara,1,Residential,2,1,16,13.408178,-16.6
 Latrikunda Sabiji,Saye Kunda,Aliue Saye,1,Residential,2,1,3,13.407788,-16.667945
 Latrikunda Sabiji,Njie Kunda,Mamadou Njie,1,Residential,2,3,14,13.407926,-16.668069
 Latrikunda Sabiji,Bah Kunda,Yaya Bah,1,Residential,3,7,19,13.408024,-16.66826
-Latrikunda Sabiji,Jallow Kunda,Ebrima Saidou Jallow,"1,2",Residential,71,1,15,13.407885,-16.668447
+Latrikunda Sabiji,Jallow Kunda,Ebrima Saidou Jallow,"1,2",Residential,7,1,15,13.407885,-16.668447
 Latrikunda Sabiji,Jagne Kunda,Alhagie Taheru Jagne,1,Residential,7,1,12,13.407726,-16.668645
 Latrikunda Sabiji,Fofana Kunda,Fansu Fofana,1,Residential,3,1,16,13.40759,-16.668868
 Latrikunda Sabiji,Sonko Kunda,Bakary Sonko,1,Residential,2,2,15,13.406896,-16.668695
@@ -169051,7 +169051,7 @@ Medina Tunjang,Jaw Kunda,Mod Jaw,1,Residential,2,1,14,13.428457,-14.751385
 Medina Tunjang,Jaw Kunda,Alagie Jaw,1,Residential,3,1,13,13.427969,-14.751535
 Medina Tunjang,Secka Kunda,Alagie Malick Secka,1,Residential,1,1,7,13.429135,-14.754087
 Medina Tunjang,Sanga Kunda,Essa Sanga,1,Residential,5,1,33,13.428617,-14.750343
-Medina Tunjang,Secka Kunda,Alagie Secka,1,Residential,40,6,157,13.42935,-14.750449
+Medina Tunjang,Secka Kunda,Alagie Secka,1,Residential,4,6,157,13.42935,-14.750449
 Medina Tunjang,Janneh Kunda,Mamadou Janneh,1,Residential,6,2,9,13.42963,-14.75088
 Medina Tunjang,Mbye Kunda,Kebba Mbye,"1,2",Residential,35,6,124,13.430132,-14.75105
 Medina Tunjang,Mbye kunda,Mot Fatou Mbye,1,Residential,4,1,22,13.429304,-14.749817
@@ -174820,7 +174820,7 @@ Bato Kunku,bah kunda near fry kunda nursery school,musa bah,"1,2",Residential,6,
 Bato Kunku,manjang kundq,saikou manjang,1,Residential,2,1,17,13.32845,-16.796358
 Bato Kunku,saidy kunda,ebrima saidy,1,Residential,2,1,9,13.327724,-16.796706
 Bato Kunku,dampha kunda,nanding sarjo dampha,1,Residential,2,1,8,13.327592,-16.796953
-Bato Kunku,fatty kunda,mr fatty,1,Residential,3438965,1,2,13.327775,-16.796983
+Bato Kunku,fatty kunda,mr fatty,1,Residential,3,1,2,13.327775,-16.796983
 Bato Kunku,manjang kunda,fakebba manjang,1,Residential,1,1,5,13.327487,-16.796859
 Bato Kunku,darboe kunda,salif darboe,1,Residential,2,3,29,13.327055,-16.79699
 Bato Kunku,jahateh kunda,salum jahateh,1,Residential,4,1,24,13.326991,-16.796448
@@ -175612,7 +175612,7 @@ Mahmuda,Jobe Kunda,Omar Jobe,1,Residential,1,1,4,13.306668,-16.731778
 Mahmuda,Empty,Unknown,1,Residential,1,0,0,13.306473,-16.7316
 Mahmuda,Kambai Kunda,Ebrima Kambai,1,Residential,2,1,13,13.307078,-16.731768
 Mahmuda,Jabbi Kunda,Solo Jabbi,1,Residential,2,1,13,13.307073,-16.733003
-Mahmuda,Sonko Kunda,Musa Sonko,1,Residential,0,1,11,13.30687,-16.730923
+Mahmuda,Sonko Kunda,Musa Sonko,1,Residential,3,1,11,13.30687,-16.730923
 Mahmuda,Under construction,Unknown,1,Residential,1,0,0,13.306967,-16.730783
 Mahmuda,Under construction,Unknown,1,Residential,1,0,0,13.306457,-16.730787
 Mahmuda,Empty fence,unknown,1,Residential,0,0,0,13.306473,-16.731245
@@ -176080,7 +176080,7 @@ Jambanjelly,Daffeh Kunda,Massy Daffeh,1,Residential,1,1,8,13.283427,-16.719687
 Jambanjelly,Adjacent to Dafeeh kunda (Massy Daffeh),not found,1,Residential,1,0,0,13.283311,-16.720027
 Jambanjelly,Saidy kunda,Bintou,1,Residential,1,1,10,13.283702,-16.720201
 Jambanjelly,Mbye Kunda,Ndye Mbye,1,Residential,2,1,14,13.28444,-16.719798
-Jambanjelly,Ceesay kunda,Sulagman Ceesay,"1,Other",Residential,281,1,27,13.284661,-16.719692
+Jambanjelly,Ceesay kunda,Sulagman Ceesay,"1,Other",Residential,2,1,27,13.284661,-16.719692
 Jambanjelly,Ceesay Kunda,Haruna Ceesay,1,Residential,1,1,17,13.284286,-16.719521
 Jambanjelly,Ceesay Kumda,Saikou Ceesay,1,Residential,2,1,17,13.283023,-16.718315
 Jambanjelly,fatty Kunda,Bubacarr Fatty,1,Residential,3,2,19,13.283067,-16.717533
@@ -176223,7 +176223,7 @@ Ndimbuya Rumba,Njie Kunda,Saidou Njie,1,Residential,4,2,26,13.281612,-16.702703
 Jambur,Kamaso Kunda,Madi Kamaso,1,Residential,2,1,10,13.318251,-16.698493
 Jambur,Camara Kunda,Saihou Camara,1,Residential,3,1,11,13.317663,-16.698512
 Jambur,Unknown,Unknown,1,Residential,1,0,0,13.317057,-16.698453
-Jambur,Bojang kunda,Ousman Bojang,1,Residential,211,1,13,13.316647,-16.698498
+Jambur,Bojang kunda,Ousman Bojang,1,Residential,2,1,13,13.316647,-16.698498
 Jambur,Bojang kunda,Adoulie AK Bojang,1,Residential,4,1,19,13.316267,-16.698523
 Jambur,Bah kunda,Omar Bah,1,Residential,2,1,12,13.315922,-16.698108
 Jambur,Bah kunda,Assan Bah,1,Residential,3,1,10,13.316207,-16.698052
@@ -176344,7 +176344,7 @@ Jambanjelly,unknown,unknown,1,Residential,1,0,0,13.277797,-16.711859
 Jambanjelly,mendy kunda,Dominic mendy,1,Residential,1,1,13,13.277161,-16.710859
 Jambanjelly,unknown,uninown,"1,Other",Residential,1,0,0,13.277138,-16.712958
 Farato,Loum Kunda,Ebrima Loum,1,Residential,2,1,11,13.313317,-16.664598
-Farato,Saho Kunda,Alhagie Saho,1,Residential,2111,2,11,13.312308,-16.664573
+Farato,Saho Kunda,Alhagie Saho,1,Residential,2,2,11,13.312308,-16.664573
 Farato,Camara Kunda,Ba!!a Camara,1,Residential,2,1,11,13.312335,-16.664338
 Farato,Jarju Kunda,Pa Jallow,1,Residential,1,1,10,13.312443,-16.664377
 Farato,Bah Kunda,Aja Fatoumata Bah,1,Residential,3,6,23,13.312811,-16.664412
@@ -176372,7 +176372,7 @@ Farato,Jallow Kunda,Muhtar Jallow,1,Residential,3,7,47,13.310475,-16.6654
 Farato,Sabally Kunda,Amadou Sabally,1,Residential,1,1,9,13.310673,-16.665538
 Farato,Sanchaba,Nigerian,1,Residential,1,0,0,13.310813,-16.665406
 Mahmuda,Cham Kunda opposite Edi Saidy's Compound,Ebrima Jallow,1,Residential,2,1,5,13.301808,-16.736157
-Mahmuda,Ceesay Kunda beside community health centre,Habib Ceesay,1,Residential,31111,1,3,13.300952,-16.737337
+Mahmuda,Ceesay Kunda beside community health centre,Habib Ceesay,1,Residential,2,1,3,13.300952,-16.737337
 Mahmuda,Bah Kunda pharmacy inside compound,Mamadou Alpha Bah,"1,2",Residential,2,1,8,13.300452,-16.736267
 Mahmuda,Sowe kunda near Edi Saidy's compound,Amadou Sowe,1,Residential,4,1,13,13.30168,-16.735903
 Mahmuda,Jallow kunda beside Koba Touray's compound,Hamadi Jallow,1,Residential,2,1,9,13.301073,-16.735917
@@ -177401,7 +177401,7 @@ Jambanjelly,Jammeh kunda,Buba (sukuta ) Jammeh,"1,2",Residential,5,3,26,13.27703
 Jambanjelly,Jammeh kunda( omardinding),omar Jammeh,"1,2",Residential,4,2,14,13.276727,-16.729635
 Jambanjelly,"Jarjou kunda (near Alkalo,s",Momodou Jarjou,"1,2",Residential,20,4,34,13.276885,-16.729137
 Jambanjelly,"Conteh Kunda (opposite Alkalo,s compounds)",ousman conteh,1,Residential,5,4,17,13.276595,-16.728893
-Fara Kunku,Kandeh Kunda,Demba Kandeh,1,Residential,723,3,25,13.273545,-16.746257
+Fara Kunku,Kandeh Kunda,Demba Kandeh,1,Residential,2,3,25,13.273545,-16.746257
 Fara Kunku,Tamba Kunda,Landing Tamba,1,Residential,2,1,18,13.272903,-16.746148
 Fara Kunku,Sarjo Kunda,Omar Sarjo,1,Residential,2,1,15,13.272436,-16.745969
 Fara Kunku,Ceesay Kunda,Amadou Ceesay,1,Residential,3,2,18,13.271617,-16.745767
@@ -180774,7 +180774,7 @@ Jalambang,JABANG KUNDA,ABDOU JABANG,1,Residential,2,1,7,13.276132,-16.686668
 Jalambang,MENDY KUNDA,ANTHONY MENDY,1,Residential,3,1,10,13.276751,-16.686994
 Jalambang,MENDY KUNDA,MARIE MENDY,1,Residential,2,1,12,13.277485,-16.686768
 Jalambang,JALLOW KUNDA,YUSUF JALLOW,1,Residential,1,0,0,13.277551,-16.687055
-Jalambang,BASS KUNDA,MARIA BASS,2,Commercial,0,0,12,13.277374,-16.688007
+Jalambang,BASS KUNDA,MARIA BASS,2,Commercial,4,0,12,13.277374,-16.688007
 Jalambang,JAITEH KUNDA,MUSA JAITEH,1,Residential,2,1,27,13.276907,-16.68831
 Jalambang,BASS KUNDA,MAIA BASS,1,Residential,2,1,12,13.276609,-16.688393
 Jalambang,KONTEH KUNDA,MUSTAPHA KONTEH,1,Residential,3,1,3,13.276403,-16.688451
@@ -180906,7 +180906,7 @@ Garawol,Sukuna Kunda,Langba Sukuna,"1,2",Residential,13,5,88,13.41493,-13.938134
 Garawol,Jallow Kunda,Abdoulie Jallow,"1,2",Residential,5,3,55,13.41446,-13.938177
 Garawol,Konteh Kunda,Bangally Konteh,1,Residential,10,2,40,13.414183,-13.938237
 Garawol,Konteh Kunda,Alhagie Bakary Konteh,1,Residential,6,2,73,13.413941,-13.938505
-Garawol,Konteh Kunda,Almamy Konteh,1,Residential,43,10,422,13.413673,-13.938387
+Garawol,Konteh Kunda,Almamy Konteh,1,Residential,4,10,422,13.413673,-13.938387
 Garawol,Konteh Kunda,Salifu Konteh,"1,Other",Residential,4,1,31,13.413594,-13.938743
 Missiraba Mariam,Kanteh Kunda,Yussuf Kanteh,1,Residential,3,4,114,13.336773,-13.942857
 Missiraba Mariam,Kanteh Kunda,Bangaly Kanteh,1,Residential,2,1,30,13.33641,-13.942651
@@ -181184,7 +181184,7 @@ Nyamanarr,Bah Kunda,Sallbella Bah,1,Residential,1,1,10,13.331213,-13.868917
 Nyamanarr,Susso Kunda,Alpha Susso,1,Residential,4,3,30,13.331131,-13.869349
 Nyamanarr,Keita Kunda,Saikou Keita,1,Residential,1,1,25,13.330769,-13.869766
 Nyamanarr,Baldeh Kunda,Leffo Baldeh,1,Residential,4,4,37,13.331095,-13.869582
-Nyamanarr,Susso Kunda,Bubacarr Susso,1,Residential,40,3,40,13.331523,-13.87006
+Nyamanarr,Susso Kunda,Bubacarr Susso,1,Residential,4,3,40,13.331523,-13.87006
 Koina,Keita kunda,Alfusainey keita,"1,2",Residential,3,1,6,13.47458,-13.861263
 Koina,Kesuteh kunda,Omar kesuteh,1,Residential,4,1,7,13.474953,-13.859311
 Koina,Jaiteh kunda,Essa jaiteh,1,Residential,1,1,3,13.476964,-13.860358
